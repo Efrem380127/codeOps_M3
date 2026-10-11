@@ -18,6 +18,10 @@ export async function GET(request) {
 
 export async function POST(request) {
   const session = await getSession(request);
+  if (!session) {
+    return Response.json({ error: "Unauthorized: Active session required" }, { status: 401 });
+  }
+
   const body = await request.json();
   const fieldErrors = validate(body);
 
@@ -28,9 +32,9 @@ export async function POST(request) {
   const order = {
     id: String(Date.now()),
     ...body,
-    sessionId: session?.id || "guest",
-    userId: session?.id || "guest",
-    owner: session?.name || body.name,
+    sessionId: session.id,
+    userId: session.id,
+    owner: session.name,
     status: "confirmed",
     createdAt: new Date().toISOString()
   };

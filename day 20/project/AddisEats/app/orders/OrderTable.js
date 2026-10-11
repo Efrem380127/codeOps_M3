@@ -1,10 +1,7 @@
 import Link from "next/link";
-import { etb, when } from "@/lib/format";
-import CsvExportButton from "./CsvExportButton";
 
 export default function OrderTable({
   orders = [],
-  allOrders = [],
   totalCount = 0,
   currentPage = 1,
   pageSize = 5,
@@ -47,13 +44,13 @@ export default function OrderTable({
   function renderSortIndicator(columnKey) {
     if (sortKey !== columnKey) {
       return (
-        <span aria-hidden="true" style={{ color: "#94a3b8", marginLeft: "4px" }}>
+        <span aria-hidden="true" style={{ color: "#9ca3af", marginLeft: "4px" }}>
           &#x21C5;
         </span>
       );
     }
     return (
-      <span aria-hidden="true" style={{ color: "#2563eb", marginLeft: "4px" }}>
+      <span aria-hidden="true" style={{ color: "#18542a", marginLeft: "4px" }}>
         {sortDir === "asc" ? "\u25B2" : "\u25BC"}
       </span>
     );
@@ -63,49 +60,43 @@ export default function OrderTable({
     <div
       style={{
         backgroundColor: "#ffffff",
-        border: "1px solid #e2e8f0",
-        borderRadius: "8px",
+        border: "1px solid #e5dcc3",
+        borderRadius: "20px",
         padding: "1.25rem",
-        marginTop: "1.5rem"
+        marginTop: "1.5rem",
+        boxShadow: "0 2px 8px rgba(24, 84, 42, 0.04)"
       }}
     >
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.875rem", flexWrap: "wrap", gap: "0.75rem" }}>
-        <h2 style={{ fontSize: "1.125rem", fontWeight: "600", color: "#0f172a", margin: 0 }}>
-          Customer Orders Log
-        </h2>
-        <CsvExportButton orders={allOrders.length > 0 ? allOrders : orders} />
-      </div>
-
       <div style={{ overflowX: "auto" }}>
         <table
           style={{
             width: "100%",
             borderCollapse: "collapse",
             fontSize: "0.875rem",
-            color: "#1e293b"
+            color: "#1f2937"
           }}
         >
           <caption
             style={{
               captionSide: "top",
               textAlign: "left",
-              fontWeight: "600",
-              fontSize: "0.875rem",
-              color: "#64748b",
-              marginBottom: "0.5rem"
+              fontWeight: "700",
+              fontSize: "1.1rem",
+              color: "#18542a",
+              marginBottom: "0.875rem"
             }}
           >
             Customer Orders and Fulfillment Details
           </caption>
           <thead>
-            <tr style={{ borderBottom: "2px solid #cbd5e1", backgroundColor: "#f8fafc" }}>
+            <tr style={{ borderBottom: "2px solid #e5dcc3", backgroundColor: "#fcf9f0" }}>
               <th
                 scope="col"
                 style={{
                   textAlign: "left",
                   padding: "0.75rem 0.875rem",
-                  fontWeight: "600",
-                  color: "#334155"
+                  fontWeight: "700",
+                  color: "#18542a"
                 }}
               >
                 Order ID
@@ -116,8 +107,8 @@ export default function OrderTable({
                 style={{
                   textAlign: "left",
                   padding: "0.75rem 0.875rem",
-                  fontWeight: "600",
-                  color: "#334155"
+                  fontWeight: "700",
+                  color: "#18542a"
                 }}
               >
                 <Link
@@ -126,8 +117,7 @@ export default function OrderTable({
                     color: "inherit",
                     textDecoration: "none",
                     display: "inline-flex",
-                    alignItems: "center",
-                    minHeight: "44px"
+                    alignItems: "center"
                   }}
                 >
                   Date
@@ -140,8 +130,8 @@ export default function OrderTable({
                 style={{
                   textAlign: "left",
                   padding: "0.75rem 0.875rem",
-                  fontWeight: "600",
-                  color: "#334155"
+                  fontWeight: "700",
+                  color: "#18542a"
                 }}
               >
                 <Link
@@ -150,8 +140,7 @@ export default function OrderTable({
                     color: "inherit",
                     textDecoration: "none",
                     display: "inline-flex",
-                    alignItems: "center",
-                    minHeight: "44px"
+                    alignItems: "center"
                   }}
                 >
                   Customer
@@ -160,14 +149,26 @@ export default function OrderTable({
               </th>
               <th
                 scope="col"
+                aria-sort={getAriaSort("area")}
                 style={{
                   textAlign: "left",
                   padding: "0.75rem 0.875rem",
-                  fontWeight: "600",
-                  color: "#334155"
+                  fontWeight: "700",
+                  color: "#18542a"
                 }}
               >
-                Area
+                <Link
+                  href={createSortHref("area")}
+                  style={{
+                    color: "inherit",
+                    textDecoration: "none",
+                    display: "inline-flex",
+                    alignItems: "center"
+                  }}
+                >
+                  Neighbourhood
+                  {renderSortIndicator("area")}
+                </Link>
               </th>
               <th
                 scope="col"
@@ -175,8 +176,8 @@ export default function OrderTable({
                 style={{
                   textAlign: "left",
                   padding: "0.75rem 0.875rem",
-                  fontWeight: "600",
-                  color: "#334155"
+                  fontWeight: "700",
+                  color: "#18542a"
                 }}
               >
                 <Link
@@ -185,8 +186,7 @@ export default function OrderTable({
                     color: "inherit",
                     textDecoration: "none",
                     display: "inline-flex",
-                    alignItems: "center",
-                    minHeight: "44px"
+                    alignItems: "center"
                   }}
                 >
                   Status
@@ -195,23 +195,12 @@ export default function OrderTable({
               </th>
               <th
                 scope="col"
-                style={{
-                  textAlign: "center",
-                  padding: "0.75rem 0.875rem",
-                  fontWeight: "600",
-                  color: "#334155"
-                }}
-              >
-                Tracking
-              </th>
-              <th
-                scope="col"
                 aria-sort={getAriaSort("total")}
                 style={{
                   textAlign: "right",
                   padding: "0.75rem 0.875rem",
-                  fontWeight: "600",
-                  color: "#334155"
+                  fontWeight: "700",
+                  color: "#18542a"
                 }}
               >
                 <Link
@@ -222,8 +211,7 @@ export default function OrderTable({
                     display: "inline-flex",
                     alignItems: "center",
                     justifyContent: "flex-end",
-                    width: "100%",
-                    minHeight: "44px"
+                    width: "100%"
                   }}
                 >
                   Total (ETB)
@@ -234,36 +222,35 @@ export default function OrderTable({
           </thead>
           <tbody>
             {orders.map((order) => (
-              <tr key={order.id} style={{ borderBottom: "1px solid #e2e8f0" }}>
+              <tr key={order.id} style={{ borderBottom: "1px solid #f3e8cc" }}>
                 <td style={{ padding: "0.75rem 0.875rem", fontWeight: "600" }}>
                   <Link
                     href={`/orders/${order.id}`}
-                    style={{
-                      color: "#2563eb",
-                      textDecoration: "none",
-                      display: "inline-flex",
-                      alignItems: "center",
-                      minHeight: "44px"
-                    }}
+                    style={{ color: "#18542a", textDecoration: "none" }}
                   >
                     {order.id}
                   </Link>
                 </td>
-                <td style={{ padding: "0.75rem 0.875rem", color: "#475569" }}>
-                  {when(order.createdAt)}
+                <td style={{ padding: "0.75rem 0.875rem", color: "#6b7280" }}>
+                  {new Date(order.createdAt).toLocaleDateString("en-US", {
+                    month: "short",
+                    day: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit"
+                  })}
                 </td>
-                <td style={{ padding: "0.75rem 0.875rem", color: "#1e293b", fontWeight: "600" }}>
+                <td style={{ padding: "0.75rem 0.875rem", color: "#1f2937", fontWeight: "600" }}>
                   {order.name}
                 </td>
-                <td style={{ padding: "0.75rem 0.875rem", color: "#475569" }}>
+                <td style={{ padding: "0.75rem 0.875rem", color: "#4b5563" }}>
                   {order.area}
                 </td>
                 <td style={{ padding: "0.75rem 0.875rem" }}>
                   <span
                     style={{
                       display: "inline-block",
-                      padding: "4px 10px",
-                      borderRadius: "4px",
+                      padding: "2px 8px",
+                      borderRadius: "9999px",
                       fontSize: "0.75rem",
                       fontWeight: "700",
                       textTransform: "capitalize",
@@ -272,8 +259,6 @@ export default function OrderTable({
                           ? "#dcfce7"
                           : order.status === "ready"
                           ? "#e0e7ff"
-                          : order.status === "out_for_delivery"
-                          ? "#dbeafe"
                           : order.status === "cooking"
                           ? "#fef3c7"
                           : order.status === "cancelled"
@@ -284,8 +269,6 @@ export default function OrderTable({
                           ? "#15803d"
                           : order.status === "ready"
                           ? "#3730a3"
-                          : order.status === "out_for_delivery"
-                          ? "#1e40af"
                           : order.status === "cooking"
                           ? "#b45309"
                           : order.status === "cancelled"
@@ -293,29 +276,8 @@ export default function OrderTable({
                           : "#475569"
                     }}
                   >
-                    {order.status.replace(/_/g, " ")}
+                    {order.status}
                   </span>
-                </td>
-                <td style={{ padding: "0.75rem 0.875rem", textAlign: "center" }}>
-                  <Link
-                    href={`/order-status?id=${order.id}`}
-                    style={{
-                      display: "inline-flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      minHeight: "44px",
-                      padding: "0.35rem 0.75rem",
-                      fontSize: "0.8125rem",
-                      color: "#2563eb",
-                      textDecoration: "none",
-                      fontWeight: "600",
-                      borderRadius: "6px",
-                      border: "1px solid #cbd5e1",
-                      backgroundColor: "#f8fafc"
-                    }}
-                  >
-                    📍 Live Map
-                  </Link>
                 </td>
                 <td
                   style={{
@@ -323,10 +285,10 @@ export default function OrderTable({
                     textAlign: "right",
                     fontVariantNumeric: "tabular-nums",
                     fontWeight: "700",
-                    color: "#0f172a"
+                    color: "#18542a"
                   }}
                 >
-                  {etb(order.total)}
+                  {`${order.total?.toLocaleString()} ETB`}
                 </td>
               </tr>
             ))}
@@ -344,28 +306,23 @@ export default function OrderTable({
           gap: "1rem",
           marginTop: "1.25rem",
           paddingTop: "1rem",
-          borderTop: "1px solid #e2e8f0"
+          borderTop: "1px solid #e5dcc3"
         }}
       >
-        <p style={{ margin: 0, fontSize: "0.875rem", color: "#64748b" }}>
+        <p style={{ margin: 0, fontSize: "0.875rem", color: "#6b7280" }}>
           Showing <strong>{startIndex}</strong> to <strong>{endIndex}</strong> of <strong>{totalCount}</strong> orders
         </p>
 
-        <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "0.375rem" }}>
           {currentPage > 1 ? (
             <Link
               href={createPageHref(currentPage - 1)}
               style={{
-                display: "inline-flex",
-                alignItems: "center",
-                justifyContent: "center",
-                minHeight: "44px",
-                minWidth: "44px",
-                padding: "0.5rem 1rem",
-                borderRadius: "6px",
-                border: "1px solid #cbd5e1",
+                padding: "0.375rem 0.75rem",
+                borderRadius: "8px",
+                border: "1px solid #e5dcc3",
                 backgroundColor: "#ffffff",
-                color: "#1e293b",
+                color: "#18542a",
                 textDecoration: "none",
                 fontSize: "0.875rem",
                 fontWeight: "600"
@@ -377,16 +334,11 @@ export default function OrderTable({
             <span
               aria-disabled="true"
               style={{
-                display: "inline-flex",
-                alignItems: "center",
-                justifyContent: "center",
-                minHeight: "44px",
-                minWidth: "44px",
-                padding: "0.5rem 1rem",
-                borderRadius: "6px",
-                border: "1px solid #e2e8f0",
-                backgroundColor: "#f8fafc",
-                color: "#94a3b8",
+                padding: "0.375rem 0.75rem",
+                borderRadius: "8px",
+                border: "1px solid #f3e8cc",
+                backgroundColor: "#fcf9f0",
+                color: "#9ca3af",
                 fontSize: "0.875rem",
                 cursor: "not-allowed"
               }}
@@ -403,16 +355,11 @@ export default function OrderTable({
                 href={createPageHref(p)}
                 aria-current={isCurrent ? "page" : undefined}
                 style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  minHeight: "44px",
-                  minWidth: "44px",
-                  padding: "0.5rem",
-                  borderRadius: "6px",
-                  border: isCurrent ? "2px solid #2563eb" : "1px solid #cbd5e1",
-                  backgroundColor: isCurrent ? "#2563eb" : "#ffffff",
-                  color: isCurrent ? "#ffffff" : "#1e293b",
+                  padding: "0.375rem 0.75rem",
+                  borderRadius: "8px",
+                  border: isCurrent ? "1px solid #18542a" : "1px solid #e5dcc3",
+                  backgroundColor: isCurrent ? "#18542a" : "#ffffff",
+                  color: isCurrent ? "#ffffff" : "#18542a",
                   textDecoration: "none",
                   fontSize: "0.875rem",
                   fontWeight: isCurrent ? "700" : "500"
@@ -427,16 +374,11 @@ export default function OrderTable({
             <Link
               href={createPageHref(currentPage + 1)}
               style={{
-                display: "inline-flex",
-                alignItems: "center",
-                justifyContent: "center",
-                minHeight: "44px",
-                minWidth: "44px",
-                padding: "0.5rem 1rem",
-                borderRadius: "6px",
-                border: "1px solid #cbd5e1",
+                padding: "0.375rem 0.75rem",
+                borderRadius: "8px",
+                border: "1px solid #e5dcc3",
                 backgroundColor: "#ffffff",
-                color: "#1e293b",
+                color: "#18542a",
                 textDecoration: "none",
                 fontSize: "0.875rem",
                 fontWeight: "600"
@@ -448,16 +390,11 @@ export default function OrderTable({
             <span
               aria-disabled="true"
               style={{
-                display: "inline-flex",
-                alignItems: "center",
-                justifyContent: "center",
-                minHeight: "44px",
-                minWidth: "44px",
-                padding: "0.5rem 1rem",
-                borderRadius: "6px",
-                border: "1px solid #e2e8f0",
-                backgroundColor: "#f8fafc",
-                color: "#94a3b8",
+                padding: "0.375rem 0.75rem",
+                borderRadius: "8px",
+                border: "1px solid #f3e8cc",
+                backgroundColor: "#fcf9f0",
+                color: "#9ca3af",
                 fontSize: "0.875rem",
                 cursor: "not-allowed"
               }}

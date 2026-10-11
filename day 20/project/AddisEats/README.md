@@ -1,114 +1,104 @@
-# Addis Eats — Frontend Capstone Project
+# Addis Eats — Next.js Advanced Full-Stack Application
 
 **IBT College Canada · CodeOps · Full Stack Software Development**  
-**Module 3 · Frontend: React & Next.js · Day 49 (Day 24) Capstone Build**  
+**Module 3 · Frontend: React & Next.js · Day 45 (Day 20) Advanced Project**  
+**Deployed URL**: [https://addis-eats-six.vercel.app](https://addis-eats-six.vercel.app)
+
+> **Security status:** This is a demo, not production-ready authentication or private order handling. The sign-in action trusts a user-selected staff role, the session signing key has a fallback, and public order-status paths can reveal customer details. See the [initial code review risk register](VERIFICATION.md#d-adoption-and-existing-risk-register). The historical security claims below describe a narrower test and are not a production security approval.
 
 ---
 
-## 🚀 Live Production Deliverable
+## 1. Project Overview & Deliverable
 
-- **Live Production URL**: [https://addis-eats-six.vercel.app](https://addis-eats-six.vercel.app)
-- **Deployment URL**: [https://addis-eats-4038gzhqr-roveltesfaye-3329s-projects.vercel.app](https://addis-eats-4038gzhqr-roveltesfaye-3329s-projects.vercel.app)
-- **Vercel Project Dashboard**: [https://vercel.com/roveltesfaye-3329s-projects/addis-eats](https://vercel.com/roveltesfaye-3329s-projects/addis-eats)
-
----
-
-## 1. What It Is and Who It Is For
-
-**Addis Eats** is a full-stack restaurant delivery application tailored for authentic Ethiopian cuisine in Addis Ababa. It connects hungry diners with fresh, local culinary specialties (such as Shiro, Doro Wat, and Kitfo), while providing couriers and restaurant managers with real-time operational oversight.
-
-The application synthesizes the full curriculum of React and Next.js:
-- **Semantic, Accessible Markup**: Zero clickable divs, full keyboard navigation (Tab/Enter/Escape), and WCAG 44px touch targets.
-- **Three-Layer Security**: Cryptographic session cookies, edge middleware route protection, server component authorization, and ownership-gated server actions.
-- **Live Data Architecture**: Real-time Leaflet delivery tracking, Server-Sent Events (SSE) driver stream, 5-second SWR order status polling, and 300ms debounced catalog search.
-- **Measured Core Web Vitals**: LCP of 1.3s, zero CLS (0.00), self-hosted typography (`next/font`), and responsive image pipelines (`next/image`).
-- **Data Presentation**: RFC 4180 CSV export, interactive order analytics charts, and tabular accessibility mirrors.
+Addis Eats brings together the four core disciplines of Week 9 into a single, cohesive, production-grade application:
+1. **Accounts & Three-Layer Protection**: Session cookies (`httpOnly`), edge middleware, server component authorization, and ownership-gated server actions.
+2. **Live Data & Client State**: 5-second polling for active order status with server-seeded `fallbackData`, and 300ms debounced menu search with null-key skipping.
+3. **Measured Performance Overhaul**: Core Web Vitals audited on throttled mobile connections; LCP cut from 4.6s to 1.3s, zero layout shift (CLS 0.00), and Lighthouse score of 98.
+4. **Metadata & Discoverability**: Root `metadataBase` on the deployed production domain, dynamic `generateMetadata` for dish records, 1200×630 OpenGraph cards, Schema.org `MenuItem` JSON-LD in ETB, and automated sitemap/robots generation.
 
 ---
 
-## 2. Setup from a Fresh Clone
+## 2. Six Areas of Requirement
 
-To run the application locally from a clean git clone:
+| Area | Requirement | Implementation | Evidence & Verification |
+|---|---|---|---|
+| **Accounts** | Sign in, sign out, session in flagged cookie | `app/actions/auth.js`, `lib/auth.js` | Cookie set with `httpOnly: true, secure: true, sameSite: "lax"`. Stored server-side session. |
+| **Protection** | Middleware, page check, check in every action | `middleware.js`, `app/orders/page.js`, `app/actions/order.js` | Three attacks all fail; unauthenticated or cross-account mutations refused. |
+| **Ownership** | Every query scoped to session, never a sent ID | `app/orders/page.js`, `app/api/orders/[id]` | `getOrdersForUser(session.id)`; URL ID tampering blocked. |
+| **Live Data** | One polled query and one debounced search | `app/orders/OrderStatus.js`, `app/menu/DishSearch.js` | SWR 5s poll seeded with `fallbackData`; 300ms debounce fires 1 request per pause. |
+| **Performance** | Measured improvement, documented | `next/image` (`priority`, `sizes`), `next/font`, `next/script` | Throttled Mobile Lighthouse score jumped from 61 to 98; LCP 1.3s, CLS 0.00. |
+| **Discovery** | Metadata, previews, sitemap, structured data | `app/layout.tsx`, `app/sitemap.js`, `app/robots.js` | Deployed source shows absolute `og:image`, sitemap lists 9 dishes, `MenuItem` JSON-LD. |
+
+---
+
+## 3. The Three Decision Tables
+
+Before building, the three core architectural decisions were codified:
+1. **[DECISIONS.md](DECISIONS.md#decision-one-who-may-see-what-slide-11) / [AUTH.md](AUTH.md)**: Who may see each route, what each layer proves, and why the fourth column matters.
+2. **[DECISIONS.md](DECISIONS.md#decision-two-where-data-is-fetched-slide-12) / [DATA.md](DATA.md)**: Where data is fetched — server unless triggered by typing, seeded with `fallbackData`.
+3. **[DECISIONS.md](DECISIONS.md#decision-three-the-performance-budget-slide-13) / [PERF.md](PERF.md)**: Performance budget with both before and after columns filled out.
+
+---
+
+## 4. How to Run from a Fresh Clone
 
 ```bash
-# 1. Clone the repository
+# 1. Clone repository and navigate to Day 20 project
 git clone https://github.com/Riter-Rob/codeOps_M3.git
-cd "codeOps_M3/day 24/AddisEats"
+cd "codeOps_M3/day 20/mini project/AddisEats"
 
 # 2. Install dependencies
 npm install
 
-# 3. Create local environment file
+# 3. Configure environment
 cp .env.example .env.local
 
-# 4. Start local development server
+# 4. Run local development server
 npm run dev
 
-# 5. Production build & run pre-flight
+# 5. Build and test production bundle
 npm run build
 npm run start
 ```
 
-Open [http://localhost:3000](http://localhost:3000) to view the application.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ---
 
-## 3. Environment Variables Configuration
+## 5. Security Attack Verification (DevTools Console)
 
-| Variable | Scope | Environments | Purpose |
-|---|---|---|---|
-| `SESSION_SECRET` | Server-only (Secret) | Production, Preview, Development | Secret key used to cryptographically sign session cookies (HMAC SHA-256). Concealed from client bundles. |
-| `NEXT_PUBLIC_APP_URL` | Client & Server (Public) | Production, Preview, Development | Base domain URL used for OpenGraph cards, canonical tags, and metadata resolution. |
+Run these three attacks directly from the browser DevTools Console to verify three-layer protection:
 
----
+```javascript
+// Attack 1: Calling action while signed out
+await cancelOrder("ord_812");
+// Result: Refused with { error: "Unauthorized: Active session required" } (app/actions/order.js:63)
 
-## 4. Verification Battery Results
+// Attack 2: Cross-account action invocation (IDOR)
+// Logged in as "Chala Kebede" targeting order of "Abebe Bikila":
+await cancelOrder("1");
+// Result: Refused with { error: "Forbidden: Not the record owner" } (app/actions/order.js:72)
 
-### A. Security — The Three Attacks Refused on the Live URL
-1. **Attack 1 (Calling action while signed out)**:  
-   `await cancelOrder("ord_812");` -> Refused with `{ error: "Unauthorized: No active session" }` ([app/actions/order.js:57-59](app/actions/order.js#L57-L59)).
-2. **Attack 2 (IDOR / Cross-user mutation)**:  
-   Signed in as Chala, targeting Abebe's order: `await cancelOrder("1");` -> Refused with `{ error: "Forbidden: Not the record owner" }` ([app/actions/order.js:66-68](app/actions/order.js#L66-L68)).
-3. **Attack 3 (Crafted open redirect)**:  
-   Navigating to `/sign-in?next=https://example.com` -> Relative URL check strips domain and defaults to `/` ([app/actions/auth.js:27-29](app/actions/auth.js#L27-L29)).
-4. **URL ID Tampering**:  
-   Navigating to `/orders/999` while unauthorized renders an explicit `Access Denied` gate ([app/orders/[id]/page.js:24-30](app/orders/[id]/page.js#L24-L30)).
+// Attack 3: Open redirect attack via crafted link
+// Visit: /sign-in?next=https://example.com
+// Result: Redirect safely falls back to "/" (app/actions/auth.js:27)
+```
 
-### B. Performance & Accessibility
-- **Core Web Vitals**: LCP 1.3s (Target < 2.5s), CLS 0.00 (Target < 0.1), INP 45ms (Target < 200ms).
-- **Keyboard Navigation**: 100% of routes and actions reachable using only Tab and Enter. Escape dismisses search and alerts. Universal `:focus-visible` blue ring.
-- **Touch Targets**: Every interactive button, link, and input is $\ge 44$px tall and wide.
-- **Images**: All assets optimized under 150 kB with explicit `sizes` and WebP format.
-
-### C. Discovery & Metadata
-- Absolute `og:image` dynamically rendered via Next.js `ImageResponse` ([app/opengraph-image.js](app/opengraph-image.js)).
-- Valid `/sitemap.xml` and `/robots.txt` generated automatically.
+Full details and logs are recorded in [VERIFICATION.md](VERIFICATION.md).
 
 ---
 
-## 5. The Five Mandatory Documents
+## 6. Project Documentation Index
 
-1. **[README.md](README.md)**: Project overview, live deliverable URL, setup instructions, variables, and presentation guide.
-2. **[AUTH.md](AUTH.md)**: Route protection matrix, layer proofs, line-by-line attack defense, and secret hygiene.
-3. **[DATA.md](DATA.md)**: Server vs. client boundary inventory, cache keys, refresh rules, and debouncing.
-4. **[PERF.md](PERF.md)**: Two-column performance budget (baseline vs. optimized) from the deployed build.
-5. **[FUTURE.md](FUTURE.md)**: MoSCoW triage analysis, features consciously deferred, and future roadmap.
+- **[AUTH.md](AUTH.md)**: Route protection matrix, layer proofs, and line-by-line attack defense.
+- **[DATA.md](DATA.md)**: Query inventory, caching strategies, debouncing, and SWR fallback hydration.
+- **[PERF.md](PERF.md)**: Core Web Vitals before & after audit, asset pipeline analysis, and Lighthouse report.
+- **[DECISIONS.md](DECISIONS.md)**: The three pre-build architectural decision tables.
+- **[VERIFICATION.md](VERIFICATION.md)**: Tool-based verification checklist, presentation walkthrough, review questions, and the active code review standard and workflow.
+- **[FINDABLE.md](FINDABLE.md)** / **[SEO.md](SEO.md)**: Metadata, OpenGraph cards, sitemap, robots, and JSON-LD structured data.
 
 ---
 
-## 6. Presentation & Code Walkthrough Plan (8 Minutes)
+## 7. Code Review: Start Here
 
-### Timing Breakdown
-- **0:00–1:00 (1 min)**: *What it is and who it is for* — Introduce Addis Eats as an authentic Ethiopian food delivery service solving courier tracking and ordering.
-- **1:00–3:00 (2 mins)**: *The main flow, live* — Demonstrate live browsing on [https://addis-eats-six.vercel.app](https://addis-eats-six.vercel.app), add Shiro to cart, checkout, and watch real-time delivery map updates.
-- **3:00–5:00 (2 mins)**: *One technical decision* — Explain why `DishList.js` is a Server Component streamed into client `FilterShell.js`, cutting client bundle size while preserving instant client tab switching.
-- **5:00–6:00 (1 min)**: *The three attacks refused* — Open DevTools console on the live site and demonstrate refusal of signed-out mutations, cross-account IDOR, and open redirects.
-- **6:00–7:00 (1 min)**: *PERF.md* — Walk through the two-column budget: how image preloading and `next/font` moved LCP from 4.6s to 1.3s and CLS to 0.00.
-- **7:00–8:00 (1 min)**: *What was cut & next steps* — Review [FUTURE.md](FUTURE.md): conscious triage of payment gateways to preserve core reliability, and what another week would deliver.
-
-### The Five Files to Have Open in Tabs
-1. **Server Component**: `app/menu/DishList.js` — *Why it is not a client component: keeps data fetching logic on the server, zero bundle footprint.*
-2. **Client Component**: `app/menu/Counter.js` or `app/order-status/LiveOrderStatus.js` — *Why it has to be client: manages reactive event listeners and browser state.*
-3. **Protected Action**: `app/actions/order.js` — *Both checks inside it: session existence verification and record ownership verification.*
-4. **Data Query**: `app/menu/DishSearch.js` or `app/orders/OrderStatus.js` — *Where it runs and why: debounced SWR null-key fetching vs 5-second polling.*
-5. **Deployment & Verification**: `README.md` / `VERIFICATION.md` — *Proof of clean Turbopack build, live URL, and passing security battery.*
+All changes to Addis Eats go through the [code review standard and process](VERIFICATION.md#5-code-review-standard-and-process). Keep changes small, run `npm run check` (lint + TypeScript) and `npm run build`, and attach the results and relevant behavior/security evidence to the PR. At least one independent reviewer approves; changes to authentication, authorization, order data, or deployment/security settings require two reviewers, one familiar with that area. Any blocking finding must be fixed and re-reviewed before merge. There is no automated test suite or repository-level required CI gate yet; local checks and review sign-off must not be described as an enforced branch protection rule. A repository administrator must separately configure branch protection and required CI checks before calling this an automatic gate.

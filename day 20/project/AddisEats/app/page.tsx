@@ -1,196 +1,122 @@
-import Image from "next/image";
 import Link from "next/link";
 import { getSession } from "@/lib/auth";
 import { signOut } from "./actions/auth";
+import { dishes } from "./data/dishes";
+import FoodCard from "./components/FoodCard";
 
 export const metadata = {
   title: "Home",
-  description: "Welcome to Addis Eats. Order freshly cooked authentic Ethiopian dishes, stews, and cultural books.",
+  description: "Ethiopian food in Addis Ababa. Fresh Doro Wat, Tibs, and Beyainatu.",
+  alternates: {
+    canonical: "/",
+  },
 };
 
 export default async function Home() {
   const session = await getSession();
+  const popularDishes = dishes.slice(0, 4);
 
   return (
-    <div style={{ padding: "1rem 0" }}>
-      <h1 style={{ fontSize: "2rem", color: "#0f172a", marginBottom: "0.75rem" }}>
-        Welcome to Addis Eats
-      </h1>
-
-      <div style={{ margin: "1.5rem 0", maxWidth: "800px" }}>
-        <Image
-          src="/hero.jpg"
-          alt="Addis Eats authentic food and cultural literature display"
-          width={800}
-          height={400}
-          priority
-          sizes="(max-width: 768px) 100vw, 800px"
-          style={{ width: "100%", height: "auto", borderRadius: "8px", display: "block" }}
-        />
+    <div>
+      <div style={{ marginBottom: "1.5rem" }}>
+        <h1>What are you eating today?</h1>
+        <p style={{ color: "#706b61", marginTop: "0.25rem" }}>
+          Fresh dishes delivered to your door in Bole, Kazanchis, Megenagna, and Piassa.
+        </p>
       </div>
 
-      <div style={{ margin: "1.25rem 0", padding: "1.25rem", backgroundColor: "#ffffff", borderRadius: "8px", border: "1px solid #cbd5e1" }}>
+      <div
+        style={{
+          background: "#ffffff",
+          border: "1px solid #e5dcc3",
+          borderRadius: "26px",
+          padding: "0.95rem 1.25rem",
+          marginBottom: "1.5rem",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          flexWrap: "wrap",
+          gap: "0.75rem",
+          fontSize: "0.9375rem",
+          boxShadow: "0 2px 8px rgba(24, 84, 42, 0.04)",
+        }}
+      >
         {session ? (
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "1rem" }}>
-            <span style={{ fontSize: "1rem", color: "#1e293b" }}>
-              Signed in as: <strong>{session.name}</strong> ({session.role})
+          <div style={{ display: "flex", alignItems: "center", gap: "1rem", flexWrap: "wrap" }}>
+            <span>
+              Signed in as <strong style={{ color: "#18542a" }}>{session.name}</strong>{" "}
+              <span style={{ fontSize: "0.8125rem", color: "#6b7280" }}>
+                ({session.role})
+              </span>
             </span>
             <form action={signOut}>
-              <button
-                type="submit"
-                style={{
-                  minHeight: "44px",
-                  minWidth: "44px",
-                  padding: "0.5rem 1.25rem",
-                  backgroundColor: "#dc2626",
-                  color: "#ffffff",
-                  border: "none",
-                  borderRadius: "6px",
-                  cursor: "pointer",
-                  fontWeight: "600",
-                  display: "inline-flex",
-                  alignItems: "center",
-                  justifyContent: "center"
-                }}
-              >
+              <button type="submit" className="btn btn-secondary btn-sm">
                 Sign Out
               </button>
             </form>
           </div>
         ) : (
-          <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-            <span style={{ color: "#475569" }}>Not signed in.</span>
-            <Link
-              href="/sign-in"
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                justifyContent: "center",
-                minHeight: "44px",
-                padding: "0.5rem 1.25rem",
-                backgroundColor: "#2563eb",
-                color: "#ffffff",
-                borderRadius: "6px",
-                textDecoration: "none",
-                fontWeight: "600"
-              }}
-            >
-              Sign In here
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%", flexWrap: "wrap", gap: "0.5rem" }}>
+            <span style={{ color: "#706b61" }}>
+              Sign in to save your delivery address and view past orders.
+            </span>
+            <Link href="/sign-in" className="btn btn-primary btn-sm">
+              Sign In
             </Link>
           </div>
         )}
       </div>
 
-      <nav aria-label="Main application sections" style={{ display: "flex", gap: "0.75rem", marginTop: "1.5rem", flexWrap: "wrap" }}>
-        <Link
-          href="/menu"
-          style={{
-            minHeight: "44px",
-            display: "inline-flex",
-            alignItems: "center",
-            justifyContent: "center",
-            padding: "0.5rem 1.25rem",
-            backgroundColor: "#ffffff",
-            border: "1px solid #cbd5e1",
-            borderRadius: "6px",
-            color: "#1e293b",
-            textDecoration: "none",
-            fontWeight: "600"
-          }}
-        >
-          Menu & Search
+      <div style={{ marginBottom: "1.5rem" }}>
+        <div className="categories-pill-row">
+          <Link href="/menu" className="category-item-btn active">All Dishes</Link>
+          <Link href="/menu?category=Traditional" className="category-item-btn">Traditional</Link>
+          <Link href="/menu?category=Fasting" className="category-item-btn">Fasting</Link>
+          <Link href="/menu?category=Tibs" className="category-item-btn">Tibs</Link>
+        </div>
+      </div>
+
+      <div style={{ marginBottom: "2rem" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: "0.75rem" }}>
+          <h2>Popular in Addis</h2>
+          <Link href="/menu" style={{ fontSize: "0.9375rem", color: "#d52518", textDecoration: "none", fontWeight: 700 }}>
+            Full menu &rarr;
+          </Link>
+        </div>
+
+        <div className="menu-grid">
+          {popularDishes.map((dish) => (
+            <FoodCard key={dish.id} dish={dish} />
+          ))}
+        </div>
+      </div>
+
+      <div
+        style={{
+          background: "#ffffff",
+          border: "1px solid #e5dcc3",
+          borderRadius: "26px",
+          padding: "1.1rem 1.35rem",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          flexWrap: "wrap",
+          gap: "1rem",
+          boxShadow: "0 2px 8px rgba(24, 84, 42, 0.04)",
+        }}
+      >
+        <div>
+          <strong style={{ fontSize: "1rem", color: "#18542a", display: "block" }}>
+            Delivery Districts
+          </strong>
+          <span style={{ fontSize: "0.875rem", color: "#706b61" }}>
+            Bole (25–35m) · Kazanchis (30–40m) · Megenagna (35–45m) · Piassa (40–50m)
+          </span>
+        </div>
+        <Link href="/checkout" className="btn btn-secondary btn-sm">
+          Start Order
         </Link>
-        <Link
-          href="/orders"
-          style={{
-            minHeight: "44px",
-            display: "inline-flex",
-            alignItems: "center",
-            justifyContent: "center",
-            padding: "0.5rem 1.25rem",
-            backgroundColor: "#ffffff",
-            border: "1px solid #cbd5e1",
-            borderRadius: "6px",
-            color: "#1e293b",
-            textDecoration: "none",
-            fontWeight: "600"
-          }}
-        >
-          Orders & Dashboard
-        </Link>
-        <Link
-          href="/order-status"
-          style={{
-            minHeight: "44px",
-            display: "inline-flex",
-            alignItems: "center",
-            justifyContent: "center",
-            padding: "0.5rem 1.25rem",
-            backgroundColor: "#ffffff",
-            border: "1px solid #cbd5e1",
-            borderRadius: "6px",
-            color: "#1e293b",
-            textDecoration: "none",
-            fontWeight: "600"
-          }}
-        >
-          Order Status
-        </Link>
-        <Link
-          href="/checkout"
-          style={{
-            minHeight: "44px",
-            display: "inline-flex",
-            alignItems: "center",
-            justifyContent: "center",
-            padding: "0.5rem 1.25rem",
-            backgroundColor: "#ffffff",
-            border: "1px solid #cbd5e1",
-            borderRadius: "6px",
-            color: "#1e293b",
-            textDecoration: "none",
-            fontWeight: "600"
-          }}
-        >
-          Checkout
-        </Link>
-        <Link
-          href="/cart"
-          style={{
-            minHeight: "44px",
-            display: "inline-flex",
-            alignItems: "center",
-            justifyContent: "center",
-            padding: "0.5rem 1.25rem",
-            backgroundColor: "#ffffff",
-            border: "1px solid #cbd5e1",
-            borderRadius: "6px",
-            color: "#1e293b",
-            textDecoration: "none",
-            fontWeight: "600"
-          }}
-        >
-          Cart
-        </Link>
-        <Link
-          href="/kitchen"
-          style={{
-            minHeight: "44px",
-            display: "inline-flex",
-            alignItems: "center",
-            justifyContent: "center",
-            padding: "0.5rem 1.25rem",
-            backgroundColor: "#ffffff",
-            border: "1px solid #cbd5e1",
-            borderRadius: "6px",
-            color: "#1e293b",
-            textDecoration: "none",
-            fontWeight: "600"
-          }}
-        >
-          Kitchen (Staff)
-        </Link>
-      </nav>
+      </div>
     </div>
   );
 }

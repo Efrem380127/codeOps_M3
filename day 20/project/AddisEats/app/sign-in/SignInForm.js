@@ -13,48 +13,32 @@ export default function SignInForm({ nextUrl }) {
     setRole(userRole);
   }
 
-  function handleKeyDown(e) {
-    if (e.key === "Escape") {
-      setUsername("");
-    }
-  }
-
   return (
-    <div
-      onKeyDown={handleKeyDown}
-      style={{
-        maxWidth: "460px",
-        margin: "0 auto",
-        padding: "1.75rem",
-        border: "1px solid #cbd5e1",
-        borderRadius: "8px",
-        backgroundColor: "#ffffff",
-        boxShadow: "0 1px 3px rgba(0,0,0,0.08)"
-      }}
-    >
-      <h2 style={{ marginBottom: "1.25rem", textAlign: "center", color: "#0f172a" }}>
+    <div className="form-box" style={{ margin: "0 auto" }}>
+      <h1 style={{ fontSize: "1.375rem", marginBottom: "0.25rem" }}>
         Sign In
-      </h2>
+      </h1>
+      <p style={{ fontSize: "0.875rem", color: "#6b7280", marginBottom: "1.25rem" }}>
+        Sign in to save delivery addresses and track orders.
+      </p>
 
       {nextUrl && (
-        <div style={{ padding: "0.625rem 0.875rem", backgroundColor: "#f1f5f9", borderRadius: "6px", marginBottom: "1rem", fontSize: "0.875rem" }}>
-          Target destination: <code>{nextUrl}</code>
+        <div style={{ padding: "0.4rem 0.65rem", backgroundColor: "#fcf9f0", borderRadius: "6px", marginBottom: "1rem", fontSize: "0.8125rem", border: "1px solid #e5dcc3" }}>
+          Redirect destination: <code style={{ color: "#d52518", fontWeight: 600 }}>{nextUrl}</code>
         </div>
       )}
 
       {state?.error && (
-        <p role="alert" style={{ color: "#dc2626", fontSize: "0.875rem", marginBottom: "1rem", fontWeight: "600" }}>
+        <p className="field-error" style={{ marginBottom: "1rem" }}>
           {state.error}
         </p>
       )}
 
-      <form action={formAction} style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
+      <form action={formAction}>
         <input type="hidden" name="next" value={nextUrl || ""} />
 
-        <div>
-          <label htmlFor="username" style={{ display: "block", marginBottom: "6px", fontWeight: "600", color: "#0f172a" }}>
-            Username
-          </label>
+        <div className="form-field">
+          <label htmlFor="username">Your Name</label>
           <input
             id="username"
             name="username"
@@ -62,99 +46,62 @@ export default function SignInForm({ nextUrl }) {
             onChange={(e) => setUsername(e.target.value)}
             placeholder="e.g. Abebe Bikila"
             required
-            style={{ width: "100%", minHeight: "44px" }}
+            className="form-control"
           />
         </div>
 
-        <div>
-          <label htmlFor="role" style={{ display: "block", marginBottom: "6px", fontWeight: "600", color: "#0f172a" }}>
-            Role
-          </label>
+        <div className="form-field">
+          <label htmlFor="role">Account Type</label>
           <select
             id="role"
             name="role"
             value={role}
             onChange={(e) => setRole(e.target.value)}
-            style={{ width: "100%", minHeight: "44px" }}
+            className="form-control"
           >
-            <option value="customer">Customer</option>
-            <option value="staff">Staff</option>
+            <option value="customer">Customer (Order food & track)</option>
+            <option value="staff">Staff (Kitchen queue access)</option>
           </select>
         </div>
 
         <button
           type="submit"
           disabled={isPending}
-          aria-busy={isPending}
-          style={{
-            width: "100%",
-            minHeight: "48px",
-            padding: "0.75rem",
-            backgroundColor: isPending ? "#94a3b8" : "#2563eb",
-            color: "#ffffff",
-            border: "none",
-            borderRadius: "6px",
-            cursor: isPending ? "not-allowed" : "pointer",
-            fontWeight: "700",
-            fontSize: "1rem"
-          }}
+          className="btn btn-primary"
+          style={{ width: "100%", marginTop: "0.5rem" }}
         >
-          {isPending ? "Signing In..." : "Sign In"}
+          {isPending ? "Signing in..." : "Sign In"}
         </button>
       </form>
 
-      <div style={{ marginTop: "1.75rem", borderTop: "1px solid #e2e8f0", paddingTop: "1.25rem" }}>
-        <p style={{ fontSize: "0.875rem", color: "#475569", marginBottom: "0.75rem", fontWeight: "600" }}>
-          Quick test accounts:
+      <div style={{ marginTop: "1.5rem", borderTop: "1px solid #f3e8cc", paddingTop: "1rem" }}>
+        <p style={{ fontSize: "0.75rem", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.03em", color: "#78716c", marginBottom: "0.5rem" }}>
+          Quick Test Accounts:
         </p>
-        <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "0.35rem" }}>
           <button
             type="button"
             onClick={() => setPreset("Abebe Bikila", "customer")}
-            style={{
-              minHeight: "44px",
-              padding: "0.625rem 1rem",
-              textAlign: "left",
-              justifyContent: "flex-start",
-              fontSize: "0.875rem",
-              cursor: "pointer",
-              borderRadius: "6px",
-              border: "1px solid #cbd5e1"
-            }}
+            className="btn btn-secondary btn-sm"
+            style={{ justifyContent: "flex-start" }}
           >
-            Abebe Bikila (Customer - has seed order)
+            Abebe Bikila · Customer (Has existing order)
           </button>
           <button
             type="button"
             onClick={() => setPreset("Chala Kebede", "customer")}
-            style={{
-              minHeight: "44px",
-              padding: "0.625rem 1rem",
-              textAlign: "left",
-              justifyContent: "flex-start",
-              fontSize: "0.875rem",
-              cursor: "pointer",
-              borderRadius: "6px",
-              border: "1px solid #cbd5e1"
-            }}
+            className="btn btn-secondary btn-sm"
+            style={{ justifyContent: "flex-start" }}
           >
-            Chala Kebede (Customer - different account)
+            Chala Kebede · Customer (New account)
           </button>
           <button
             type="button"
             onClick={() => setPreset("Chef Almaz", "staff")}
-            style={{
-              minHeight: "44px",
-              padding: "0.625rem 1rem",
-              textAlign: "left",
-              justifyContent: "flex-start",
-              fontSize: "0.875rem",
-              cursor: "pointer",
-              borderRadius: "6px",
-              border: "1px solid #cbd5e1"
-            }}
+            className="btn btn-secondary btn-sm"
+            style={{ justifyContent: "flex-start" }}
           >
-            Chef Almaz (Staff - kitchen access)
+            Chef Almaz · Staff (Kitchen access)
           </button>
         </div>
       </div>

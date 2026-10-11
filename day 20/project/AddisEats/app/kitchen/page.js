@@ -4,8 +4,11 @@ import { orders } from "../data/orders";
 import Link from "next/link";
 
 export const metadata = {
-  title: "Kitchen Dashboard",
+  title: "Kitchen Queue",
   description: "Staff portal for monitoring incoming orders and kitchen ticket fulfillment.",
+  alternates: {
+    canonical: "/kitchen",
+  },
 };
 
 export default async function KitchenPage() {
@@ -17,63 +20,91 @@ export default async function KitchenPage() {
 
   if (session.role !== "staff") {
     return (
-      <div style={{ padding: "2rem" }}>
-        <h1 style={{ color: "#dc2626" }}>403 - Forbidden</h1>
-        <p>Staff role required to view the kitchen dashboard.</p>
-        <p>Your current role is: <strong>{session.role}</strong></p>
-        <Link href="/">&larr; Return to Home</Link>
+      <div style={{ maxWidth: "480px", margin: "2rem auto" }}>
+        <div style={{ background: "#ffffff", border: "1px solid #e5dcc3", borderRadius: "6px", padding: "1.75rem" }}>
+          <div style={{ color: "#d52518", fontWeight: 700, fontSize: "0.875rem", marginBottom: "0.5rem" }}>
+            Access Restricted
+          </div>
+          <h1 style={{ fontSize: "1.375rem", margin: "0.5rem 0" }}>Staff Access Only</h1>
+          <p style={{ color: "#6b7280", marginBottom: "1.25rem", fontSize: "0.875rem" }}>
+            The kitchen queue is restricted to restaurant staff. You are currently logged in as <strong>{session.role}</strong>.
+          </p>
+          <Link href="/" className="btn btn-secondary btn-sm">
+            &larr; Back to Home
+          </Link>
+        </div>
       </div>
     );
   }
 
   return (
-    <div style={{ padding: "2rem" }}>
-      <nav style={{ marginBottom: "1rem" }}>
-        <Link href="/">Home</Link>{" | "}
-        <Link href="/orders">Orders</Link>{" | "}
-        <Link href="/kitchen">Kitchen</Link>
+    <div>
+      <nav className="breadcrumbs" aria-label="Breadcrumbs">
+        <Link href="/">Home</Link>
+        <span className="separator">/</span>
+        <span style={{ color: "#6b7280" }}>Kitchen</span>
       </nav>
 
-      <h1>Kitchen Dashboard</h1>
-      <p style={{ color: "#4b5563" }}>
-        Staff member: <strong>{session.name}</strong> ({session.role})
-      </p>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", flexWrap: "wrap", gap: "1rem", marginBottom: "1.5rem" }}>
+        <div>
+          <h1 style={{ margin: 0 }}>Kitchen Queue</h1>
+          <p style={{ color: "#6b7280", marginTop: "0.25rem" }}>
+            Active tickets for food preparation.
+          </p>
+        </div>
+        <div style={{ fontSize: "0.8125rem", color: "#6b7280" }}>
+          Staff: <strong style={{ color: "#18542a" }}>{session.name}</strong>
+        </div>
+      </div>
 
-      <h2 style={{ marginTop: "1.5rem" }}>All Kitchen Orders</h2>
+      <h2>Incoming Tickets</h2>
       {orders.length === 0 ? (
-        <p>No active orders in the queue.</p>
+        <div style={{ background: "#ffffff", border: "1px solid #e5dcc3", borderRadius: "6px", padding: "2rem", textAlign: "center" }}>
+          <p style={{ margin: 0, color: "#6b7280" }}>No pending orders in the kitchen queue.</p>
+        </div>
       ) : (
-        <ul style={{ listStyle: "none", padding: 0 }}>
-          {orders.map((order) => (
-            <li
-              key={order.id}
-              style={{
-                marginBottom: "1rem",
-                padding: "1rem",
-                border: "1px solid #e5e7eb",
-                borderRadius: "6px"
-              }}
-            >
-              <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <strong>Order #{order.id}</strong>
-                <span
-                  style={{
-                    padding: "2px 8px",
-                    borderRadius: "4px",
-                    backgroundColor: order.status === "cancelled" ? "#fee2e2" : "#dcfce7",
-                    color: order.status === "cancelled" ? "#991b1b" : "#166534",
-                    fontSize: "0.875rem"
-                  }}
-                >
-                  {order.status}
-                </span>
+        <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem", maxWidth: "680px" }}>
+          {orders.map((order) => {
+            const statusClass =
+              order.status === "cancelled"
+                ? "status-cancelled"
+                : order.status === "delivered"
+                ? "status-delivered"
+                : "status-preparing";
+
+            return (
+              <div
+                key={order.id}
+                className="order-ticket"
+              >
+                <div className="order-ticket-header">
+                  <div>
+                    <strong style={{ fontSize: "0.9375rem", color: "#18542a" }}>
+                      Ticket #{order.id}
+                    </strong>
+                    <span style={{ marginLeft: "0.75rem", fontSize: "0.875rem", color: "#4b5563" }}>
+                      {order.name}
+                    </span>
+                  </div>
+                  <span style={{ fontWeight: 700, fontSize: "0.875rem", color: order.status === "cancelled" ? "#d52518" : order.status === "delivered" ? "#18542a" : "#b45309", textTransform: "capitalize" }}>
+                    {order.status}
+                  </span>
+                </div>
+
+                <div style={{ display: "flex", gap: "1.5rem", fontSize: "0.8125rem", color: "#6b7280", flexWrap: "wrap", margin: "0.25rem 0" }}>
+                  <span><strong>Phone:</strong> {order.phone}</span>
+                  <span><strong>District:</strong> {order.area}</span>
+                </div>
+
+                {order.notes && (
+                  <div style={{ background: "#fdfbf7", padding: "0.4rem 0.6rem", borderRadius: "4px", fontSize: "0.8125rem", color: "#4b5563", marginTop: "0.35rem" }}>
+                    <strong>Note:</strong> {order.notes}
+                  </div>
+                )}
               </div>
-              <p style={{ margin: "4px 0" }}>Customer: {order.name} ({order.phone})</p>
-              <p style={{ margin: "4px 0" }}>Area: {order.area}</p>
-              {order.notes && <p style={{ margin: "4px 0", color: "#6b7280" }}>Notes: {order.notes}</p>}
-            </li>
-          ))}
-        </ul>
+            );
+          })}
+        </div>
       )}
     </div>
   );

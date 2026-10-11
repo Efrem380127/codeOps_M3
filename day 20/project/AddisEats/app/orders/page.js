@@ -1,19 +1,22 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { orders } from "../data/orders";
 import { getSession } from "@/lib/auth";
 import OrdersEmptyState from "./OrdersEmptyState";
-import RevenueBarChart from "./RevenueBarChart";
-import OrdersLineChart from "./OrdersLineChart";
-import ChartDataTable from "./ChartDataTable";
+import NeighbourhoodBarChart from "./NeighbourhoodBarChart";
+import OrdersOverTimeLineChart from "./OrdersOverTimeLineChart";
+import NeighbourhoodDataTable from "./NeighbourhoodDataTable";
+import OrdersTimeDataTable from "./OrdersTimeDataTable";
 import OrderTable from "./OrderTable";
 import OrdersLoading from "./loading";
 import OrdersError from "./error";
 
-import { etb } from "@/lib/format";
-
 export const metadata = {
-  title: "Order History & Analytics",
-  description: "Aggregated order volume, ETB revenue metrics, fulfillment status, and order transactions.",
+  title: "Order Dashboard & Analytics",
+  description: "View neighbourhood revenue distribution, order trends, and itemized customer receipts.",
+  alternates: {
+    canonical: "/orders",
+  },
 };
 
 export default async function OrdersPage({ searchParams }) {
@@ -25,10 +28,10 @@ export default async function OrdersPage({ searchParams }) {
 
   if (forcedState === "error") {
     return (
-      <div style={{ padding: "2rem", maxWidth: "1000px", margin: "0 auto" }}>
+      <div style={{ maxWidth: "1000px", margin: "0 auto" }}>
         <StateSwitcher activeState={forcedState} />
         <OrdersError
-          error={{ message: "Demonstration error: Simulated database failure while reading order stream." }}
+          error={{ message: "Demonstration error: Simulated failure while reading live kitchen order transactions." }}
         />
       </div>
     );
@@ -36,7 +39,7 @@ export default async function OrdersPage({ searchParams }) {
 
   if (forcedState === "loading") {
     return (
-      <div style={{ padding: "2rem", maxWidth: "1000px", margin: "0 auto" }}>
+      <div style={{ maxWidth: "1000px", margin: "0 auto" }}>
         <StateSwitcher activeState={forcedState} />
         <OrdersLoading />
       </div>
@@ -44,37 +47,48 @@ export default async function OrdersPage({ searchParams }) {
   }
 
   const session = await getSession();
+
+  if (!session) {
+    redirect("/sign-in?next=/orders");
+  }
+
   const allOrders = session?.role === "staff"
     ? orders
-    : orders.filter((o) => o.sessionId === session?.id || o.userId === session?.id || !session);
+    : orders.filter((o) => o.sessionId === session.id || o.userId === session.id);
 
   if (forcedState === "empty" || allOrders.length === 0) {
     return (
-      <div style={{ padding: "2rem", maxWidth: "1000px", margin: "0 auto" }}>
-        <nav style={{ marginBottom: "1.25rem" }}>
-          <Link href="/">Home</Link>{" | "}
-          <Link href="/menu">Menu</Link>{" | "}
-          <Link href="/orders">Orders</Link>{" | "}
-          <Link href="/kitchen">Kitchen</Link>
+      <div style={{ maxWidth: "1000px", margin: "0 auto" }}>
+        <nav className="breadcrumbs" aria-label="Breadcrumbs">
+          <Link href="/">Home</Link>
+          <span className="separator">/</span>
+          <span style={{ color: "#6b7280" }}>Orders</span>
         </nav>
 
         <StateSwitcher activeState={forcedState || "empty"} />
 
         <div style={{ marginBottom: "1.5rem" }}>
-          <h1 style={{ fontSize: "1.75rem", fontWeight: "700", color: "#0f172a", marginBottom: "0.25rem" }}>
-            Orders & Revenue Analytics
-          </h1>
-          {session && (
-            <p style={{ color: "#64748b", fontSize: "0.875rem" }}>
-              Signed in as <strong>{session.name}</strong> ({session.role})
-            </p>
-          )}
+          <h1 style={{ margin: 0 }}>Addis Eats Dashboard</h1>
+          <p style={{ color: "#6b7280", marginTop: "0.25rem" }}>
+            Signed in as <strong>{session.name}</strong> ({session.role})
+          </p>
         </div>
 
         <OrdersEmptyState isForced={forcedState === "empty"} />
       </div>
     );
   }
+
+  const neighbourhoods = ["Bole", "Kazanchis", "Piassa", "Sarbet", "Gerji", "CMC"];
+  const revenueByNeighbourhood = neighbourhoods.map((area) => {
+    const areaOrders = allOrders.filter((o) => o.area === area);
+    const revenue = areaOrders.reduce((sum, o) => sum + (o.total || 0), 0);
+    return {
+      neighbourhood: area,
+      revenue,
+      orderCount: areaOrders.length
+    };
+  });
 
   const now = new Date();
   const daysList = [];
@@ -88,7 +102,7 @@ export default async function OrdersPage({ searchParams }) {
     daysList.push({ dateKey, displayDate, dayName, timestamp: d.getTime() });
   }
 
-  const dailyMetrics = daysList.map((day) => {
+  const ordersOverTime = daysList.map((day) => {
     const dayStart = day.timestamp;
     const dayEnd = dayStart + 24 * 60 * 60 * 1000;
 
@@ -98,14 +112,12 @@ export default async function OrdersPage({ searchParams }) {
     });
 
     const revenue = matchedOrders.reduce((sum, o) => sum + (o.total || 0), 0);
-    const orderCount = matchedOrders.length;
-
     return {
       dateKey: day.dateKey,
       displayDate: day.displayDate,
       dayName: day.dayName,
-      revenue,
-      orderCount
+      orderCount: matchedOrders.length,
+      revenue
     };
   });
 
@@ -117,9 +129,10 @@ export default async function OrdersPage({ searchParams }) {
     totalRevenue,
     totalOrders,
     averageOrderValue,
+    revenueByNeighbourhood,
+    ordersOverTime,
     rangeLabel: "Past 7 Days",
-    unit: "Orders",
-    dailyMetrics
+    timeUnit: "Orders"
   };
 
   const sortedOrders = [...allOrders].sort((a, b) => {
@@ -128,6 +141,8 @@ export default async function OrdersPage({ searchParams }) {
       comparison = (a.total || 0) - (b.total || 0);
     } else if (sortKey === "name") {
       comparison = (a.name || "").localeCompare(b.name || "");
+    } else if (sortKey === "area") {
+      comparison = (a.area || "").localeCompare(b.area || "");
     } else if (sortKey === "status") {
       comparison = (a.status || "").localeCompare(b.status || "");
     } else {
@@ -140,25 +155,20 @@ export default async function OrdersPage({ searchParams }) {
   const paginatedOrders = sortedOrders.slice((currentPage - 1) * pageSize, currentPage * pageSize);
 
   return (
-    <div style={{ padding: "2rem", maxWidth: "1000px", margin: "0 auto" }}>
-      <nav style={{ marginBottom: "1.25rem" }}>
-        <Link href="/">Home</Link>{" | "}
-        <Link href="/menu">Menu</Link>{" | "}
-        <Link href="/orders">Orders</Link>{" | "}
-        <Link href="/kitchen">Kitchen</Link>
+    <div style={{ maxWidth: "1000px", margin: "0 auto" }}>
+      <nav className="breadcrumbs" aria-label="Breadcrumbs">
+        <Link href="/">Home</Link>
+        <span className="separator">/</span>
+        <span style={{ color: "#6b7280" }}>Orders</span>
       </nav>
 
       <StateSwitcher activeState={forcedState || "populated"} />
 
       <header style={{ marginBottom: "1.75rem", background: "transparent", color: "inherit", padding: 0 }}>
-        <h1 style={{ fontSize: "1.75rem", fontWeight: "700", color: "#0f172a", marginBottom: "0.25rem" }}>
-          Orders & Revenue Analytics
-        </h1>
-        {session && (
-          <p style={{ color: "#64748b", fontSize: "0.875rem" }}>
-            Signed in as <strong>{session.name}</strong> ({session.role})
-          </p>
-        )}
+        <h1 style={{ margin: 0 }}>Addis Eats Dashboard</h1>
+        <p style={{ color: "#6b7280", marginTop: "0.25rem" }}>
+          Signed in as <strong>{session.name}</strong> ({session.role})
+        </p>
       </header>
 
       <section
@@ -170,55 +180,64 @@ export default async function OrdersPage({ searchParams }) {
           marginBottom: "1.75rem"
         }}
       >
-        <div style={{ backgroundColor: "#ffffff", border: "1px solid #e2e8f0", borderRadius: "8px", padding: "1.25rem" }}>
-          <span style={{ fontSize: "0.875rem", color: "#64748b", display: "block", marginBottom: "0.375rem" }}>
+        <div style={{ backgroundColor: "#ffffff", border: "1px solid #e5dcc3", borderRadius: "20px", padding: "1.25rem", boxShadow: "0 2px 8px rgba(24, 84, 42, 0.04)" }}>
+          <span style={{ fontSize: "0.85rem", color: "#6b7280", display: "block", marginBottom: "0.35rem" }}>
             Total Revenue
           </span>
-          <strong style={{ fontSize: "1.5rem", color: "#0f172a", fontVariantNumeric: "tabular-nums" }}>
-            {etb(summary.totalRevenue)}
+          <strong style={{ fontSize: "1.5rem", color: "#18542a", fontVariantNumeric: "tabular-nums" }}>
+            {`${summary.totalRevenue.toLocaleString()} ETB`}
           </strong>
         </div>
 
-        <div style={{ backgroundColor: "#ffffff", border: "1px solid #e2e8f0", borderRadius: "8px", padding: "1.25rem" }}>
-          <span style={{ fontSize: "0.875rem", color: "#64748b", display: "block", marginBottom: "0.375rem" }}>
+        <div style={{ backgroundColor: "#ffffff", border: "1px solid #e5dcc3", borderRadius: "20px", padding: "1.25rem", boxShadow: "0 2px 8px rgba(24, 84, 42, 0.04)" }}>
+          <span style={{ fontSize: "0.85rem", color: "#6b7280", display: "block", marginBottom: "0.35rem" }}>
             Total Orders
           </span>
-          <strong style={{ fontSize: "1.5rem", color: "#0f172a", fontVariantNumeric: "tabular-nums" }}>
+          <strong style={{ fontSize: "1.5rem", color: "#18542a", fontVariantNumeric: "tabular-nums" }}>
             {summary.totalOrders}
           </strong>
         </div>
 
-        <div style={{ backgroundColor: "#ffffff", border: "1px solid #e2e8f0", borderRadius: "8px", padding: "1.25rem" }}>
-          <span style={{ fontSize: "0.875rem", color: "#64748b", display: "block", marginBottom: "0.375rem" }}>
+        <div style={{ backgroundColor: "#ffffff", border: "1px solid #e5dcc3", borderRadius: "20px", padding: "1.25rem", boxShadow: "0 2px 8px rgba(24, 84, 42, 0.04)" }}>
+          <span style={{ fontSize: "0.85rem", color: "#6b7280", display: "block", marginBottom: "0.35rem" }}>
             Average Order Value
           </span>
-          <strong style={{ fontSize: "1.5rem", color: "#0f172a", fontVariantNumeric: "tabular-nums" }}>
-            {etb(summary.averageOrderValue)}
+          <strong style={{ fontSize: "1.5rem", color: "#18542a", fontVariantNumeric: "tabular-nums" }}>
+            {`${summary.averageOrderValue.toLocaleString()} ETB`}
           </strong>
         </div>
       </section>
 
       <section
-        aria-label="Order trend charts"
+        aria-label="Analytics charts"
         style={{
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(420px, 1fr))",
-          gap: "1.5rem"
+          gridTemplateColumns: "repeat(auto-fit, minmax(440px, 1fr))",
+          gap: "1.5rem",
+          marginBottom: "1.5rem"
         }}
       >
-        <RevenueBarChart summary={summary} />
-        <OrdersLineChart summary={summary} />
-      </section>
+        <div>
+          <NeighbourhoodBarChart summary={summary} />
+          <NeighbourhoodDataTable
+            data={summary.revenueByNeighbourhood}
+            totalRevenue={summary.totalRevenue}
+            totalOrders={summary.totalOrders}
+          />
+        </div>
 
-      <ChartDataTable
-        dailyMetrics={summary.dailyMetrics}
-        totalOrders={summary.totalOrders}
-        totalRevenue={summary.totalRevenue}
-      />
+        <div>
+          <OrdersOverTimeLineChart summary={summary} />
+          <OrdersTimeDataTable
+            data={summary.ordersOverTime}
+            totalOrders={summary.totalOrders}
+            totalRevenue={summary.totalRevenue}
+          />
+        </div>
+      </section>
 
       <OrderTable
         orders={paginatedOrders}
-        allOrders={allOrders}
         totalCount={sortedOrders.length}
         currentPage={currentPage}
         pageSize={pageSize}
@@ -248,12 +267,13 @@ function StateSwitcher({ activeState }) {
         marginBottom: "1.5rem",
         padding: "0.75rem 1rem",
         backgroundColor: "#ffffff",
-        border: "1px solid #e2e8f0",
-        borderRadius: "8px",
-        fontSize: "0.8125rem"
+        border: "1px solid #e5dcc3",
+        borderRadius: "16px",
+        fontSize: "0.8125rem",
+        boxShadow: "0 2px 8px rgba(24, 84, 42, 0.04)"
       }}
     >
-      <span style={{ fontWeight: "600", color: "#475569" }}>Demonstrate States:</span>
+      <span style={{ fontWeight: "700", color: "#18542a" }}>Demonstrate States:</span>
       {states.map((s) => {
         const isActive = activeState === s.key || (!activeState && s.key === "populated");
         return (
@@ -261,17 +281,14 @@ function StateSwitcher({ activeState }) {
             key={s.key}
             href={s.href}
             style={{
-              display: "inline-flex",
-              alignItems: "center",
-              justifyContent: "center",
-              minHeight: "44px",
-              padding: "0.5rem 0.875rem",
-              borderRadius: "6px",
-              border: isActive ? "2px solid #2563eb" : "1px solid #cbd5e1",
-              backgroundColor: isActive ? "#eff6ff" : "#ffffff",
-              color: isActive ? "#1d4ed8" : "#475569",
+              padding: "0.3rem 0.75rem",
+              borderRadius: "9999px",
+              border: isActive ? "1px solid #18542a" : "1px solid #e5dcc3",
+              backgroundColor: isActive ? "#18542a" : "#fcf9f0",
+              color: isActive ? "#ffffff" : "#4b5563",
               textDecoration: "none",
-              fontWeight: isActive ? "700" : "500"
+              fontWeight: isActive ? "700" : "500",
+              transition: "all 0.15s ease"
             }}
           >
             {s.label}
