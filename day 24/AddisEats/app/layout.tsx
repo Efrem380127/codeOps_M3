@@ -1,28 +1,19 @@
-import { Geist, Geist_Mono } from "next/font/google";
+import Link from "next/link";
 import Script from "next/script";
 import "./globals.css";
 import Providers from "./components/Providers";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+import CartLink from "./components/CartLink";
 
 export const metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://addis-eats-six.vercel.app"),
   title: {
-    default: "Addis Eats | Authentic Ethiopian Food & Books",
+    default: "Addis Eats | Authentic Ethiopian Food Delivery",
     template: "%s | Addis Eats",
   },
-  description: "Browse and order authentic Ethiopian cuisine and cultural literature.",
+  description: "Order authentic Ethiopian cuisine in Addis Ababa. Fresh Doro Wat, Tibs, Shiro, and Beyainatu.",
   openGraph: {
     title: "Addis Eats",
-    description: "Authentic Ethiopian cuisine and cultural literature.",
+    description: "Authentic Ethiopian cuisine delivered to your door.",
     siteName: "Addis Eats",
     locale: "en_US",
     type: "website",
@@ -31,15 +22,34 @@ export const metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
+    <html lang="en">
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=JetBrains+Mono:wght@500;600&display=swap"
+          rel="stylesheet"
+        />
+      </head>
       <body>
         <a href="#main-content" className="skip-link">
           Skip to main content
         </a>
         <Providers>
-          <header>
-            <h1>Addis Eats & Book Store</h1>
-            <p>Fresh Ethiopian dishes, cultural books & live delivery tracking</p>
+          <header className="site-header">
+            <div className="header-container">
+              <Link href="/" className="brand-title">
+                Addis Eats
+              </Link>
+
+              <nav className="header-nav" aria-label="Main Navigation">
+                <Link href="/menu">Menu</Link>
+                <Link href="/orders">Orders</Link>
+                <Link href="/order-status">Live Status</Link>
+                <Link href="/kitchen">Kitchen</Link>
+                <CartLink />
+              </nav>
+            </div>
           </header>
 
           <main id="main-content" tabIndex={-1}>
@@ -47,12 +57,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </main>
 
           <footer>
-            <p>2026 Addis Eats &middot; IBT College Canada CodeOps</p>
+            <p>Addis Eats &middot; Authentic Ethiopian Cuisine</p>
           </footer>
         </Providers>
 
         <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-DEMO123"
+          src="https://www.googletagmanager.com/gtag/js?id=G-ADDISEATS123"
           strategy="lazyOnload"
         />
       </body>
