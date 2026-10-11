@@ -1,31 +1,35 @@
-import FoodCard from "@/app/components/FoodCard";
+import Image from "next/image";
+import Link from "next/link";
 import { dishes } from "@/app/data/dishes";
-import { filterDishes } from "@/app/lib/cart";
 
-export default async function DishList({ category, search }) {
-  const filtered = filterDishes(dishes, category || "all", search || "");
-  const heading = category && category.toLowerCase() !== "all" ? category : "All dishes";
-
-  if (!filtered.length) {
-    return (
-      <div className="card empty-state">
-        <h2>No dishes match your search.</h2>
-        <p>
-          {search ? `Nothing found for “${search}”. ` : ""}
-          Try “Wat”, “Tibs”, or “Shiro”, or clear the filters to see every dish.
-        </p>
-      </div>
-    );
-  }
-
+export default async function DishList() {
   return (
-    <section aria-labelledby="dish-list-heading">
-      <h2 id="dish-list-heading" className="dish-list-heading">
-        {heading} ({filtered.length})
-      </h2>
-      <div className="menu-grid">
-        {filtered.map((dish) => <FoodCard key={dish.id} dish={dish} />)}
+    <div>
+      <h2>Available Dishes</h2>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: "1rem", marginTop: "1rem" }}>
+        {dishes.map((dish) => (
+          <Link
+            key={dish.id}
+            href={`/menu/${dish.id}`}
+            style={{ textDecoration: "none", color: "inherit" }}
+          >
+            <div style={{ border: "1px solid #e5e7eb", borderRadius: "8px", overflow: "hidden", background: "#fff" }}>
+              <Image
+                src={dish.image}
+                alt={dish.name}
+                width={300}
+                height={200}
+                sizes="(max-width: 640px) 100vw, 300px"
+                style={{ width: "100%", height: "auto", display: "block" }}
+              />
+              <div style={{ padding: "0.75rem" }}>
+                <p style={{ fontWeight: "600", marginBottom: "0.25rem" }}>{dish.name}</p>
+                <p style={{ color: "#b45309", fontWeight: "600", fontSize: "0.875rem" }}>{dish.price} ETB</p>
+              </div>
+            </div>
+          </Link>
+        ))}
       </div>
-    </section>
+    </div>
   );
 }

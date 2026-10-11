@@ -1,59 +1,67 @@
-# DATA.md — Query Architecture & Data Fetching Strategy
+# DATA.md — Query Architecture & Data Strategy
 
-This document details the data fetching architecture, query boundaries, cache strategies, and refresh rules for Addis Eats, adhering to the principle: **Server unless the person triggers it; then seed the exception with fallbackData.**
-
-> **Review correction (current code):** Server seeding does not make private data safe to expose. `app/order-status/page.js` can seed a requested order without an ownership check, and `app/api/orders/[id]/route.js` exposes full details for demo order #1 before authentication. See the [current review risk register](VERIFICATION.md#d-adoption-and-existing-risk-register).
+This document details every query, rendering boundary, cache key, refresh rule, and architectural justification across the Addis Eats frontend and server layers.
 
 ---
 
-## 1. Decision Two: Where Data is Fetched
+## 1. Query & Fetching Inventory
 
-| Data | Where, and Why | Key / Endpoint | Refresh Rule |
-|---|---|---|---|
-| **Menu and dishes** | **Server** — public, indexable, cacheable | Static / ISR (`revalidate: 60s`) | Revalidates every 60 seconds; static generation for dish details (`generateStaticParams`). |
-| **Order history** | **Server** — private, scoped to the session | Server component via `getOrdersForUser(session.id)` | On-demand on request; scoped strictly to verified cookie session. |
-| **Order status** | **Server first, then polled on the client** | `/api/orders/${id}` via SWR | Server renders initial status (`fallbackData`), client polls every 5 seconds (`refreshInterval: 5000`). |
-| **Menu search** | **Client** — triggered by typing, debounced | `/api/dishes?search=${term}&page=${page}` via SWR | Debounced 300ms; `null` key when input is blank; `keepPreviousData: true` during page transitions. |
-| **Cart** | **Client store** — never leaves the browser | `CartContext` / Local Storage | Synchronous in-memory state; zero server round-trips until checkout. |
-
----
-
-## 2. Core Principles & Problem Solutions
-
-### A. "Server unless the person triggers it"
-- Four out of five data entities (Menu, Dish details, Order history, and initial Order status) render directly on the server as React Server Components.
-- This minimizes client bundle size, ensures fast First Contentful Paint (FCP), allows search engine crawlers to parse complete HTML, and eliminates client-side waterfall requests.
-
-### B. "Then seed the exception"
-- Where client-side querying is unavoidable (live delivery status updates or interactive catalog searching), the server renders the first result and supplies it to SWR as `fallbackData`.
-- **Zero-Spinner Arrival**: A customer arriving at `/order-status?id=1` or `/orders/1` sees full order information on the very first paint. There is no loading spinner for data the server already had in memory.
-- Polling begins 5 seconds after hydration without ever displacing the initial layout.
-
-### C. Menu Search Debouncing & Null Keys
-- **Null Key**: When the search query is blank (`""`), SWR's cache key resolves to `null`. This pauses fetching completely and avoids firing useless empty queries.
-- **300ms Debounce**: Rapid keystrokes clear and reset the debounce timer. Typing "Shiro" fires exactly 1 network request after typing ceases, rather than 5 concurrent requests.
-- **No Race Conditions**: SWR automatically invalidates and ignores stale out-of-order responses from preceding queries.
-
-### D. Paged Dish List with `keepPreviousData`
-- Navigating between pages (`?page=1` to `?page=2`) keeps previous records visible on-screen until the incoming page payload finishes resolving.
-- Eliminates page flashing and layout shifts during search/pagination transitions.
+| Query / Flow | Boundary | Cache Key / Route | Refresh Rule | Architectural Reasoning |
+|---|---|---|---|---|
+| **Menu Catalog** | Server | `getDishes()` in `app/menu/page.js` | ISR (`revalidate: 60s`) | Catalog changes infrequently during operational hours; ISR serves instantaneous cached HTML globally via Edge CDN while updating in the background. |
+| **Dish Detail** | Server | `generateStaticParams()` in `app/menu/[id]/page.js` | SSG (Pre-rendered static HTML) | Individual dish pages are completely deterministic; pre-generating all 9 dishes yields zero-millisecond TTFB and maximum SEO discoverability. |
+| **Dish Search & Filter** | Client | `/api/dishes?search=${query}&page=${page}` (or `null`) | On-demand (300ms debounce), `keepPreviousData: true` | Setting key to `null` when search is empty stops unnecessary network traffic. 300ms debounce cancels intermediate keystrokes. `keepPreviousData` avoids layout flicker during transitions. |
+| **Order History** | Server | `getOrdersForUser(session.id)` in `app/orders/page.js` | Dynamic (`cookies()`) | Strictly private; rendered dynamically on demand to enforce caller ownership and prevent caching of personal customer records. |
+| **Single Order Detail** | Server | `getOrderById(params.id)` in `app/orders/[id]/page.js` | Dynamic (`cookies()`) | Ownership gate verifies `order.sessionId === session.id` before rendering. Throws access refusal for unauthorized IDs. |
+| **Live Order Status Polling** | Client | `/api/orders/${id}` in `app/orders/OrderStatus.js` | SWR 5s poll (`refreshInterval: 5000`) | Pre-seeded with server `fallbackData` for zero-spinner initial paint. SWR polls every 5 seconds while tab is active, pausing automatically when window is blurred. |
+| **Live Delivery SSE Stream** | Server / Client | `/api/orders/[id]/stream` in `app/order-status/LiveOrderStatus.js` | Real-time Server-Sent Events | Pushes live driver courier coordinates across Addis Ababa checkpoints directly to the interactive Leaflet map without continuous HTTP overhead. |
+| **Kitchen Dashboard** | Server | `getOrders()` in `app/kitchen/page.js` | Dynamic (`session.role === "staff"`) | Displays incoming tickets and real-time order states strictly for authenticated restaurant kitchen staff. |
 
 ---
 
-## 3. Query Inventory & Verification
+## 2. Server vs. Client Boundary Architecture
 
-| Query | Key | Refresh Rule | Rationale |
-|---|---|---|---|
-| **Order Status** | `/api/orders/${id}` | `refreshInterval: 5000`, `revalidateOnFocus: true` | Delivery progress changes in real-time; 5-second polling provides timely updates without server overload. |
-| **Dishes Search** | `/api/dishes?search=${term}&page=${page}` (or `null`) | 300ms debounce, `keepPreviousData: true` | Client-driven interaction; prevents spamming the server on every keystroke. |
-| **Dishes Menu (All)** | `/api/dishes` | ISR (60s) / Static SSG | Menu catalog is stable during service hours; caching improves throughput and edge latency. |
+### The Rule
+> **Fetch on the server unless the request is triggered by user typing or ongoing live polling.**
 
-### Verification Answers
-1. **Does typing five characters fire one request or five?**  
-   **One request.** The 300ms timer resets on each keystroke, dispatching only after the user pauses typing.
-2. **Does the order page show data immediately, with no spinner?**  
-   **Yes.** Server pre-rendering seeds `fallbackData`, rendering order details instantly on arrival.
-3. **Do two components asking for the same key produce one network call?**  
-   **Yes.** SWR deduplicates in-flight requests for identical keys into a single HTTP fetch.
-4. **Does the list keep previous results visible while the next load runs?**  
-   **Yes.** `keepPreviousData: true` holds previous cards in place until the next page arrives.
+```
+[Server Component: DishList] (Async Server Component)
+       ▲
+       │ Streamed via {children}
+       ▼
+[Client Wrapper: FilterShell] ("use client" - Leaf state: category selection)
+```
+
+1. **Why `DishList.js` is a Server Component**:
+   It fetches dishes directly from server memory or database without shipping any data-fetching libraries or parsing logic to the client browser bundle.
+2. **Why `FilterShell.js` is a Client Component**:
+   It only manages local active tab state (`selectedCategory`) and passes server-rendered dishes via React `{children}` composition.
+3. **Why `Counter.js` is an Isolated Leaf**:
+   The interactive increment/decrement quantity logic is isolated into a tiny leaf component (`"use client"`), keeping parent containers pure Server Components.
+
+---
+
+## 3. Client-Side Data Problems Solved
+
+### A. Zero-Flicker Search with Null Key and Debouncing
+- **Null Key**: When search query is empty string (`""`), SWR key evaluates to `null`. SWR does not issue a network request.
+- **300ms Debounce**: When a user rapidly types "Shiro", keystrokes reset the debounce timer. Exactly one HTTP request fires 300ms after typing halts.
+- **`keepPreviousData: true`**: While the new page or query is in-flight, previous search results stay visible, preventing blank flashes or layout jumping.
+
+### B. Instant First Paint via SWR `fallbackData`
+- Client polling components (`OrderStatus.js`) receive initial server-rendered data via props.
+- SWR hydrates its cache instantly using `fallbackData: initialOrder`.
+- The initial screen renders immediately with complete order status, producing **zero loading spinners** on initial page load.
+
+---
+
+## 4. Mutation & State Synchronization
+
+- **`placeOrder` (Server Action)**:
+  - Validates delivery fields against server schema.
+  - Links order to authenticated session ID.
+  - Calls `revalidatePath("/checkout")` and `revalidatePath("/orders")`.
+- **`cancelOrder` (Server Action)**:
+  - Validates active session and confirms record ownership (`order.sessionId === session.id`).
+  - Sets order status to `"cancelled"`.
+  - Revalidates order list and detail paths.

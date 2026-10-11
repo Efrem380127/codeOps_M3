@@ -4,57 +4,42 @@ import CategoryBar from "./CategoryBar";
 import DishList from "./DishList";
 import DishSearch from "./DishSearch";
 import NavigationButton from "./NavigationButton";
+import FilterShell from "./FilterShell";
 
 export const revalidate = 60;
 
 export const metadata = {
-  title: "Menu",
-  description: "Browse our authentic Ethiopian menu featuring traditional stews, grilled specialties, and vegan fasting platters.",
-  alternates: {
-    canonical: "/menu",
-  },
+  title: "Menu & Specialties",
+  description: "Explore our authentic Ethiopian menu featuring freshly prepared wat stews, grilled tibs, and vegan platters.",
 };
 
-export default async function Menu({ searchParams }) {
-  const params = await searchParams;
-  const category = params?.category || "all";
-  const search = params?.search || "";
-
+export default async function Menu() {
   return (
-    <div className="menu-page-container">
-      <nav className="breadcrumbs" aria-label="Breadcrumbs">
-        <Link href="/">Home</Link>
-        <span aria-hidden="true">/</span>
-        <span aria-current="page">Menu</span>
+    <div style={{ padding: "1.5rem" }}>
+      <NavigationButton />
+      <h1>Menu</h1>
+
+      <nav style={{ margin: "0.5rem 0 1rem" }}>
+        <Link href="/">Home</Link>{" | "}
+        <Link href="/cart">Cart</Link>{" | "}
+        <Link href="/checkout">Checkout</Link>{" | "}
+        <Link href="/orders">Orders</Link>
       </nav>
 
-      <div className="page-heading">
-        <h1>Today&rsquo;s menu</h1>
-        <p>Nine Ethiopian favorites, cooked to order and delivered across Addis Ababa.</p>
-      </div>
+      <Suspense fallback={<p>Loading search...</p>}>
+        <DishSearch />
+      </Suspense>
 
-      <div className="menu-top-toolbar">
-        <Suspense fallback={<div className="search-pill-bar" />}>
-          <DishSearch />
+      <CategoryBar />
+
+      <FilterShell>
+        <Suspense fallback={<p>Loading dishes...</p>}>
+          <DishList />
         </Suspense>
-        <div className="menu-promo-cards">
-          <div className="promo-badge-card">
-            <div>
-              <strong>Fast delivery</strong>
-              <span>Bole &amp; Kazanchis</span>
-            </div>
-          </div>
-          <NavigationButton />
-        </div>
-      </div>
+      </FilterShell>
 
-      <Suspense fallback={null}>
-        <CategoryBar />
-      </Suspense>
-
-      <Suspense fallback={<p className="helper-text">Loading dishes...</p>}>
-        <DishList category={category} search={search} />
-      </Suspense>
+      <h2>Dish Details</h2>
+      <Link href="/menu/1">View Dish 1</Link>
     </div>
   );
 }

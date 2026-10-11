@@ -7,13 +7,13 @@ import CartLink from "./components/CartLink";
 export const metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://addis-eats-six.vercel.app"),
   title: {
-    default: "Addis Eats Ethiopian Food Delivery",
-    template: "%s  Addis Eats",
+    default: "Addis Eats | Authentic Ethiopian Food Delivery",
+    template: "%s | Addis Eats",
   },
-  description: "Order Ethiopian food in Addis Ababa. Fresh Doro Wat, Tibs, and Beyainatu.",
+  description: "Order authentic Ethiopian cuisine in Addis Ababa. Fresh Doro Wat, Tibs, Shiro, and Beyainatu.",
   openGraph: {
     title: "Addis Eats",
-    description: "Ethiopian food delivered to your door.",
+    description: "Authentic Ethiopian cuisine delivered to your door.",
     siteName: "Addis Eats",
     locale: "en_US",
     type: "website",
@@ -32,6 +32,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body>
+        <a href="#main-content" className="skip-link">
+          Skip to main content
+        </a>
         <Providers>
           <header className="site-header">
             <div className="header-container">
@@ -49,10 +52,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </div>
           </header>
 
-          <main>{children}</main>
+          <main id="main-content" tabIndex={-1}>
+            {children}
+          </main>
 
           <footer>
-            <p>Addis Eats.</p>
+            <p>Addis Eats &middot; Authentic Ethiopian Cuisine</p>
           </footer>
         </Providers>
 

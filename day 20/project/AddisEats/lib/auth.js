@@ -1,5 +1,5 @@
 const encoder = new TextEncoder();
-const SECRET = process.env.SESSION_SECRET || "addis-eats-session-secret-key-32chars";
+const SECRET = process.env.SESSION_SECRET || "bookstore-session-secret-key-32chars";
 
 function toBase64Url(str) {
   return btoa(unescape(encodeURIComponent(str)))

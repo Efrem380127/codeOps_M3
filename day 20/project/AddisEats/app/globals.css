@@ -781,7 +781,7 @@ textarea:focus {
   }
 }
 
-/* --- Cart, search and menu refinements --- */
+
 
 .sr-only {
   position: absolute;
@@ -1105,4 +1105,32 @@ textarea:focus {
     align-items: center;
   }
 }
+:focus-visible {
+  outline: 3px solid #18542a !important;
+  outline-offset: 2px !important;
+}
 
+.skip-link {
+  position: absolute;
+  top: -60px;
+  left: 1rem;
+  background: #18542a;
+  color: #ffffff;
+  padding: 0.75rem 1.25rem;
+  font-weight: 700;
+  border-radius: 6px;
+  z-index: 9999;
+  text-decoration: none;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  transition: top 0.15s ease-in-out;
+}
+
+.skip-link:focus {
+  top: 1rem;
+}
+
+button, a, input, select, textarea {
+  min-height: 44px;
+}

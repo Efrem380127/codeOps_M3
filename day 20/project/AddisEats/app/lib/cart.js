@@ -1,7 +1,6 @@
 export const DELIVERY_FEE = 50;
 export const MAX_QUANTITY = 20;
 
-// Never use a browser-supplied name or price when accepting a selection.
 export function resolveCartItems(selection, catalog) {
   if (!Array.isArray(selection) || selection.length === 0 || selection.length > catalog.length) {
     throw new Error("Choose at least one dish before checking out.");
