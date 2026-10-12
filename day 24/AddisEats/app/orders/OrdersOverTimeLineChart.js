@@ -31,27 +31,28 @@ export default function OrdersOverTimeLineChart({ summary }) {
   return (
     <div
       style={{
-        backgroundColor: "#ffffff",
-        border: "1px solid #e5dcc3",
-        borderRadius: "20px",
+        backgroundColor: "var(--surface)",
+        border: "1px solid var(--rule)",
+        borderRadius: "var(--r)",
         padding: "1.25rem",
-        boxShadow: "0 2px 8px rgba(24, 84, 42, 0.04)",
         display: "flex",
         flexDirection: "column"
       }}
     >
       <div style={{ marginBottom: "0.75rem" }}>
-        <h3 style={{ fontSize: "1.1rem", fontWeight: "700", color: "#18542a", margin: "0 0 0.25rem 0" }}>
+        <h3 style={{ fontSize: "1.1rem", fontWeight: "700", color: "var(--ink-0)", margin: "0 0 0.25rem 0" }}>
           {`Orders over Time (${rangeLabel}, Unit: ${unit})`}
         </h3>
-        <p style={{ fontSize: "0.85rem", color: "#6b7280", margin: 0 }}>
+        <p style={{ fontSize: "0.85rem", color: "var(--ink-3)", margin: 0 }}>
           {`Daily volume frequency recorded across ${rangeLabel.toLowerCase()}`}
         </p>
       </div>
 
+      {/* aspectRatio matches the viewBox exactly, so preserveAspectRatio="none"
+          cannot distort the glyphs. A fixed pixel height would stretch them. */}
       <div
         style={{
-          height: "260px",
+          aspectRatio: `${svgWidth} / ${svgHeight}`,
           width: "100%",
           position: "relative"
         }}
@@ -72,18 +73,13 @@ export default function OrdersOverTimeLineChart({ summary }) {
                   y1={y}
                   x2={marginLeft + chartWidth}
                   y2={y}
-                  stroke={tickVal === 0 ? "#18542a" : "#e5dcc3"}
-                  strokeDasharray={tickVal === 0 ? "none" : "3 3"}
-                  strokeWidth={tickVal === 0 ? "1.5" : "1"}
+                  className={tickVal === 0 ? "chart-axis" : "chart-grid"}
                 />
                 <text
                   x={marginLeft - 10}
                   y={y + 4}
                   textAnchor="end"
-                  fontSize="11"
-                  fill="#4b5563"
-                  fontFamily="sans-serif"
-                  fontWeight={tickVal === 0 ? "600" : "400"}
+                  className={tickVal === 0 ? "chart-tick is-zero" : "chart-tick"}
                 >
                   {tickVal}
                 </text>
@@ -92,45 +88,20 @@ export default function OrdersOverTimeLineChart({ summary }) {
           })}
 
           {points.length > 1 && (
-            <polyline
-              fill="none"
-              stroke="#18542a"
-              strokeWidth="2.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              points={polylinePoints}
-            />
+            <polyline className="chart-line" points={polylinePoints} />
           )}
 
           {points.map((p) => (
             <g key={p.item.dateKey}>
-              <circle
-                cx={p.x}
-                cy={p.y}
-                r="5"
-                fill="#ffffff"
-                stroke="#18542a"
-                strokeWidth="2.5"
-              />
-              <text
-                x={p.x}
-                y={p.y - 8}
-                textAnchor="middle"
-                fontSize="11"
-                fill="#18542a"
-                fontWeight="700"
-                fontFamily="sans-serif"
-              >
+              <circle cx={p.x} cy={p.y} r="5" className="chart-point" />
+              <text x={p.x} y={p.y - 8} textAnchor="middle" className="chart-value">
                 {p.item.orderCount}
               </text>
               <text
                 x={p.x}
                 y={svgHeight - 10}
                 textAnchor="middle"
-                fontSize="11"
-                fill="#1f2937"
-                fontWeight="600"
-                fontFamily="sans-serif"
+                className="chart-category"
               >
                 {p.item.displayDate}
               </text>

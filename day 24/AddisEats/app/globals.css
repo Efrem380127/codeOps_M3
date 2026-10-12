@@ -1,58 +1,192 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=JetBrains+Mono:wght@500;600&display=swap');
+/* ==========================================================================
+   Addis Eats — design system
+   Clinical Swiss, warm signal: a printed menu, not a delivery marketplace.
+   See .impeccable.md for the direction this encodes.
+
+   This is the same system as Meds Addis — the two capstones share a design
+   language — differentiated by its signal colour. Meds Addis signals in
+   prescription amber; Addis Eats signals in paprika.
+
+   Order: tokens -> reset -> base -> header -> layout -> components -> states
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Design tokens
+
+   Colour is expressed in oklch so that lightness steps are perceptually even.
+   Every colour is declared once with light-dark(), which resolves against the
+   computed `color-scheme`. That means light and dark are a single declaration
+   each, not two parallel blocks that drift apart.
+
+   Note: this file used to load three families from fonts.googleapis.com with
+   an @import at the very top. That is a render-blocking third-party request on
+   every page load. The fonts are now self-hosted by next/font — see
+   app/layout.tsx.
+   -------------------------------------------------------------------------- */
 
 :root {
-  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  --font-display: 'Playfair Display', Georgia, serif;
-  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  color-scheme: light dark;
 
-  --radius-card: 26px;
-  --radius-btn: 12px;
-  --radius-input: 10px;
-  --radius-pill: 9999px;
+  /* --- Neutrals -----------------------------------------------------------
+     A cool ramp carrying a trace of blue. Not pure grey: nothing in a real
+     environment is. The ramp runs light-to-dark as ink-0 is the strongest
+     text, so the naming stays stable when the theme flips. */
+  --ink-0: light-dark(oklch(19% 0.014 255), oklch(97% 0.004 255));
+  --ink-1: light-dark(oklch(30% 0.013 255), oklch(89% 0.006 255));
+  --ink-2: light-dark(oklch(45% 0.012 255), oklch(74% 0.008 255));
+  /* ink-3 carries real text — labels, chart ticks, table meta — so it owes the
+     full 4.5:1 rather than the 3:1 for incidental marks. ink-4 is placeholder
+     and disabled only, held to the 3:1 floor WCAG asks of inactive UI. Both
+     were a step too light. */
+  --ink-3: light-dark(oklch(54% 0.011 255), oklch(62% 0.010 255));
+  --ink-4: light-dark(oklch(65% 0.009 255), oklch(50% 0.010 255));
 
-  --color-cream: #f3e8cc;
-  --color-forest: #18542a;
-  --color-tomato: #d52518;
-  --color-carrot: #f96015;
-  --color-sunshine: #ffc926;
-  --color-kiwi: #9abc05;
-  --color-card-bg: #ffffff;
-  --color-border: #e5dcc3;
-  --color-text-main: #1f2937;
-  --color-text-muted: #6b7280;
+  /* --- Surfaces -----------------------------------------------------------
+     `paper` is deliberately not #fff. The old canvas was a warm cream, which
+     is the other obvious reflex for a food brand; a neutral paper lets the
+     photography be the only warm thing on the page. */
+  --paper: light-dark(oklch(98.4% 0.003 255), oklch(15.5% 0.008 255));
+  --surface: light-dark(oklch(100% 0 0), oklch(19.5% 0.008 255));
+  --surface-sunken: light-dark(oklch(96.6% 0.004 255), oklch(23.5% 0.008 255));
 
-  --paper: #f3e8cc;
-  --surface: #ffffff;
-  --line: #e5dcc3;
-  --ink: #1f2937;
-  --muted: #6b7280;
-  --forest: #18542a;
-  --rust: #d52518;
-  --rust-dark: #b91c1c;
-  --ochre: #ffc926;
-  --sage: #f4f8e8;
-  --sage-line: #9abc05;
+  /* --- Rules --------------------------------------------------------------
+     The only mechanism for depth in this system. There are no shadows. */
+  --rule: light-dark(oklch(89% 0.006 255), oklch(29% 0.010 255));
+  --rule-strong: light-dark(oklch(78% 0.008 255), oklch(40% 0.012 255));
+
+  /* Text placed on an ink or signal surface. It flips with the theme because
+     the surfaces it sits on flip too: white-on-paprika in light mode becomes
+     near-black-on-lighter-paprika in dark. This exists so that "white text on a
+     button" has one honest answer instead of a hardcoded #fff that breaks the
+     moment the theme changes. */
+  --on-accent: light-dark(oklch(100% 0 0), oklch(16% 0.012 255));
+  --on-accent-strong: oklch(98% 0.010 32);
+
+  /* --- Signal -------------------------------------------------------------
+     Paprika. The single accent, and unlike Meds Addis it is also the primary
+     action colour — for a food app, appetite is the point, and a black "Add to
+     cart" would be a wasted opportunity. It appears nowhere else. */
+  --signal: light-dark(oklch(56% 0.175 32), oklch(68% 0.155 32));
+  --signal-ink: light-dark(oklch(42% 0.155 30), oklch(84% 0.100 32));
+  --signal-wash: light-dark(oklch(96.5% 0.028 32), oklch(26% 0.055 32));
+  --signal-rule: light-dark(oklch(80% 0.110 32), oklch(44% 0.095 32));
+
+  /* The signal as a pressed fill. Deliberately deep in BOTH schemes, because
+     the label on it has to be light in both — which --signal-ink cannot
+     provide, since it flips to a light paprika in dark mode. Pointing the
+     hover state at it produced white-on-light-paprika there. */
+  --signal-strong: light-dark(oklch(48% 0.170 32), oklch(54% 0.150 32));
+
+  /* --- Semantic -----------------------------------------------------------
+     Kept muted on purpose. A system with one signal colour cannot afford a
+     second one shouting at the same volume. */
+  --ok: light-dark(oklch(52% 0.098 158), oklch(74% 0.090 158));
+  --ok-ink: light-dark(oklch(40% 0.088 158), oklch(84% 0.080 158));
+  --ok-wash: light-dark(oklch(96.5% 0.022 158), oklch(26% 0.035 158));
+
+  --danger: light-dark(oklch(52% 0.170 27), oklch(72% 0.150 27));
+  --danger-ink: light-dark(oklch(43% 0.160 27), oklch(84% 0.090 27));
+  --danger-wash: light-dark(oklch(96.5% 0.022 27), oklch(26% 0.050 27));
+
+  /* --- Geometry -----------------------------------------------------------
+     Zero radius. Sharp rectangles are the printed-menu metaphor, and they are
+     the single most visible break from the rounded-card default. Circles are
+     allowed only for status dots, which are genuinely circular objects. */
+  --r: 0px;
+  --r-full: 999px;
+
+  /* --- Type ---------------------------------------------------------------
+     One grotesque for structure, one mono for data. */
+  --font-sans: var(--font-archivo), "Archivo", ui-sans-serif, system-ui,
+    -apple-system, "Segoe UI", sans-serif;
+  --font-mono: var(--font-plex-mono), "IBM Plex Mono", ui-monospace,
+    SFMono-Regular, Menlo, Consolas, monospace;
+
+  --t-2xs: 0.6875rem; /* 11px — mono labels only */
+  --t-xs: 0.75rem; /* 12px */
+  --t-sm: 0.8125rem; /* 13px */
+  --t-base: 0.9375rem; /* 15px — body */
+  --t-md: 1.0625rem; /* 17px — lead */
+  --t-lg: 1.375rem; /* 22px */
+  --t-xl: 1.875rem; /* 30px */
+  --t-2xl: 2.375rem; /* 38px */
+  --t-display: clamp(2.25rem, 1.4rem + 3.8vw, 3.75rem);
+
+  --lh-tight: 1.03;
+  --lh-head: 1.15;
+  --lh-body: 1.55;
+
+  /* --- Space -------------------------------------------------------------- */
+  --sp-1: 0.25rem;
+  --sp-2: 0.5rem;
+  --sp-3: 0.75rem;
+  --sp-4: 1rem;
+  --sp-5: 1.5rem;
+  --sp-6: 2rem;
+  --sp-7: 3rem;
+  --sp-8: 4.5rem;
+  --sp-9: 7rem;
+
+  --ring: 0 0 0 2px var(--paper), 0 0 0 4px var(--signal);
+
+  --container: 1120px;
+  --header-h: 60px;
+
+  /* Exponential ease-out. Nothing in this system bounces. */
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur: 180ms;
 }
+
+/* A manual choice overrides the OS preference. `color-scheme` is what
+   light-dark() resolves against, so these two rules are the entire theming
+   mechanism — no duplicated colour blocks. */
+:root[data-theme="light"] {
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+}
+
+/* --------------------------------------------------------------------------
+   2. Reset
+   -------------------------------------------------------------------------- */
 
 *,
 *::before,
 *::after {
   box-sizing: border-box;
+}
+
+* {
   margin: 0;
-  padding: 0;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--header-h) + var(--sp-4));
 }
 
 body {
   font-family: var(--font-sans);
-  color: #1f2937;
-  background-color: #f3e8cc;
-  min-height: 100vh;
+  color: var(--ink-1);
+  background-color: var(--paper);
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
-  line-height: 1.5;
-  letter-spacing: -0.011em;
+  line-height: var(--lh-body);
+  font-kerning: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+img,
+picture,
+svg,
+video {
+  display: block;
+  max-width: 100%;
 }
 
 button,
@@ -62,201 +196,418 @@ textarea,
 .form-control,
 .form-input {
   font-family: inherit;
+  color: inherit;
 }
 
-.tabular {
+button {
+  cursor: pointer;
+}
+
+/* Anything a user might compare or verify aligns in tabular figures, so it
+   can be read down a column rather than across a line. */
+.tabular,
+.food-card-price,
+.price-row,
+.price-total,
+.checkout-summary li,
+.quantity-control span {
   font-variant-numeric: tabular-nums;
 }
 
+a {
+  color: var(--ink-0);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+/* --------------------------------------------------------------------------
+   3. Base typography
+   -------------------------------------------------------------------------- */
+
+h1,
+h2,
+h3,
+h4 {
+  color: var(--ink-0);
+  font-weight: 600;
+  line-height: var(--lh-head);
+  letter-spacing: -0.022em;
+  text-wrap: balance;
+}
+
+h1 {
+  font-size: var(--t-2xl);
+  letter-spacing: -0.03em;
+  line-height: var(--lh-tight);
+  margin-block-end: var(--sp-2);
+}
+
+h2 {
+  font-size: var(--t-xl);
+  letter-spacing: -0.026em;
+  margin-block-end: var(--sp-2);
+}
+
+h3 {
+  font-size: var(--t-lg);
+}
+
+p {
+  color: var(--ink-1);
+  font-size: var(--t-base);
+  text-wrap: pretty;
+}
+
+/* --------------------------------------------------------------------------
+   4. Icons
+
+   A single stroke weight across the whole set, drawn on a 24-unit grid.
+   Emoji were removed because they render differently on every platform, cannot
+   inherit colour, and are the most recognisable marker of generated UI.
+   -------------------------------------------------------------------------- */
+
+.icon {
+  width: 1em;
+  height: 1em;
+  flex-shrink: 0;
+  vertical-align: -0.125em;
+}
+
+/* --------------------------------------------------------------------------
+   5. Header
+   -------------------------------------------------------------------------- */
+
 .site-header {
-  background: #ffffff;
-  border-bottom: 2px solid #e5dcc3;
+  background: var(--paper);
+  border-block-end: 1px solid var(--rule);
+  /* The regulatory band. One 2px paprika rule across the top of every page is
+     the cheapest possible brand device. */
+  border-block-start: 2px solid var(--signal);
   position: sticky;
   top: 0;
   z-index: 40;
 }
 
 .header-container {
-  max-width: 1040px;
-  margin: 0 auto;
-  padding: 0.75rem 1rem;
+  max-width: var(--container);
+  margin-inline: auto;
+  padding-inline: var(--sp-4);
+  min-height: var(--header-h);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1rem;
+  gap: var(--sp-4);
+  flex-wrap: wrap;
 }
 
 .brand-title {
-  font-size: 1.45rem;
-  font-weight: 800;
-  color: #18542a;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-3);
+  font-size: var(--t-md);
+  font-weight: 600;
+  color: var(--ink-0);
   text-decoration: none;
   letter-spacing: -0.03em;
-  font-family: var(--font-sans);
+}
+
+/* A solid ink square holding a drawn mark — not a serif wordmark. */
+.brand-mark {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  background: var(--ink-0);
+  color: var(--paper);
+  flex-shrink: 0;
+}
+
+.brand-mark .icon {
+  width: 15px;
+  height: 15px;
 }
 
 .header-nav {
   display: flex;
   align-items: center;
-  gap: 0.35rem;
+  gap: var(--sp-4);
 }
 
 .header-nav a {
-  color: #18542a;
+  color: var(--ink-2);
   text-decoration: none;
-  font-size: 0.9375rem;
-  font-weight: 600;
-  padding: 0.4rem 0.75rem;
-  border-radius: 6px;
-  transition: all 0.15s ease;
+  font-size: var(--t-sm);
+  font-weight: 500;
+  letter-spacing: -0.006em;
+  /* The active state is a rule under the word, not a filled pill. */
+  border-block-end: 2px solid transparent;
+  padding-block: var(--sp-2);
+  transition: color var(--dur) var(--ease),
+    border-color var(--dur) var(--ease);
 }
 
 .header-nav a:hover {
-  color: #d52518;
-  background-color: #fcf9f0;
+  color: var(--ink-0);
+  border-block-end-color: var(--rule-strong);
 }
 
 .header-nav a.active-link {
-  color: #d52518;
-  background-color: #fef2f2;
+  color: var(--ink-0);
+  font-weight: 600;
+  border-block-end-color: var(--signal);
 }
 
+/* Cart. A rectangle with a hairline, not a filled pill. */
 .cart-pill {
-  background-color: #d52518 !important;
-  color: #ffffff !important;
-  font-weight: 700 !important;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  min-height: 40px;
+  padding-inline: var(--sp-4);
+  border: 1px solid var(--ink-0);
+  border-radius: var(--r);
+  background: transparent;
+  color: var(--ink-0) !important;
+  font-family: var(--font-mono);
+  font-size: var(--t-2xs);
+  font-weight: 500 !important;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background-color var(--dur) var(--ease),
+    color var(--dur) var(--ease);
 }
 
 .cart-pill:hover {
-  background-color: #b91c1c !important;
+  background: var(--ink-0);
+  color: var(--paper) !important;
 }
+
+/* Theme control. Sits beside the cart and behaves like a form control. */
+.theme-toggle {
+  display: inline-grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--rule-strong);
+  border-radius: var(--r);
+  background: transparent;
+  color: var(--ink-2);
+  transition: color var(--dur) var(--ease),
+    border-color var(--dur) var(--ease);
+}
+
+.theme-toggle:hover {
+  color: var(--ink-0);
+  border-color: var(--ink-0);
+}
+
+.theme-toggle .icon {
+  width: 17px;
+  height: 17px;
+}
+
+/* Account state. Identity reads as a stamp — mono, uppercase, hairline — not
+   as a chip with a coloured dot, which is the usual treatment and says nothing.
+   The name is the only variable-length string in the header, so it is allowed
+   to truncate rather than push the nav around. */
+.account {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-3);
+}
+
+.account__who {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  max-width: 12ch;
+  overflow: hidden;
+  font-family: var(--font-mono);
+  font-size: var(--t-2xs);
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.account__who .icon {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+/* A text control, not a second button. Two buttons side by side in a header is
+   one too many. */
+.account__out {
+  appearance: none;
+  background: none;
+  border: 0;
+  border-block-end: 2px solid transparent;
+  padding: var(--sp-2) 0;
+  font: inherit;
+  font-size: var(--t-sm);
+  font-weight: 500;
+  color: var(--ink-2);
+  cursor: pointer;
+  transition: color var(--dur) var(--ease),
+    border-color var(--dur) var(--ease);
+}
+
+.account__out:hover:not(:disabled) {
+  color: var(--ink-0);
+  border-block-end-color: var(--rule-strong);
+}
+
+.account__out:disabled {
+  color: var(--ink-4);
+  cursor: default;
+}
+
+/* --------------------------------------------------------------------------
+   6. Page frame
+   -------------------------------------------------------------------------- */
 
 main {
   flex: 1;
-  max-width: 1040px;
+  max-width: var(--container);
   width: 100%;
-  margin: 0 auto;
-  padding: 1.5rem 1rem 3rem;
+  margin-inline: auto;
+  padding: var(--sp-5) var(--sp-4) var(--sp-8);
 }
 
 footer {
-  border-top: 1px solid #e5dcc3;
-  background: #ffffff;
-  padding: 1.5rem 1rem;
+  border-block-start: 1px solid var(--rule-strong);
+  background: var(--paper);
+  padding-block: var(--sp-5);
+  padding-inline: var(--sp-4);
   text-align: center;
-  font-size: 0.875rem;
-  color: #18542a;
+  font-family: var(--font-mono);
+  font-size: var(--t-2xs);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-3);
 }
 
-h1 {
-  font-size: 1.85rem;
-  font-weight: 800;
-  color: #18542a;
-  letter-spacing: -0.025em;
-  margin-bottom: 0.5rem;
-  font-family: var(--font-sans);
-  line-height: 1.25;
+.page-heading {
+  margin-block-end: var(--sp-5);
+  padding-block-end: var(--sp-4);
+  border-block-end: 2px solid var(--ink-0);
 }
 
-h2 {
-  font-size: 1.3rem;
-  font-weight: 700;
-  color: #18542a;
-  letter-spacing: -0.02em;
-  margin-bottom: 0.5rem;
-  font-family: var(--font-sans);
-  line-height: 1.3;
-}
-
-h3 {
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: #18542a;
-  letter-spacing: -0.015em;
-  font-family: var(--font-sans);
-}
-
-p {
-  color: #4b5563;
-  font-size: 0.9375rem;
+.page-heading p {
+  color: var(--ink-2);
+  margin-block-start: var(--sp-1);
+  max-width: 58ch;
 }
 
 .breadcrumbs {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  font-size: 0.875rem;
-  margin-bottom: 0.75rem;
-  color: #6b7280;
+  gap: var(--sp-2);
+  font-family: var(--font-mono);
+  font-size: var(--t-2xs);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-block-end: var(--sp-3);
+  color: var(--ink-3);
 }
 
 .breadcrumbs a {
-  color: #18542a;
+  color: var(--ink-2);
   text-decoration: none;
 }
 
 .breadcrumbs a:hover {
-  color: #d52518;
+  color: var(--ink-0);
   text-decoration: underline;
 }
 
+.helper-text,
+.muted {
+  font-size: var(--t-sm);
+  color: var(--ink-3);
+}
+
+/* --------------------------------------------------------------------------
+   7. Menu layout
+
+   The sidebar used to be forced into Times New Roman with `!important`, which
+   was a font choice made in three separate rules rather than once. It is now
+   the same grotesque as everything else, separated by a rule instead of a box.
+   -------------------------------------------------------------------------- */
+
 .menu-layout {
   display: flex;
-  gap: 1.75rem;
+  gap: var(--sp-6);
   align-items: flex-start;
   flex-wrap: wrap;
 }
 
 aside,
 .menu-sidebar {
-  width: 210px;
+  width: 200px;
   flex-shrink: 0;
-  border: none !important;
-  background: #ffffff;
-  box-shadow: none !important;
-  border-radius: 0 !important;
-  padding: 1rem;
-  font-family: 'Times New Roman', Times, serif !important;
+  border: none;
+  background: transparent;
+  box-shadow: none;
+  border-radius: 0;
+  padding: 0;
+}
+
+@media (min-width: 860px) {
+  aside,
+  .menu-sidebar {
+    border-inline-end: 1px solid var(--rule);
+    padding-inline-end: var(--sp-5);
+  }
 }
 
 .sidebar-title {
-  font-family: 'Times New Roman', Times, serif !important;
-  font-size: 1.1rem;
-  font-weight: 700;
-  margin-bottom: 0.65rem;
-  color: #18542a;
+  font-family: var(--font-mono);
+  font-size: var(--t-2xs);
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-block-end: var(--sp-3);
+  color: var(--ink-3);
 }
 
 .sidebar-links {
   list-style: none;
   padding: 0;
-  margin: 0 0 1.25rem 0;
+  margin: 0 0 var(--sp-5);
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
+  gap: var(--sp-1);
 }
 
 .sidebar-link {
-  font-family: 'Times New Roman', Times, serif !important;
+  display: block;
   text-decoration: none;
-  font-size: 0.95rem;
-  color: #18542a;
-  font-weight: 600;
-  display: inline-block;
-  padding: 0.2rem 0.35rem;
-  border-radius: 4px;
-  transition: color 0.15s ease, background-color 0.15s ease;
+  font-size: var(--t-sm);
+  color: var(--ink-2);
+  font-weight: 500;
+  padding-block: var(--sp-1);
+  border-radius: var(--r);
+  transition: color var(--dur) var(--ease);
 }
 
 .sidebar-link:hover {
-  color: #d52518;
-  background-color: #fdfbf7;
+  color: var(--ink-0);
+}
+
+.sidebar-link.active {
+  color: var(--ink-0);
+  font-weight: 600;
 }
 
 .sidebar-section {
-  border-top: 1px solid #f3e8cc;
-  padding-top: 0.85rem;
-  font-family: 'Times New Roman', Times, serif !important;
+  border-block-start: 1px solid var(--rule);
+  padding-block-start: var(--sp-4);
 }
 
 .menu-content {
@@ -272,9 +623,11 @@ aside,
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1rem;
+  gap: var(--sp-4);
   flex-wrap: wrap;
-  margin-bottom: 1.25rem;
+  margin-block-end: var(--sp-5);
+  padding-block-end: var(--sp-4);
+  border-block-end: 1px solid var(--rule);
 }
 
 .menu-search-wrapper {
@@ -287,162 +640,214 @@ aside,
   width: 100%;
 }
 
+/* Was a rounded pill with a soft green shadow. Now a plain field — the same
+   control as every other input in the app. */
 .search-pill-bar {
   display: flex;
   align-items: center;
-  background: #ffffff;
-  border: 1.5px solid #e5dcc3;
-  border-radius: 9999px;
-  padding: 3px 4px 3px 16px;
-  box-shadow: 0 2px 8px rgba(24, 84, 42, 0.04);
-  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  gap: var(--sp-2);
+  background: var(--surface);
+  border: 1px solid var(--rule-strong);
+  border-radius: var(--r);
+  padding-inline-start: var(--sp-3);
+  transition: border-color var(--dur) var(--ease);
 }
 
 .search-pill-bar:focus-within {
-  border-color: #f96015;
-  box-shadow: 0 0 0 3px rgba(249, 96, 21, 0.15);
+  border-color: var(--ink-0);
+  box-shadow: var(--ring);
 }
 
 .search-pill-input {
   flex: 1;
+  min-width: 0;
   border: none;
   outline: none;
   background: transparent;
-  font-size: 0.9rem;
-  color: #1f2937;
-  padding: 0.4rem 0.25rem 0.4rem 0;
+  font-size: var(--t-sm);
+  color: var(--ink-0);
+  padding-block: var(--sp-3);
   font-family: inherit;
 }
 
+.search-pill-input::placeholder {
+  color: var(--ink-3);
+}
+
 .search-pill-btn {
-  background: #18542a;
-  color: #ffffff;
+  background: var(--ink-0);
+  color: var(--paper);
   border: none;
-  border-radius: 9999px;
-  padding: 0.45rem 1.15rem;
-  font-weight: 700;
-  font-size: 0.8125rem;
+  border-radius: var(--r);
+  padding: var(--sp-2) var(--sp-4);
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-size: var(--t-2xs);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   cursor: pointer;
-  transition: background-color 0.18s ease;
+  transition: background-color var(--dur) var(--ease);
   flex-shrink: 0;
+  min-height: 36px;
 }
 
 .search-pill-btn:hover {
-  background: #d52518;
+  background: var(--ink-1);
+}
+
+.search-clear {
+  background: transparent;
+  border: none;
+  color: var(--ink-3);
+  font-size: var(--t-2xs);
+  font-weight: 500;
+  font-family: var(--font-mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: var(--sp-2);
+  cursor: pointer;
+  border-radius: var(--r);
+}
+
+.search-clear:hover {
+  color: var(--ink-0);
 }
 
 .menu-promo-cards {
   display: flex;
   align-items: center;
-  gap: 0.65rem;
+  gap: var(--sp-5);
   flex-wrap: wrap;
 }
 
+/* Was a row of badges. Now a specification strip: value over mono label. */
 .promo-badge-card {
   display: flex;
   flex-direction: column;
-  gap: 0.1rem;
-  padding: 0.25rem 0;
-  font-size: 0.75rem;
-  color: #4b5563;
+  gap: 2px;
+  font-size: var(--t-2xs);
+  color: var(--ink-3);
+  padding-inline-start: var(--sp-3);
+  border-inline-start: 1px solid var(--rule);
 }
 
 .promo-badge-card strong {
   display: block;
-  font-size: 0.8125rem;
-  color: #18542a;
-  font-weight: 700;
-  line-height: 1.15;
+  font-size: var(--t-sm);
+  color: var(--ink-0);
+  font-weight: 600;
+  line-height: 1.2;
 }
 
 .promo-badge-card span {
-  font-size: 0.72rem;
-  color: #6b7280;
+  font-family: var(--font-mono);
+  font-size: var(--t-2xs);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-3);
 }
 
+/* --------------------------------------------------------------------------
+   8. Category filters
+
+   Was a row of pills with a sunshine-yellow active state and a coloured glow.
+   Now a row of sharp tags; the active one is solid ink.
+   -------------------------------------------------------------------------- */
+
 .categories-section-wrapper {
-  margin-bottom: 1.25rem;
-  padding-top: 0.25rem;
+  margin-block-end: var(--sp-5);
 }
 
 .categories-section-title {
-  font-size: 1.45rem;
-  font-weight: 800;
-  color: #18542a;
-  margin-bottom: 0.65rem;
-  letter-spacing: -0.025em;
+  font-size: var(--t-xl);
+  font-weight: 600;
+  color: var(--ink-0);
+  letter-spacing: -0.026em;
+  margin-block-end: var(--sp-3);
 }
 
 .categories-pill-row {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--sp-2);
   flex-wrap: wrap;
 }
 
 .category-item-btn {
   background: transparent;
-  border: none;
-  color: #4b5563;
-  font-size: 0.9375rem;
-  font-weight: 600;
-  padding: 0.45rem 1rem;
-  border-radius: 9999px;
+  border: 1px solid var(--rule-strong);
+  color: var(--ink-2);
+  font-size: var(--t-2xs);
+  font-weight: 500;
+  font-family: var(--font-mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: var(--sp-2) var(--sp-3);
+  border-radius: var(--r);
   cursor: pointer;
-  transition: all 0.18s ease;
+  transition: border-color var(--dur) var(--ease),
+    color var(--dur) var(--ease), background-color var(--dur) var(--ease);
   text-decoration: none;
   display: inline-flex;
   align-items: center;
-  font-family: inherit;
+  min-height: 38px;
 }
 
 .category-item-btn:hover {
-  color: #18542a;
-  background: rgba(255, 255, 255, 0.5);
+  color: var(--ink-0);
+  border-color: var(--ink-0);
 }
 
 .category-item-btn.active {
-  background: #ffc926 !important;
-  color: #18542a !important;
-  font-weight: 700 !important;
-  box-shadow: 0 2px 6px rgba(255, 201, 38, 0.35);
+  background: var(--ink-0);
+  color: var(--paper) !important;
+  border-color: var(--ink-0);
+  font-weight: 500;
 }
+
+/* --------------------------------------------------------------------------
+   9. Dish grid + cards
+
+   The old card was a dark slab (#181b20) at 26px radius with a gradient
+   fading the photograph into the body, frosted-glass badges on top of the
+   image, and a lift-and-zoom on hover. Every one of those is a template move,
+   and the gradient was actively working against the food.
+
+   Now: a photograph, a hairline, and a price. The image is the only loud thing
+   on the page and nothing is laid over it.
+   -------------------------------------------------------------------------- */
 
 .menu-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 1.35rem;
-  margin-top: 0.5rem;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: var(--sp-5);
+  margin-block-start: var(--sp-4);
 }
 
 .food-card {
   position: relative;
-  background: #ffffff;
-  border-radius: 26px;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: var(--r);
   overflow: hidden;
   display: flex;
   flex-direction: column;
   text-decoration: none;
   color: inherit;
-  border: 1px solid #e5dcc3;
-  box-shadow: 0 4px 16px rgba(24, 84, 42, 0.05);
-  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1),
-              box-shadow 0.22s cubic-bezier(0.16, 1, 0.3, 1),
-              border-color 0.18s ease;
+  transition: border-color var(--dur) var(--ease);
 }
 
 .food-card:hover {
-  transform: translateY(-4px);
-  border-color: #f96015;
-  box-shadow: 0 12px 28px -4px rgba(24, 84, 42, 0.12), 0 3px 8px rgba(24, 84, 42, 0.04);
+  border-color: var(--ink-0);
 }
 
 .food-card-media {
   position: relative;
   width: 100%;
-  height: 180px;
+  aspect-ratio: 4 / 3;
   overflow: hidden;
-  background: #fdfbf7;
+  background: var(--surface-sunken);
+  border-block-end: 1px solid var(--rule);
 }
 
 .food-card-img {
@@ -450,162 +855,246 @@ aside,
   height: 100%;
   object-fit: cover;
   display: block;
-  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.food-card:hover .food-card-img {
-  transform: scale(1.04);
 }
 
 .food-card-body {
-  padding: 1.1rem 1.25rem 1.25rem;
+  padding: var(--sp-4);
   display: flex;
   flex-direction: column;
   flex: 1;
-  background: #ffffff;
+  background: var(--surface);
 }
 
 .food-card-header {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
-  gap: 0.5rem;
-  margin-bottom: 0.35rem;
+  gap: var(--sp-3);
+  margin-block-end: var(--sp-1);
 }
 
 .food-card-title {
-  font-size: 1.2rem;
-  font-weight: 800;
-  color: #18542a;
-  letter-spacing: -0.02em;
+  font-size: var(--t-base);
+  font-weight: 600;
+  color: var(--ink-0);
+  letter-spacing: -0.014em;
   line-height: 1.25;
   margin: 0;
 }
 
+.food-card-title a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.food-card-title a:hover {
+  text-decoration: underline;
+}
+
 .food-card-price {
-  font-size: 1.05rem;
-  font-weight: 800;
-  color: #d52518;
+  font-family: var(--font-mono);
+  font-size: var(--t-sm);
+  font-weight: 500;
+  color: var(--ink-0);
   white-space: nowrap;
 }
 
 .food-card-desc {
-  font-size: 0.8125rem;
-  color: #6b7280;
-  line-height: 1.42;
-  margin-bottom: 1.15rem;
-  min-height: 2.3rem;
+  font-size: var(--t-sm);
+  color: var(--ink-2);
+  line-height: 1.45;
+  margin-block-end: var(--sp-4);
+  min-height: 2.4rem;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
 
+/* The dietary annotation. Was a frosted pill floating over the photograph;
+   now an italic note beside the dish, as the design doc always intended. */
+.dish-category {
+  display: block;
+  font-size: var(--t-2xs);
+  font-style: italic;
+  color: var(--ink-3);
+  margin-block-end: var(--sp-1);
+}
+
 .food-card-action {
   width: 100%;
-  padding: 0.58rem 1rem;
-  background: #fdfbf7;
-  border: 1.5px solid #18542a;
-  color: #18542a;
-  font-weight: 700;
-  font-size: 0.875rem;
-  border-radius: 9999px;
+  padding: var(--sp-3) var(--sp-4);
+  background: transparent;
+  border: 1px solid var(--ink-0);
+  color: var(--ink-0);
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-size: var(--t-2xs);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border-radius: var(--r);
   text-align: center;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.35rem;
-  transition: all 0.18s ease;
-  margin-top: auto;
+  gap: var(--sp-2);
+  transition: background-color var(--dur) var(--ease),
+    color var(--dur) var(--ease);
+  margin-block-start: auto;
   cursor: pointer;
+  min-height: 44px;
 }
 
 .food-card:hover .food-card-action {
-  background: #18542a;
-  color: #ffffff;
-  border-color: #18542a;
-  transform: translateY(-1px);
+  background: var(--ink-0);
+  color: var(--paper);
 }
 
-.food-card:active .food-card-action {
-  transform: scale(0.98);
+.food-card-controls {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  margin-block-start: auto;
+  padding-block-start: var(--sp-1);
 }
+
+.food-card-controls .btn {
+  flex: 1;
+  min-height: 44px;
+}
+
+.dish-details-link {
+  font-family: var(--font-mono);
+  font-size: var(--t-2xs);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  text-decoration: none;
+  padding: var(--sp-3) var(--sp-2);
+  border-radius: var(--r);
+}
+
+.dish-details-link:hover {
+  color: var(--ink-0);
+  text-decoration: underline;
+}
+
+.dish-list-heading {
+  margin-block: var(--sp-5) var(--sp-2);
+}
+
+/* --------------------------------------------------------------------------
+   10. Buttons
+
+   Primary is paprika — this app's accent *is* its call to action. Secondary is
+   a hairline rectangle.
+   -------------------------------------------------------------------------- */
 
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0.55rem 1.15rem;
-  font-size: 0.9375rem;
-  font-weight: 600;
-  border-radius: var(--radius-btn, 12px);
+  gap: var(--sp-2);
+  padding: var(--sp-3) var(--sp-4);
+  min-height: 44px;
+  font-size: var(--t-sm);
+  font-weight: 500;
+  letter-spacing: -0.004em;
+  border-radius: var(--r);
   border: 1px solid transparent;
   cursor: pointer;
   text-decoration: none;
   line-height: 1.25;
-  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  white-space: nowrap;
+  transition: background-color var(--dur) var(--ease),
+    border-color var(--dur) var(--ease), color var(--dur) var(--ease);
 }
 
-.btn:active {
-  transform: scale(0.98);
+.btn[disabled],
+.btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
 }
 
 .btn-primary {
-  background-color: #d52518;
-  color: #ffffff;
+  background-color: var(--signal);
+  border-color: var(--signal);
+  color: var(--on-accent);
 }
 
+/* Presses to a deeper paprika that stays deep in both schemes, so the label can
+   stay light in both. This used to point at --signal-ink, which is a light
+   paprika in dark mode — the hover state was white on light paprika. */
 .btn-primary:hover {
-  background-color: #b91c1c;
-  transform: translateY(-1px);
+  background-color: var(--signal-strong);
+  border-color: var(--signal-strong);
+  color: var(--on-accent-strong);
 }
 
 .btn-secondary {
-  background-color: #ffffff;
-  border: 1px solid #d5cdb5;
-  color: #18542a;
+  background-color: transparent;
+  border: 1px solid var(--rule-strong);
+  color: var(--ink-0);
 }
 
 .btn-secondary:hover {
-  background-color: #fdfbf7;
-  border-color: #f96015;
-  color: #d52518;
-  transform: translateY(-1px);
+  border-color: var(--ink-0);
+  color: var(--ink-0);
 }
 
 .btn-danger {
-  background-color: #d52518;
-  color: #ffffff;
+  background-color: transparent;
+  border-color: var(--danger);
+  color: var(--danger-ink);
 }
 
 .btn-danger:hover {
-  background-color: #b91c1c;
+  background-color: var(--danger-wash);
+  color: var(--danger-ink);
 }
 
 .btn-sm {
-  padding: 0.35rem 0.75rem;
-  font-size: 0.8125rem;
-  border-radius: var(--radius-pill, 9999px);
+  padding: var(--sp-2) var(--sp-3);
+  font-size: var(--t-xs);
+  min-height: 36px;
 }
 
+/* --------------------------------------------------------------------------
+   11. Forms
+   -------------------------------------------------------------------------- */
+
 .form-box {
-  background: #ffffff;
-  border: 1px solid #e5dcc3;
-  border-radius: 26px;
-  padding: 1.5rem;
+  background: transparent;
+  border-block-start: 2px solid var(--ink-0);
+  border-radius: var(--r);
+  padding-block: var(--sp-5) 0;
   max-width: 480px;
 }
 
-.form-field {
-  margin-bottom: 1rem;
+.form-card {
+  background: transparent;
+  border-block-start: 2px solid var(--ink-0);
+  border-radius: var(--r);
+  padding-block: var(--sp-5) 0;
+  max-width: 520px;
 }
 
-.form-field label {
+.form-field,
+.form-group {
+  margin-block-end: var(--sp-4);
+}
+
+.form-field label,
+.form-group label {
   display: block;
-  font-size: 0.875rem;
-  font-weight: 600;
-  margin-bottom: 0.35rem;
-  color: #18542a;
+  font-family: var(--font-mono);
+  font-size: var(--t-2xs);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-block-end: var(--sp-2);
+  color: var(--ink-2);
 }
 
 .form-control,
@@ -613,66 +1102,107 @@ aside,
 input[type="text"],
 input[type="tel"],
 input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="search"],
 select,
 textarea {
   width: 100%;
-  padding: 0.6rem 0.85rem;
-  border: 1px solid #d5cdb5;
-  border-radius: var(--radius-input, 10px);
-  font-size: 0.9375rem;
-  color: #1f2937;
-  background: #ffffff;
+  min-height: 44px;
+  padding: var(--sp-3);
+  border: 1px solid var(--rule-strong);
+  border-radius: var(--r);
+  font-size: var(--t-sm);
+  color: var(--ink-0);
+  background: var(--surface);
   font-family: inherit;
-  transition: border-color 0.15s ease;
+  transition: border-color var(--dur) var(--ease);
+}
+
+.form-control::placeholder,
+.form-input::placeholder,
+input::placeholder,
+textarea::placeholder {
+  color: var(--ink-3);
 }
 
 .form-control:focus,
 .form-input:focus,
-input[type="text"]:focus,
-input[type="tel"]:focus,
-input[type="email"]:focus,
+input:focus,
 select:focus,
 textarea:focus {
   outline: none;
-  border-color: #f96015;
+  border-color: var(--ink-0);
+  box-shadow: var(--ring);
 }
 
 .field-error,
 .form-error {
-  color: #d52518;
-  font-size: 0.8125rem;
-  margin-top: 0.25rem;
+  color: var(--danger-ink);
+  font-size: var(--t-xs);
+  font-weight: 500;
+  margin-block-start: var(--sp-1);
+}
+
+/* Search row. The field itself is already styled by the element selectors
+   above; this only arranges it beside its button and stops the two of them
+   from stretching across a wide page, where a search box that runs the full
+   width reads as a form rather than as a filter. */
+.search {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-2);
+  max-width: 34rem;
+}
+
+.search input {
+  flex: 1 1 14rem;
+  width: auto;
+  min-width: 0;
+}
+
+/* --------------------------------------------------------------------------
+   12. Cards, tickets, live status
+   -------------------------------------------------------------------------- */
+
+.card,
+.order-ticket {
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: var(--r);
+  padding: var(--sp-5);
 }
 
 .order-ticket {
-  background: #ffffff;
-  border: 1px solid #e5dcc3;
-  border-radius: 26px;
-  padding: 1.25rem 1.4rem;
-  margin-bottom: 0.75rem;
+  margin-block-end: var(--sp-3);
 }
 
 .order-ticket-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 0.5rem;
+  gap: var(--sp-3);
+  margin-block-end: var(--sp-2);
 }
 
 .live-beacon {
   display: inline-flex;
   align-items: center;
-  gap: 0.45rem;
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: #18542a;
+  gap: var(--sp-2);
+  font-family: var(--font-mono);
+  font-size: var(--t-2xs);
+  font-weight: 500;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--ink-2);
 }
 
 .pulse-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background-color: #18542a;
+  width: 7px;
+  height: 7px;
+  border-radius: var(--r-full);
+  background-color: var(--signal);
   position: relative;
   display: inline-block;
 }
@@ -680,12 +1210,9 @@ textarea:focus {
 .pulse-dot::after {
   content: "";
   position: absolute;
-  top: -3px;
-  left: -3px;
-  right: -3px;
-  bottom: -3px;
-  border-radius: 50%;
-  border: 2px solid #18542a;
+  inset: -3px;
+  border-radius: var(--r-full);
+  border: 1.5px solid var(--signal);
   animation: beaconPulse 2s cubic-bezier(0.24, 0, 0.38, 1) infinite;
 }
 
@@ -704,53 +1231,342 @@ textarea:focus {
   }
 }
 
-.card {
-  background: #ffffff;
-  border: 1px solid #e5dcc3;
-  border-radius: 26px;
-  padding: 1.25rem;
+/* --------------------------------------------------------------------------
+   13. Dish detail
+   -------------------------------------------------------------------------- */
+
+.dish-actions {
+  display: flex;
+  gap: var(--sp-3);
+  flex-wrap: wrap;
+  align-items: center;
+  border-block-start: 1px solid var(--rule);
+  padding-block-start: var(--sp-5);
+  margin-block-start: var(--sp-5);
 }
 
-.form-card {
-  background: #ffffff;
-  border: 1px solid #e5dcc3;
-  border-radius: 26px;
-  padding: 1.5rem;
-  max-width: 520px;
+.dish-purchase {
+  display: flex;
+  gap: var(--sp-3);
+  flex-wrap: wrap;
+  align-items: center;
 }
 
-.form-group {
-  margin-bottom: 1rem;
+.dish-purchase .btn {
+  min-height: 44px;
 }
 
-.form-group label {
-  display: block;
-  font-size: 0.875rem;
+/* Dish photograph. A hairline frame rather than a rounded card — the picture is
+   the content, and it does not need a container drawn around it to say so.
+   `line-height: 0` removes the inline-element descender gap that otherwise
+   leaves a few pixels of background showing beneath the image. */
+.dish-figure {
+  border: 1px solid var(--rule);
+  background: var(--surface-sunken);
+  line-height: 0;
+}
+
+.dish-figure img {
+  width: 100%;
+  height: auto;
+}
+
+/* --------------------------------------------------------------------------
+   14. Cart
+   -------------------------------------------------------------------------- */
+
+.cart-page {
+  max-width: 640px;
+  margin-inline: auto;
+}
+
+.cart-items {
+  list-style: none;
+  margin: 0 0 var(--sp-4);
+  padding: 0;
+  border-block-start: 1px solid var(--rule-strong);
+}
+
+.cart-item {
+  display: flex;
+  gap: var(--sp-4);
+  align-items: flex-start;
+  padding-block: var(--sp-4);
+  border-block-end: 1px solid var(--rule);
+}
+
+.cart-thumbnail {
+  width: 72px;
+  height: 72px;
+  border-radius: var(--r);
+  object-fit: cover;
+  flex-shrink: 0;
+  border: 1px solid var(--rule);
+}
+
+.cart-item-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.cart-item-name {
   font-weight: 600;
-  margin-bottom: 0.35rem;
-  color: #18542a;
+  color: var(--ink-0);
+  text-decoration: none;
+  letter-spacing: -0.012em;
 }
 
+.cart-item-name:hover {
+  text-decoration: underline;
+}
+
+.cart-item-info p {
+  font-size: var(--t-sm);
+  color: var(--ink-3);
+  margin-block: var(--sp-1) var(--sp-3);
+}
+
+.cart-item-end {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--sp-2);
+  white-space: nowrap;
+}
+
+.remove-item {
+  background: none;
+  border: none;
+  color: var(--ink-3);
+  font-family: var(--font-mono);
+  font-size: var(--t-2xs);
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  padding: var(--sp-1) 0;
+}
+
+.remove-item:hover {
+  color: var(--danger-ink);
+  text-decoration: underline;
+}
+
+/* Was a pill with 32px round buttons. Now a rectilinear stepper. */
+.quantity-control {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+  border: 1px solid var(--rule-strong);
+  border-radius: var(--r);
+  background: var(--surface);
+}
+
+.quantity-control button {
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: transparent;
+  border-radius: var(--r);
+  font-size: var(--t-base);
+  font-weight: 500;
+  color: var(--ink-0);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+
+.quantity-control button:hover:not(:disabled) {
+  background: var(--surface-sunken);
+}
+
+.quantity-control button:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.quantity-control span {
+  min-width: 34px;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-size: var(--t-sm);
+  padding-inline: var(--sp-2);
+  border-inline: 1px solid var(--rule);
+  align-self: stretch;
+  display: grid;
+  place-items: center;
+}
+
+.price-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--sp-4);
+  padding-block: var(--sp-2);
+  font-size: var(--t-sm);
+  color: var(--ink-2);
+}
+
+.price-total {
+  border-block-start: 1px solid var(--rule-strong);
+  margin-block-start: var(--sp-2);
+  padding-block-start: var(--sp-3);
+  font-size: var(--t-md);
+  color: var(--ink-0);
+  font-weight: 600;
+}
+
+.price-total strong:last-child {
+  font-family: var(--font-mono);
+  color: var(--ink-0);
+}
+
+.cart-actions {
+  display: flex;
+  gap: var(--sp-3);
+  flex-wrap: wrap;
+  margin-block-start: var(--sp-5);
+}
+
+.cart-actions .btn {
+  flex: 1;
+  min-width: 160px;
+  min-height: 44px;
+}
+
+.checkout-summary {
+  list-style: none;
+  margin-block: var(--sp-3) var(--sp-4);
+  padding: 0;
+}
+
+.checkout-summary li {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  padding-block: var(--sp-2);
+  font-size: var(--t-sm);
+  border-block-end: 1px solid var(--rule);
+}
+
+/* --------------------------------------------------------------------------
+   15. Empty states
+
+   Was centred with a dashed border and a decorative icon medallion. Now a rule
+   above, a drawn mark, and a sentence that says what to do next.
+   -------------------------------------------------------------------------- */
+
+.empty-state {
+  text-align: start;
+  padding-block: var(--sp-7);
+  border-block-start: 1px solid var(--rule-strong);
+}
+
+.empty-state h2 {
+  margin-block-end: var(--sp-2);
+  font-size: var(--t-lg);
+}
+
+.empty-state p {
+  color: var(--ink-2);
+  margin-block-end: var(--sp-4);
+  max-width: 52ch;
+}
+
+/* --------------------------------------------------------------------------
+   16. Utilities
+   -------------------------------------------------------------------------- */
+
+.sr-only,
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-link {
+  position: absolute;
+  inset-block-start: -80px;
+  inset-inline-start: var(--sp-4);
+  background: var(--ink-0);
+  color: var(--paper);
+  padding: var(--sp-3) var(--sp-4);
+  font-size: var(--t-sm);
+  font-weight: 500;
+  z-index: 9999;
+  text-decoration: none;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  transition: inset-block-start var(--dur) var(--ease);
+}
+
+.skip-link:focus {
+  inset-block-start: var(--sp-4);
+  color: var(--paper);
+}
+
+/* --------------------------------------------------------------------------
+   17. Accessibility
+   -------------------------------------------------------------------------- */
+
+/* The ring is paprika because focus genuinely requires the user's attention —
+   the one legitimate use of the signal colour outside a primary action. */
 :focus-visible {
-  outline: 2px solid #f96015;
-  outline-offset: 3px;
+  outline: 2px solid var(--signal);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   18. Responsive
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 860px) {
+  .menu-layout {
+    flex-direction: column;
+  }
+
+  aside,
+  .menu-sidebar {
+    width: 100%;
+  }
 }
 
 @media (max-width: 720px) {
   .header-container {
-    align-items: flex-start;
     flex-direction: column;
-    gap: 0.5rem;
+    align-items: stretch;
+    gap: var(--sp-2);
+    padding-block: var(--sp-2);
   }
 
   .header-nav {
     width: 100%;
     flex-wrap: wrap;
-    gap: 0.15rem;
-  }
-
-  .header-nav a {
-    padding-inline: 0.55rem;
+    gap: var(--sp-3);
+    justify-content: space-between;
   }
 
   .menu-top-toolbar {
@@ -767,312 +1583,9 @@ textarea:focus {
   }
 
   main {
-    padding: 1.5rem 1rem 2.5rem;
+    padding: var(--sp-4) var(--sp-4) var(--sp-7);
   }
-}
 
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    scroll-behavior: auto !important;
-    animation-duration: 0.01ms !important;
-    transition-duration: 0.01ms !important;
-  }
-}
-
-
-
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
-}
-
-.page-heading {
-  margin-bottom: 1.5rem;
-}
-
-.page-heading p {
-  color: var(--color-text-muted);
-  margin-top: 0.25rem;
-}
-
-.helper-text,
-.muted {
-  font-size: 0.8125rem;
-  color: var(--color-text-muted);
-}
-
-.menu-layout {
-  display: block;
-}
-
-.dish-list-heading {
-  margin: 1rem 0 0.25rem;
-}
-
-.search-clear {
-  background: transparent;
-  border: none;
-  color: var(--color-text-muted);
-  font-size: 0.8125rem;
-  font-weight: 600;
-  padding: 0.4rem 0.6rem;
-  cursor: pointer;
-  border-radius: var(--radius-pill);
-}
-
-.search-clear:hover {
-  color: var(--color-tomato);
-}
-
-.dish-category {
-  display: block;
-  font-size: 0.8125rem;
-  font-style: italic;
-  color: var(--color-text-muted);
-  margin-bottom: 0.4rem;
-}
-
-.food-card-title a {
-  color: inherit;
-  text-decoration: none;
-}
-
-.food-card-title a:hover {
-  color: var(--color-tomato);
-}
-
-.food-card-controls {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-top: auto;
-  padding-top: 0.25rem;
-}
-
-.food-card-controls .btn {
-  flex: 1;
-  min-height: 44px;
-}
-
-.dish-details-link {
-  font-size: 0.875rem;
-  font-weight: 700;
-  color: var(--color-forest);
-  text-decoration: none;
-  padding: 0.55rem 0.35rem;
-  border-radius: var(--radius-btn);
-}
-
-.dish-details-link:hover {
-  color: var(--color-tomato);
-  text-decoration: underline;
-}
-
-.dish-actions {
-  display: flex;
-  gap: 0.75rem;
-  flex-wrap: wrap;
-  align-items: center;
-  border-top: 1px solid var(--color-cream);
-  padding-top: 1.15rem;
-}
-
-.dish-purchase {
-  display: flex;
-  gap: 0.75rem;
-  flex-wrap: wrap;
-  align-items: center;
-}
-
-.dish-purchase .btn {
-  min-height: 44px;
-  border-radius: var(--radius-pill);
-}
-
-.cart-page {
-  max-width: 620px;
-  margin: 0 auto;
-}
-
-.cart-items {
-  list-style: none;
-  margin: 0 0 1rem;
-  padding: 0;
-}
-
-.cart-item {
-  display: flex;
-  gap: 0.9rem;
-  align-items: flex-start;
-  padding: 0.85rem 0;
-  border-bottom: 1px solid var(--color-cream);
-}
-
-.cart-thumbnail {
-  width: 76px;
-  height: 76px;
-  border-radius: 16px;
-  object-fit: cover;
-  flex-shrink: 0;
-}
-
-.cart-item-info {
-  flex: 1;
-  min-width: 0;
-}
-
-.cart-item-name {
-  font-weight: 700;
-  color: var(--color-forest);
-  text-decoration: none;
-}
-
-.cart-item-name:hover {
-  color: var(--color-tomato);
-  text-decoration: underline;
-}
-
-.cart-item-info p {
-  font-size: 0.8125rem;
-  color: var(--color-text-muted);
-  margin: 0.15rem 0 0.5rem;
-}
-
-.cart-item-end {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 0.35rem;
-  white-space: nowrap;
-}
-
-.remove-item {
-  background: none;
-  border: none;
-  color: var(--color-tomato);
-  font-size: 0.8125rem;
-  font-weight: 600;
-  cursor: pointer;
-  padding: 0.3rem 0;
-}
-
-.remove-item:hover {
-  text-decoration: underline;
-}
-
-.quantity-control {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.15rem;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-pill);
-  background: #fff;
-  padding: 0.1rem;
-}
-
-.quantity-control button {
-  width: 32px;
-  height: 32px;
-  border: none;
-  background: transparent;
-  border-radius: 50%;
-  font-size: 1rem;
-  font-weight: 700;
-  color: var(--color-forest);
-  cursor: pointer;
-}
-
-.quantity-control button:hover:not(:disabled) {
-  background: var(--color-cream);
-}
-
-.quantity-control button:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-}
-
-.quantity-control span {
-  min-width: 28px;
-  text-align: center;
-  font-weight: 700;
-  font-size: 0.875rem;
-}
-
-.price-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 1rem;
-  padding: 0.5rem 0;
-  font-size: 0.9375rem;
-  color: var(--color-text-muted);
-}
-
-.price-total {
-  border-top: 1px solid var(--color-border);
-  margin-top: 0.35rem;
-  padding-top: 0.75rem;
-  font-size: 1.125rem;
-  color: var(--color-forest);
-}
-
-.price-total strong:last-child {
-  color: var(--color-tomato);
-}
-
-.cart-actions {
-  display: flex;
-  gap: 0.75rem;
-  flex-wrap: wrap;
-  margin-top: 1.25rem;
-}
-
-.cart-actions .btn {
-  flex: 1;
-  min-width: 160px;
-  border-radius: var(--radius-pill);
-  min-height: 44px;
-}
-
-.checkout-summary {
-  list-style: none;
-  margin: 0.5rem 0 0.75rem;
-  padding: 0;
-}
-
-.checkout-summary li {
-  display: flex;
-  justify-content: space-between;
-  gap: 1rem;
-  padding: 0.35rem 0;
-  font-size: 0.9375rem;
-  border-bottom: 1px solid var(--color-cream);
-}
-
-.empty-state {
-  text-align: center;
-  padding: 2rem 1.5rem;
-}
-
-.empty-state h2 {
-  margin-bottom: 0.35rem;
-}
-
-.empty-state p {
-  color: var(--color-text-muted);
-  margin-bottom: 1.25rem;
-}
-
-@media (max-width: 720px) {
   .food-card-controls {
     flex-direction: column-reverse;
     align-items: stretch;
@@ -1099,38 +1612,890 @@ textarea:focus {
   }
 
   .header-nav a,
-  .header-nav .cart-pill {
+  .header-nav .cart-pill,
+  .header-nav .account__out {
     min-height: 40px;
     display: inline-flex;
     align-items: center;
   }
 }
-:focus-visible {
-  outline: 3px solid #18542a !important;
-  outline-offset: 2px !important;
+
+/* --------------------------------------------------------------------------
+   19. Chart + map SVG layer
+
+   Themed paint for the hand-rolled SVG lives here rather than in per-element
+   `fill=` attributes, for two reasons:
+
+   - `var()` resolves reliably inside a stylesheet. In an SVG presentation
+     attribute it is not dependable across engines, so a themed chart written
+     as fill="var(--ink-2)" can silently fall back to black. Every chart in
+     this app is themed, so every chart uses classes.
+   - One class per role means the palette is stated once. Changing the series
+     colour is a one-line edit instead of a find-and-replace across four
+     chart components.
+
+   Data is drawn in ink. Exactly one mark per chart wears the signal colour —
+   the peak bar, the live route on the map. Colour that encodes nothing the
+   axis did not already say is decoration, and decoration is what makes a
+   chart look generated.
+   -------------------------------------------------------------------------- */
+
+/* Axis and grid: the thinnest possible statement of the scale. The zero rule
+   is the only one allowed to be solid. */
+.chart-axis {
+  stroke: var(--rule-strong);
+  stroke-width: 1.5;
 }
 
-.skip-link {
-  position: absolute;
-  top: -60px;
-  left: 1rem;
-  background: #18542a;
-  color: #ffffff;
-  padding: 0.75rem 1.25rem;
-  font-weight: 700;
-  border-radius: 6px;
-  z-index: 9999;
-  text-decoration: none;
-  min-height: 44px;
+.chart-grid {
+  stroke: var(--rule);
+  stroke-width: 1;
+  stroke-dasharray: 3 3;
+}
+
+/* All chart text is mono. Tabular figures stack in a true column, which is the
+   entire reason to set an axis in mono. */
+.chart-tick {
+  fill: var(--ink-3);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+
+.chart-tick.is-zero {
+  fill: var(--ink-2);
+  font-weight: 600;
+}
+
+.chart-category {
+  fill: var(--ink-2);
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+
+.chart-value {
+  fill: var(--ink-0);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Marks. Bars and points are square: radius is zero everywhere in this system,
+   and a rounded bar is the chart-library default we are trying not to look
+   like. Butt caps and mitre joins match the icon set. */
+.chart-bar {
+  fill: var(--ink-2);
+}
+
+.chart-bar.is-peak {
+  fill: var(--signal);
+}
+
+.chart-line {
+  fill: none;
+  stroke: var(--ink-0);
+  stroke-width: 2.5;
+  stroke-linecap: butt;
+  stroke-linejoin: miter;
+}
+
+.chart-point {
+  fill: var(--surface);
+  stroke: var(--ink-0);
+  stroke-width: 2.5;
+}
+
+/* Map. The route is the only live thing on it, so it is the only thing wearing
+   the signal colour. */
+.map-canvas {
+  fill: var(--surface-sunken);
+}
+
+.map-road {
+  fill: none;
+  stroke: var(--rule);
+}
+
+.map-route {
+  fill: none;
+  stroke: var(--signal);
+  stroke-width: 3.5;
+  stroke-dasharray: 6 6;
+}
+
+.map-halo-destination {
+  fill: var(--ok-wash);
+}
+
+/* The courier halo pulses to say "live". It is animated in CSS rather than
+   with SVG <animate> on purpose: SMIL ignores prefers-reduced-motion, whereas
+   the global reduced-motion rule in section 17 already neutralises every CSS
+   animation in this file. */
+.map-halo-courier {
+  fill: var(--signal-wash);
+  animation: map-pulse 2s ease-in-out infinite;
+}
+
+@keyframes map-pulse {
+  0%,
+  100% {
+    opacity: 0.7;
+  }
+
+  50% {
+    opacity: 0.2;
+  }
+}
+
+.map-pin {
+  stroke: var(--surface-sunken);
+  stroke-width: 2.5;
+}
+
+.map-pin.is-destination {
+  fill: var(--ok);
+}
+
+.map-pin.is-courier {
+  fill: var(--signal);
+}
+
+.map-tag {
+  fill: var(--ink-0);
+}
+
+.map-tag.is-courier {
+  fill: var(--signal-ink);
+}
+
+.map-tag-text {
+  fill: var(--on-accent);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+/* --------------------------------------------------------------------------
+   20. Print — an order confirmation should be printable.
+   -------------------------------------------------------------------------- */
+
+@media print {
+  .site-header,
+  footer,
+  .skip-link,
+  .theme-toggle,
+  .btn {
+    display: none !important;
+  }
+
+  body {
+    background: #fff;
+    color: #000;
+  }
+
+  .card,
+  .order-ticket,
+  .food-card {
+    border-color: #999;
+  }
+}
+
+/* ==========================================================================
+   Shared primitives, ported from Meds Addis.
+
+   The two capstones are supposed to share one design language, and they did
+   not: Addis Eats kept its own bespoke class vocabulary and was therefore
+   missing every layout primitive — no container, no section rhythm, no split,
+   no hero, no steps. Each page compensated with inline styles, which is the
+   thing that makes a UI read as assembled rather than designed.
+
+   These rules are copied verbatim from the Meds Addis stylesheet. They are
+   entirely token-driven, so they pick up Addis Eats' paprika signal without
+   change. Nothing already defined above is redefined — see the port script for
+   the collision check, which matters because `.chart-grid` means a layout grid
+   there and an SVG gridline here.
+   ========================================================================== */
+
+.num,
+.price,
+.stat__value,
+.table .num,
+.cart-pill__count,
+.pager__status,
+.data-list dd {
+  font-variant-numeric: tabular-nums;
+}
+
+.container {
+  width: 100%;
+  max-width: var(--container);
+  margin-inline: auto;
+  padding-inline: var(--sp-4);
+}
+
+@media (min-width: 640px) {
+  .container {
+      padding-inline: var(--sp-6);
+    }
+}
+
+.page {
+  flex: 1 0 auto;
+  padding-block: var(--sp-6) var(--sp-9);
+}
+
+.section {
+  padding-block: var(--sp-7);
+  border-block-start: 1px solid var(--rule);
+}
+
+.section:first-of-type {
+  border-block-start: 0;
+  padding-block-start: var(--sp-5);
+}
+
+.section-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  margin-block-end: var(--sp-5);
+}
+
+.section-head p {
+  color: var(--ink-2);
+  max-width: 62ch;
+}
+
+.section-index {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: var(--t-2xs);
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  color: var(--ink-3);
+  margin-block-end: var(--sp-3);
+}
+
+@media (min-width: 900px) {
+  .split {
+      display: grid;
+      grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+      gap: var(--sp-7);
+      align-items: start;
+    }
+
+  .split__aside {
+      position: sticky;
+      top: calc(var(--header-h) + var(--sp-5));
+    }
+}
+
+.eyebrow {
   display: inline-flex;
   align-items: center;
-  transition: top 0.15s ease-in-out;
+  gap: var(--sp-2);
+  font-family: var(--font-mono);
+  font-size: var(--t-2xs);
+  font-weight: 500;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin-block-end: var(--sp-3);
 }
 
-.skip-link:focus {
-  top: 1rem;
+.eyebrow::before {
+  content: "";
+  width: 14px;
+  height: 1px;
+  background: var(--signal);
+  flex-shrink: 0;
 }
 
-button, a, input, select, textarea {
-  min-height: 44px;
+.lede {
+  font-size: var(--t-md);
+  line-height: 1.5;
+  color: var(--ink-2);
+  max-width: 58ch;
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+
+.cluster {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-3);
+}
+
+.between {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-4);
+}
+
+.small {
+  font-size: var(--t-sm);
+}
+
+.mono {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+}
+
+.data-list {
+  display: grid;
+  gap: 0;
+  margin: 0;
+}
+
+.data-list > div {
+  display: grid;
+  grid-template-columns: minmax(0, 10rem) minmax(0, 1fr);
+  gap: var(--sp-3);
+  padding-block: var(--sp-3);
+  border-block-end: 1px solid var(--rule);
+}
+
+.data-list dt {
+  font-family: var(--font-mono);
+  font-size: var(--t-2xs);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  padding-block-start: 3px;
+}
+
+.data-list dd {
+  margin: 0;
+  color: var(--ink-1);
+  font-size: var(--t-sm);
+}
+
+.icon--lg {
+  width: 1.5em;
+  height: 1.5em;
+}
+
+.rule-block {
+  border-inline-start: 2px solid var(--signal);
+  padding-inline-start: var(--sp-4);
+}
+
+.steps {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: 0;
+  border-block-start: 1px solid var(--rule-strong);
+}
+
+.steps li {
+  display: grid;
+  grid-template-columns: 2.25rem minmax(0, 1fr);
+  gap: var(--sp-3);
+  padding-block: var(--sp-4);
+  border-block-end: 1px solid var(--rule);
+}
+
+.steps li:last-child {
+  border-block-end: 0;
+}
+
+.steps__n {
+  font-family: var(--font-mono);
+  font-size: var(--t-2xs);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: var(--signal-ink);
+  padding-block-start: 3px;
+}
+
+.steps h3 {
+  font-size: var(--t-base);
+  font-weight: 600;
+  letter-spacing: -0.012em;
+}
+
+.steps p {
+  font-size: var(--t-sm);
+  color: var(--ink-2);
+  margin-block-start: var(--sp-1);
+  max-width: 62ch;
+}
+
+.hero {
+  padding-block: var(--sp-6) var(--sp-7);
+  border-block-start: 2px solid var(--ink-0);
+  margin-block-end: var(--sp-7);
+}
+
+.hero__inner {
+  display: grid;
+  gap: var(--sp-6);
+  align-items: end;
+}
+
+@media (min-width: 960px) {
+  .hero__inner {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 0.62fr);
+      gap: var(--sp-8);
+    }
+}
+
+.hero h1 {
+  color: var(--ink-0);
+  font-size: var(--t-display);
+  font-weight: 600;
+  letter-spacing: -0.042em;
+  line-height: var(--lh-tight);
+  max-width: 14ch;
+}
+
+.hero p {
+  color: var(--ink-2);
+  font-size: var(--t-md);
+  line-height: 1.5;
+  max-width: 46ch;
+}
+
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-3);
+  margin-block-start: var(--sp-2);
+}
+
+.hero__facts {
+  display: grid;
+  gap: 0;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  list-style: none;
+  padding: 0;
+  border-block-start: 1px solid var(--rule-strong);
+}
+
+@media (min-width: 560px) {
+  .hero__facts {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+}
+
+.hero__facts li {
+  padding: var(--sp-3) var(--sp-4) var(--sp-3) 0;
+  border-inline-end: 1px solid var(--rule);
+}
+
+.hero__facts li:last-child {
+  border-inline-end: 0;
+}
+
+@media (min-width: 560px) {
+  .hero__facts li + li {
+      padding-inline-start: var(--sp-4);
+    }
+}
+
+.hero__facts strong {
+  display: block;
+  font-size: var(--t-lg);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  color: var(--ink-0);
+}
+
+.hero__facts span {
+  display: block;
+  margin-block-start: var(--sp-1);
+  font-family: var(--font-mono);
+  font-size: var(--t-2xs);
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.price {
+  font-size: var(--t-base);
+  font-weight: 600;
+  color: var(--ink-0);
+  letter-spacing: -0.01em;
+}
+
+.price__unit {
+  font-family: var(--font-mono);
+  font-size: var(--t-2xs);
+  font-weight: 400;
+  color: var(--ink-3);
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 6px;
+  border: 1px solid currentColor;
+  border-radius: var(--r);
+  background: transparent;
+  font-family: var(--font-mono);
+  font-size: var(--t-2xs);
+  font-weight: 500;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.badge--rx {
+  color: var(--signal-ink);
+  border-color: var(--signal-rule);
+  background: var(--signal-wash);
+}
+
+.badge--ok {
+  color: var(--ok-ink);
+}
+
+.badge--low {
+  color: var(--signal-ink);
+  border-color: var(--signal-rule);
+  background: var(--signal-wash);
+}
+
+.badge--out {
+  color: var(--danger-ink);
+}
+
+.badge--info {
+  color: var(--ink-2);
+}
+
+.badge--neutral {
+  color: var(--ink-3);
+}
+
+.check {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-3);
+  font-size: var(--t-sm);
+}
+
+.check input {
+  width: 20px;
+  height: 20px;
+  margin-block-start: 2px;
+  accent-color: var(--ink-0);
+  flex-shrink: 0;
+}
+
+.table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  border-block-start: 1px solid var(--rule-strong);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--t-sm);
+  min-width: 560px;
+}
+
+.table caption {
+  text-align: start;
+  padding-block: var(--sp-3);
+  font-family: var(--font-mono);
+  font-size: var(--t-2xs);
+  font-weight: 500;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.table th,
+.table td {
+  padding: var(--sp-3) var(--sp-3);
+  text-align: start;
+  border-block-end: 1px solid var(--rule);
+  vertical-align: middle;
+}
+
+.table thead th {
+  background: transparent;
+  border-block-end: 1px solid var(--rule-strong);
+  font-family: var(--font-mono);
+  font-size: var(--t-2xs);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-3);
+  white-space: nowrap;
+}
+
+.table tbody tr:last-child td {
+  border-block-end: 0;
+}
+
+.table tbody tr:hover td {
+  background: var(--surface-sunken);
+}
+
+.table .num {
+  text-align: end;
+}
+
+.state {
+  display: grid;
+  justify-items: start;
+  text-align: start;
+  gap: var(--sp-3);
+  padding: var(--sp-7) 0;
+  border-block-start: 1px solid var(--rule-strong);
+}
+
+.state__icon {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--rule-strong);
+  color: var(--ink-2);
+  margin-block-end: var(--sp-1);
+}
+
+.state__icon .icon {
+  width: 18px;
+  height: 18px;
+}
+
+.state h2,
+.state h3 {
+  font-size: var(--t-lg);
+}
+
+.state p {
+  color: var(--ink-2);
+  max-width: 52ch;
+  font-size: var(--t-sm);
+}
+
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background: var(--surface-sunken);
+}
+
+.skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--rule),
+    transparent
+  );
+  animation: shimmer 1.6s var(--ease) infinite;
+}
+
+.skeleton--card {
+  height: 300px;
+}
+
+.skeleton--line {
+  height: 12px;
+  margin-block-end: var(--sp-2);
+}
+
+.skeleton--line-sm {
+  height: 12px;
+  width: 55%;
+}
+
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 1.5px solid var(--rule-strong);
+  border-block-start-color: var(--ink-0);
+  border-radius: var(--r-full);
+  animation: spin 0.7s linear infinite;
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+  margin-block-end: var(--sp-5);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 38px;
+  padding-inline: var(--sp-3);
+  border: 1px solid var(--rule-strong);
+  border-radius: var(--r);
+  background: transparent;
+  color: var(--ink-2);
+  font-family: var(--font-mono);
+  font-size: var(--t-2xs);
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: border-color var(--dur) var(--ease),
+    color var(--dur) var(--ease), background-color var(--dur) var(--ease);
+}
+
+.chip:hover {
+  border-color: var(--ink-0);
+  color: var(--ink-0);
+}
+
+.chip[aria-pressed="true"],
+.chip[data-active="true"] {
+  background: var(--ink-0);
+  border-color: var(--ink-0);
+  color: var(--paper);
+}
+
+.pager {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  margin-block-start: var(--sp-6);
+  padding-block-start: var(--sp-4);
+  border-block-start: 1px solid var(--rule);
+  flex-wrap: wrap;
+}
+
+.pager__status {
+  font-family: var(--font-mono);
+  font-size: var(--t-2xs);
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.spec-list {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: 0;
+  border-block-start: 1px solid var(--rule-strong);
+}
+
+.spec-list li {
+  display: grid;
+  grid-template-columns: 38% 1fr;
+  gap: var(--sp-3);
+  padding-block: var(--sp-3);
+  font-size: var(--t-sm);
+  border-block-end: 1px solid var(--rule);
+}
+
+.spec-list li:last-child {
+  border-block-end: 0;
+}
+
+.spec-list__k {
+  font-family: var(--font-mono);
+  font-size: var(--t-2xs);
+  font-weight: 500;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  padding-block-start: 2px;
+}
+
+.stats {
+  display: grid;
+  gap: 0;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 170px), 1fr));
+  margin-block-end: var(--sp-6);
+  border-block-start: 1px solid var(--rule-strong);
+}
+
+.stat {
+  background: transparent;
+  padding: var(--sp-4) var(--sp-4) var(--sp-4) 0;
+  border-inline-end: 1px solid var(--rule);
+  border-block-end: 1px solid var(--rule);
+}
+
+.stat:last-child {
+  border-inline-end: 0;
+}
+
+.stat__label {
+  font-family: var(--font-mono);
+  font-size: var(--t-2xs);
+  font-weight: 500;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.stat__value {
+  font-size: var(--t-xl);
+  font-weight: 600;
+  letter-spacing: -0.032em;
+  color: var(--ink-0);
+  line-height: 1.1;
+  margin-block-start: var(--sp-2);
+}
+
+.stat__delta {
+  font-family: var(--font-mono);
+  font-size: var(--t-2xs);
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  color: var(--ink-3);
+  margin-block-start: var(--sp-1);
+}
+
+.text-center {
+  text-align: center;
+}
+
+.mt-2 {
+  margin-block-start: var(--sp-2);
+}
+
+.mt-4 {
+  margin-block-start: var(--sp-4);
+}
+
+.mt-6 {
+  margin-block-start: var(--sp-6);
+}
+
+.mb-0 {
+  margin-block-end: 0;
+}
+
+.mb-4 {
+  margin-block-end: var(--sp-4);
+}
+
+.mb-6 {
+  margin-block-end: var(--sp-6);
+}
+
+@media print {
+  .card,
+    .table-wrap {
+      border-color: #999;
+    }
 }

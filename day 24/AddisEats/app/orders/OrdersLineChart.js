@@ -31,9 +31,9 @@ export default function OrdersLineChart({ summary }) {
   return (
     <div
       style={{
-        backgroundColor: "#ffffff",
-        border: "1px solid #e2e8f0",
-        borderRadius: "8px",
+        backgroundColor: "var(--surface)",
+        border: "1px solid var(--rule)",
+        borderRadius: "var(--r)",
         padding: "1.25rem",
         display: "flex",
         flexDirection: "column"
@@ -44,20 +44,22 @@ export default function OrdersLineChart({ summary }) {
           style={{
             fontSize: "1.125rem",
             fontWeight: "600",
-            color: "#0f172a",
+            color: "var(--ink-0)",
             margin: "0 0 0.25rem 0"
           }}
         >
           {`Orders per Day (${rangeLabel}, Unit: ${unit})`}
         </h3>
-        <p style={{ fontSize: "0.875rem", color: "#64748b", margin: 0 }}>
+        <p style={{ fontSize: "0.875rem", color: "var(--ink-2)", margin: 0 }}>
           {`Daily order frequency recorded across the ${rangeLabel.toLowerCase()}`}
         </p>
       </div>
 
+      {/* aspectRatio matches the viewBox exactly, so preserveAspectRatio="none"
+          cannot distort the glyphs. A fixed pixel height would stretch them. */}
       <div
         style={{
-          height: "260px",
+          aspectRatio: `${svgWidth} / ${svgHeight}`,
           width: "100%",
           position: "relative"
         }}
@@ -78,17 +80,13 @@ export default function OrdersLineChart({ summary }) {
                   y1={y}
                   x2={marginLeft + chartWidth}
                   y2={y}
-                  stroke="#e2e8f0"
-                  strokeDasharray={tickVal === 0 ? "none" : "3 3"}
-                  strokeWidth="1"
+                  className={tickVal === 0 ? "chart-axis" : "chart-grid"}
                 />
                 <text
                   x={marginLeft - 10}
                   y={y + 4}
                   textAnchor="end"
-                  fontSize="11"
-                  fill="#64748b"
-                  fontFamily="sans-serif"
+                  className={tickVal === 0 ? "chart-tick is-zero" : "chart-tick"}
                 >
                   {tickVal}
                 </text>
@@ -97,44 +95,20 @@ export default function OrdersLineChart({ summary }) {
           })}
 
           {points.length > 1 && (
-            <polyline
-              fill="none"
-              stroke="#0284c7"
-              strokeWidth="2.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              points={polylinePoints}
-            />
+            <polyline className="chart-line" points={polylinePoints} />
           )}
 
           {points.map((p) => (
             <g key={p.day.dateKey}>
-              <circle
-                cx={p.x}
-                cy={p.y}
-                r="4.5"
-                fill="#ffffff"
-                stroke="#0284c7"
-                strokeWidth="2.5"
-              />
-              <text
-                x={p.x}
-                y={p.y - 8}
-                textAnchor="middle"
-                fontSize="11"
-                fill="#0f172a"
-                fontWeight="600"
-                fontFamily="sans-serif"
-              >
+              <circle cx={p.x} cy={p.y} r="4.5" className="chart-point" />
+              <text x={p.x} y={p.y - 8} textAnchor="middle" className="chart-value">
                 {p.day.orderCount}
               </text>
               <text
                 x={p.x}
                 y={svgHeight - 10}
                 textAnchor="middle"
-                fontSize="11"
-                fill="#475569"
-                fontFamily="sans-serif"
+                className="chart-category"
               >
                 {p.day.displayDate}
               </text>

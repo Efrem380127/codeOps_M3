@@ -25,26 +25,28 @@ export default function RevenueBarChart({ summary }) {
   return (
     <div
       style={{
-        backgroundColor: "#ffffff",
-        border: "1px solid #e2e8f0",
-        borderRadius: "8px",
+        backgroundColor: "var(--surface)",
+        border: "1px solid var(--rule)",
+        borderRadius: "var(--r)",
         padding: "1.25rem",
         display: "flex",
         flexDirection: "column"
       }}
     >
       <div style={{ marginBottom: "0.75rem", display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
-        <h3 style={{ fontSize: "1.125rem", fontWeight: "600", color: "#0f172a", margin: 0 }}>
+        <h3 style={{ fontSize: "1.125rem", fontWeight: "600", color: "var(--ink-0)", margin: 0 }}>
           Daily Revenue
         </h3>
-        <span style={{ fontSize: "0.875rem", color: "#64748b", fontVariantNumeric: "tabular-nums" }}>
+        <span style={{ fontSize: "0.875rem", color: "var(--ink-2)", fontVariantNumeric: "tabular-nums" }}>
           Total: {etb(summary?.totalRevenue)}
         </span>
       </div>
 
+      {/* aspectRatio matches the viewBox exactly, so preserveAspectRatio="none"
+          cannot distort the glyphs. A fixed pixel height would stretch them. */}
       <div
         style={{
-          height: "280px",
+          aspectRatio: `${svgWidth} / ${svgHeight}`,
           width: "100%",
           position: "relative"
         }}
@@ -65,17 +67,13 @@ export default function RevenueBarChart({ summary }) {
                   y1={y}
                   x2={marginLeft + chartWidth}
                   y2={y}
-                  stroke="#e2e8f0"
-                  strokeDasharray={tickVal === 0 ? "none" : "3 3"}
-                  strokeWidth="1"
+                  className={tickVal === 0 ? "chart-axis" : "chart-grid"}
                 />
                 <text
                   x={marginLeft - 10}
                   y={y + 4}
                   textAnchor="end"
-                  fontSize="11"
-                  fill="#64748b"
-                  fontFamily="sans-serif"
+                  className={tickVal === 0 ? "chart-tick is-zero" : "chart-tick"}
                 >
                   {etb(tickVal)}
                 </text>
@@ -96,19 +94,16 @@ export default function RevenueBarChart({ summary }) {
                   y={y}
                   width={barWidth}
                   height={Math.max(barHeight, 2)}
-                  rx="4"
-                  fill="#2563eb"
-                  opacity="0.9"
+                  className={
+                    day.revenue === maxRevenue ? "chart-bar is-peak" : "chart-bar"
+                  }
                 />
                 {day.revenue > 0 && (
                   <text
                     x={xCenter}
                     y={Math.max(y - 6, marginTop + 10)}
                     textAnchor="middle"
-                    fontSize="10"
-                    fill="#1e293b"
-                    fontWeight="500"
-                    fontFamily="sans-serif"
+                    className="chart-value"
                   >
                     {etb(day.revenue)}
                   </text>
@@ -117,9 +112,7 @@ export default function RevenueBarChart({ summary }) {
                   x={xCenter}
                   y={svgHeight - 10}
                   textAnchor="middle"
-                  fontSize="11"
-                  fill="#475569"
-                  fontFamily="sans-serif"
+                  className="chart-category"
                 >
                   {day.displayDate}
                 </text>

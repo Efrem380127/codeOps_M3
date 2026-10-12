@@ -8,19 +8,19 @@ export default function sitemap() {
       url: `${baseUrl}`,
       lastModified: new Date(),
       changeFrequency: "daily",
-      priority: 1.0,
+      priority: 1.0
     },
     {
       url: `${baseUrl}/menu`,
       lastModified: new Date(),
       changeFrequency: "daily",
-      priority: 0.9,
+      priority: 0.9
     },
     {
       url: `${baseUrl}/order-status`,
       lastModified: new Date(),
       changeFrequency: "always",
-      priority: 0.5,
+      priority: 0.5
     },
   ];
 
@@ -28,7 +28,7 @@ export default function sitemap() {
     url: `${baseUrl}/menu/${dish.id}`,
     lastModified: new Date(),
     changeFrequency: "weekly",
-    priority: 0.8,
+    priority: 0.8
   }));
 
   return [...staticRoutes, ...dishRoutes];

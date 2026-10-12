@@ -2,12 +2,11 @@ export default function NeighbourhoodDataTable({ data = [], totalRevenue = 0, to
   return (
     <div
       style={{
-        backgroundColor: "#ffffff",
-        border: "1px solid #e5dcc3",
-        borderRadius: "20px",
+        backgroundColor: "var(--surface)",
+        border: "1px solid var(--rule)",
+        borderRadius: "var(--r)",
         padding: "1.25rem",
-        marginTop: "1rem",
-        boxShadow: "0 2px 8px rgba(24, 84, 42, 0.04)"
+        marginTop: "1rem"
       }}
     >
       <table
@@ -15,7 +14,7 @@ export default function NeighbourhoodDataTable({ data = [], totalRevenue = 0, to
           width: "100%",
           borderCollapse: "collapse",
           fontSize: "0.875rem",
-          color: "#1f2937"
+          color: "var(--ink-0)"
         }}
       >
         <caption
@@ -24,21 +23,21 @@ export default function NeighbourhoodDataTable({ data = [], totalRevenue = 0, to
             textAlign: "left",
             fontWeight: "700",
             fontSize: "0.95rem",
-            color: "#18542a",
+            color: "var(--ink-0)",
             marginBottom: "0.75rem"
           }}
         >
           Revenue by Neighbourhood Breakdown (Accessible Table)
         </caption>
         <thead>
-          <tr style={{ borderBottom: "2px solid #e5dcc3", backgroundColor: "#fcf9f0" }}>
+          <tr style={{ borderBottom: "2px solid var(--rule)", backgroundColor: "var(--surface-sunken)" }}>
             <th
               scope="col"
               style={{
                 textAlign: "left",
                 padding: "0.625rem 0.75rem",
                 fontWeight: "700",
-                color: "#18542a"
+                color: "var(--ink-0)"
               }}
             >
               Neighbourhood
@@ -49,7 +48,7 @@ export default function NeighbourhoodDataTable({ data = [], totalRevenue = 0, to
                 textAlign: "right",
                 padding: "0.625rem 0.75rem",
                 fontWeight: "700",
-                color: "#18542a"
+                color: "var(--ink-0)"
               }}
             >
               Order Count
@@ -60,7 +59,7 @@ export default function NeighbourhoodDataTable({ data = [], totalRevenue = 0, to
                 textAlign: "right",
                 padding: "0.625rem 0.75rem",
                 fontWeight: "700",
-                color: "#18542a"
+                color: "var(--ink-0)"
               }}
             >
               Revenue (ETB)
@@ -69,8 +68,8 @@ export default function NeighbourhoodDataTable({ data = [], totalRevenue = 0, to
         </thead>
         <tbody>
           {data.map((item) => (
-            <tr key={item.neighbourhood} style={{ borderBottom: "1px solid #f3e8cc" }}>
-              <td style={{ padding: "0.625rem 0.75rem", fontWeight: "600", color: "#1f2937" }}>
+            <tr key={item.neighbourhood} style={{ borderBottom: "1px solid var(--rule)" }}>
+              <td style={{ padding: "0.625rem 0.75rem", fontWeight: "600", color: "var(--ink-0)" }}>
                 {item.neighbourhood}
               </td>
               <td
@@ -96,8 +95,8 @@ export default function NeighbourhoodDataTable({ data = [], totalRevenue = 0, to
           ))}
         </tbody>
         <tfoot>
-          <tr style={{ borderTop: "2px solid #e5dcc3", backgroundColor: "#fcf9f0", fontWeight: "700" }}>
-            <td style={{ padding: "0.625rem 0.75rem", color: "#18542a" }}>
+          <tr style={{ borderTop: "2px solid var(--rule)", backgroundColor: "var(--surface-sunken)", fontWeight: "700" }}>
+            <td style={{ padding: "0.625rem 0.75rem", color: "var(--ink-0)" }}>
               Total
             </td>
             <td
@@ -105,7 +104,7 @@ export default function NeighbourhoodDataTable({ data = [], totalRevenue = 0, to
                 padding: "0.625rem 0.75rem",
                 textAlign: "right",
                 fontVariantNumeric: "tabular-nums",
-                color: "#18542a"
+                color: "var(--ink-0)"
               }}
             >
               {totalOrders}
@@ -115,7 +114,7 @@ export default function NeighbourhoodDataTable({ data = [], totalRevenue = 0, to
                 padding: "0.625rem 0.75rem",
                 textAlign: "right",
                 fontVariantNumeric: "tabular-nums",
-                color: "#18542a"
+                color: "var(--ink-0)"
               }}
             >
               {`${totalRevenue.toLocaleString()} ETB`}

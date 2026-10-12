@@ -15,12 +15,12 @@ export default function OrderStatus({ id = "1", fallbackData }) {
   if (!order) return <p>Loading order status...</p>;
 
   return (
-    <div style={{ maxWidth: "460px", padding: "1.25rem", border: "1px solid #e5e7eb", borderRadius: "8px", backgroundColor: "#ffffff" }}>
+    <div style={{ maxWidth: "460px", padding: "1.25rem", border: "1px solid var(--rule)", borderRadius: "var(--r)", backgroundColor: "var(--surface)" }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: "0.75rem" }}>
-        <h2 style={{ margin: 0, fontSize: "1.125rem", color: "#0f172a" }}>Order #{order.id}</h2>
+        <h2 style={{ margin: 0, fontSize: "1.125rem", color: "var(--ink-0)" }}>Order #{order.id}</h2>
         <Link
           href={`/order-status?id=${order.id}`}
-          style={{ fontSize: "0.8125rem", color: "#2563eb", textDecoration: "none", fontWeight: "600" }}
+          style={{ fontSize: "0.8125rem", color: "var(--ink-0)", textDecoration: "none", fontWeight: "600" }}
         >
           Open Live Map &rarr;
         </Link>
@@ -35,9 +35,9 @@ export default function OrderStatus({ id = "1", fallbackData }) {
         <strong>Status: </strong>
         <span style={{
           padding: "2px 8px",
-          borderRadius: "4px",
-          backgroundColor: order.status === "cancelled" ? "#fee2e2" : order.status === "delivered" ? "#dcfce7" : "#dbeafe",
-          color: order.status === "cancelled" ? "#b91c1c" : order.status === "delivered" ? "#15803d" : "#1e40af",
+          borderRadius: "var(--r)",
+          backgroundColor: order.status === "cancelled" ? "var(--danger-wash)" : order.status === "delivered" ? "var(--ok-wash)" : "var(--signal-wash)",
+          color: order.status === "cancelled" ? "var(--danger-ink)" : order.status === "delivered" ? "var(--ok-ink)" : "var(--signal-ink)",
           textTransform: "capitalize",
           fontWeight: 600,
           fontSize: "0.8125rem"

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { etb, when } from "@/lib/format";
 import CsvExportButton from "./CsvExportButton";
+import Icon from "@/app/components/Icon";
 
 export default function OrderTable({
   orders = [],
@@ -47,13 +48,13 @@ export default function OrderTable({
   function renderSortIndicator(columnKey) {
     if (sortKey !== columnKey) {
       return (
-        <span aria-hidden="true" style={{ color: "#94a3b8", marginLeft: "4px" }}>
+        <span aria-hidden="true" style={{ color: "var(--ink-3)", marginLeft: "4px" }}>
           &#x21C5;
         </span>
       );
     }
     return (
-      <span aria-hidden="true" style={{ color: "#2563eb", marginLeft: "4px" }}>
+      <span aria-hidden="true" style={{ color: "var(--ink-0)", marginLeft: "4px" }}>
         {sortDir === "asc" ? "\u25B2" : "\u25BC"}
       </span>
     );
@@ -62,15 +63,15 @@ export default function OrderTable({
   return (
     <div
       style={{
-        backgroundColor: "#ffffff",
-        border: "1px solid #e2e8f0",
-        borderRadius: "8px",
+        backgroundColor: "var(--surface)",
+        border: "1px solid var(--rule)",
+        borderRadius: "var(--r)",
         padding: "1.25rem",
         marginTop: "1.5rem"
       }}
     >
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.875rem", flexWrap: "wrap", gap: "0.75rem" }}>
-        <h2 style={{ fontSize: "1.125rem", fontWeight: "600", color: "#0f172a", margin: 0 }}>
+        <h2 style={{ fontSize: "1.125rem", fontWeight: "600", color: "var(--ink-0)", margin: 0 }}>
           Customer Orders Log
         </h2>
         <CsvExportButton orders={allOrders.length > 0 ? allOrders : orders} />
@@ -82,7 +83,7 @@ export default function OrderTable({
             width: "100%",
             borderCollapse: "collapse",
             fontSize: "0.875rem",
-            color: "#1e293b"
+            color: "var(--ink-0)"
           }}
         >
           <caption
@@ -91,21 +92,21 @@ export default function OrderTable({
               textAlign: "left",
               fontWeight: "600",
               fontSize: "0.875rem",
-              color: "#64748b",
+              color: "var(--ink-2)",
               marginBottom: "0.5rem"
             }}
           >
             Customer Orders and Fulfillment Details
           </caption>
           <thead>
-            <tr style={{ borderBottom: "2px solid #cbd5e1", backgroundColor: "#f8fafc" }}>
+            <tr style={{ borderBottom: "2px solid var(--rule)", backgroundColor: "var(--surface-sunken)" }}>
               <th
                 scope="col"
                 style={{
                   textAlign: "left",
                   padding: "0.75rem 0.875rem",
                   fontWeight: "600",
-                  color: "#334155"
+                  color: "var(--ink-0)"
                 }}
               >
                 Order ID
@@ -117,7 +118,7 @@ export default function OrderTable({
                   textAlign: "left",
                   padding: "0.75rem 0.875rem",
                   fontWeight: "600",
-                  color: "#334155"
+                  color: "var(--ink-0)"
                 }}
               >
                 <Link
@@ -141,7 +142,7 @@ export default function OrderTable({
                   textAlign: "left",
                   padding: "0.75rem 0.875rem",
                   fontWeight: "600",
-                  color: "#334155"
+                  color: "var(--ink-0)"
                 }}
               >
                 <Link
@@ -164,7 +165,7 @@ export default function OrderTable({
                   textAlign: "left",
                   padding: "0.75rem 0.875rem",
                   fontWeight: "600",
-                  color: "#334155"
+                  color: "var(--ink-0)"
                 }}
               >
                 Area
@@ -176,7 +177,7 @@ export default function OrderTable({
                   textAlign: "left",
                   padding: "0.75rem 0.875rem",
                   fontWeight: "600",
-                  color: "#334155"
+                  color: "var(--ink-0)"
                 }}
               >
                 <Link
@@ -199,7 +200,7 @@ export default function OrderTable({
                   textAlign: "center",
                   padding: "0.75rem 0.875rem",
                   fontWeight: "600",
-                  color: "#334155"
+                  color: "var(--ink-0)"
                 }}
               >
                 Tracking
@@ -211,7 +212,7 @@ export default function OrderTable({
                   textAlign: "right",
                   padding: "0.75rem 0.875rem",
                   fontWeight: "600",
-                  color: "#334155"
+                  color: "var(--ink-0)"
                 }}
               >
                 <Link
@@ -234,12 +235,12 @@ export default function OrderTable({
           </thead>
           <tbody>
             {orders.map((order) => (
-              <tr key={order.id} style={{ borderBottom: "1px solid #e2e8f0" }}>
+              <tr key={order.id} style={{ borderBottom: "1px solid var(--rule)" }}>
                 <td style={{ padding: "0.75rem 0.875rem", fontWeight: "600" }}>
                   <Link
                     href={`/orders/${order.id}`}
                     style={{
-                      color: "#2563eb",
+                      color: "var(--ink-0)",
                       textDecoration: "none",
                       display: "inline-flex",
                       alignItems: "center",
@@ -249,13 +250,13 @@ export default function OrderTable({
                     {order.id}
                   </Link>
                 </td>
-                <td style={{ padding: "0.75rem 0.875rem", color: "#475569" }}>
+                <td style={{ padding: "0.75rem 0.875rem", color: "var(--ink-2)" }}>
                   {when(order.createdAt)}
                 </td>
-                <td style={{ padding: "0.75rem 0.875rem", color: "#1e293b", fontWeight: "600" }}>
+                <td style={{ padding: "0.75rem 0.875rem", color: "var(--ink-0)", fontWeight: "600" }}>
                   {order.name}
                 </td>
-                <td style={{ padding: "0.75rem 0.875rem", color: "#475569" }}>
+                <td style={{ padding: "0.75rem 0.875rem", color: "var(--ink-2)" }}>
                   {order.area}
                 </td>
                 <td style={{ padding: "0.75rem 0.875rem" }}>
@@ -263,34 +264,38 @@ export default function OrderTable({
                     style={{
                       display: "inline-block",
                       padding: "4px 10px",
-                      borderRadius: "4px",
+                      borderRadius: "var(--r)",
                       fontSize: "0.75rem",
                       fontWeight: "700",
                       textTransform: "capitalize",
+                      // Mono and tracked out, so the chip reads as a stamp on an
+                      // order ticket rather than a rounded status pill.
+                      fontFamily: "var(--font-mono)",
+                      letterSpacing: "0.03em",
                       backgroundColor:
                         order.status === "delivered"
-                          ? "#dcfce7"
+                          ? "var(--ok-wash)"
                           : order.status === "ready"
-                          ? "#e0e7ff"
+                          ? "var(--signal-wash)"
                           : order.status === "out_for_delivery"
-                          ? "#dbeafe"
+                          ? "var(--surface-sunken)"
                           : order.status === "cooking"
-                          ? "#fef3c7"
+                          ? "var(--surface-sunken)"
                           : order.status === "cancelled"
-                          ? "#fee2e2"
-                          : "#f1f5f9",
+                          ? "var(--danger-wash)"
+                          : "var(--surface-sunken)",
                       color:
                         order.status === "delivered"
-                          ? "#15803d"
+                          ? "var(--ok-ink)"
                           : order.status === "ready"
-                          ? "#3730a3"
+                          ? "var(--signal-ink)"
                           : order.status === "out_for_delivery"
-                          ? "#1e40af"
+                          ? "var(--ink-1)"
                           : order.status === "cooking"
-                          ? "#b45309"
+                          ? "var(--ink-2)"
                           : order.status === "cancelled"
-                          ? "#b91c1c"
-                          : "#475569"
+                          ? "var(--danger-ink)"
+                          : "var(--ink-3)"
                     }}
                   >
                     {order.status.replace(/_/g, " ")}
@@ -306,15 +311,15 @@ export default function OrderTable({
                       minHeight: "44px",
                       padding: "0.35rem 0.75rem",
                       fontSize: "0.8125rem",
-                      color: "#2563eb",
+                      color: "var(--ink-0)",
                       textDecoration: "none",
                       fontWeight: "600",
-                      borderRadius: "6px",
-                      border: "1px solid #cbd5e1",
-                      backgroundColor: "#f8fafc"
+                      borderRadius: "var(--r)",
+                      border: "1px solid var(--rule)",
+                      backgroundColor: "var(--surface-sunken)"
                     }}
                   >
-                    📍 Live Map
+                    <Icon name="pin" /> Live Map
                   </Link>
                 </td>
                 <td
@@ -323,7 +328,7 @@ export default function OrderTable({
                     textAlign: "right",
                     fontVariantNumeric: "tabular-nums",
                     fontWeight: "700",
-                    color: "#0f172a"
+                    color: "var(--ink-0)"
                   }}
                 >
                   {etb(order.total)}
@@ -344,10 +349,10 @@ export default function OrderTable({
           gap: "1rem",
           marginTop: "1.25rem",
           paddingTop: "1rem",
-          borderTop: "1px solid #e2e8f0"
+          borderTop: "1px solid var(--rule)"
         }}
       >
-        <p style={{ margin: 0, fontSize: "0.875rem", color: "#64748b" }}>
+        <p style={{ margin: 0, fontSize: "0.875rem", color: "var(--ink-2)" }}>
           Showing <strong>{startIndex}</strong> to <strong>{endIndex}</strong> of <strong>{totalCount}</strong> orders
         </p>
 
@@ -362,10 +367,10 @@ export default function OrderTable({
                 minHeight: "44px",
                 minWidth: "44px",
                 padding: "0.5rem 1rem",
-                borderRadius: "6px",
-                border: "1px solid #cbd5e1",
-                backgroundColor: "#ffffff",
-                color: "#1e293b",
+                borderRadius: "var(--r)",
+                border: "1px solid var(--rule)",
+                backgroundColor: "var(--surface)",
+                color: "var(--ink-0)",
                 textDecoration: "none",
                 fontSize: "0.875rem",
                 fontWeight: "600"
@@ -383,10 +388,10 @@ export default function OrderTable({
                 minHeight: "44px",
                 minWidth: "44px",
                 padding: "0.5rem 1rem",
-                borderRadius: "6px",
-                border: "1px solid #e2e8f0",
-                backgroundColor: "#f8fafc",
-                color: "#94a3b8",
+                borderRadius: "var(--r)",
+                border: "1px solid var(--rule)",
+                backgroundColor: "var(--surface-sunken)",
+                color: "var(--ink-3)",
                 fontSize: "0.875rem",
                 cursor: "not-allowed"
               }}
@@ -409,10 +414,10 @@ export default function OrderTable({
                   minHeight: "44px",
                   minWidth: "44px",
                   padding: "0.5rem",
-                  borderRadius: "6px",
-                  border: isCurrent ? "2px solid #2563eb" : "1px solid #cbd5e1",
-                  backgroundColor: isCurrent ? "#2563eb" : "#ffffff",
-                  color: isCurrent ? "#ffffff" : "#1e293b",
+                  borderRadius: "var(--r)",
+                  border: isCurrent ? "2px solid var(--signal)" : "1px solid var(--rule)",
+                  backgroundColor: isCurrent ? "var(--signal)" : "var(--surface)",
+                  color: isCurrent ? "var(--on-accent)" : "var(--ink-0)",
                   textDecoration: "none",
                   fontSize: "0.875rem",
                   fontWeight: isCurrent ? "700" : "500"
@@ -433,10 +438,10 @@ export default function OrderTable({
                 minHeight: "44px",
                 minWidth: "44px",
                 padding: "0.5rem 1rem",
-                borderRadius: "6px",
-                border: "1px solid #cbd5e1",
-                backgroundColor: "#ffffff",
-                color: "#1e293b",
+                borderRadius: "var(--r)",
+                border: "1px solid var(--rule)",
+                backgroundColor: "var(--surface)",
+                color: "var(--ink-0)",
                 textDecoration: "none",
                 fontSize: "0.875rem",
                 fontWeight: "600"
@@ -454,10 +459,10 @@ export default function OrderTable({
                 minHeight: "44px",
                 minWidth: "44px",
                 padding: "0.5rem 1rem",
-                borderRadius: "6px",
-                border: "1px solid #e2e8f0",
-                backgroundColor: "#f8fafc",
-                color: "#94a3b8",
+                borderRadius: "var(--r)",
+                border: "1px solid var(--rule)",
+                backgroundColor: "var(--surface-sunken)",
+                color: "var(--ink-3)",
                 fontSize: "0.875rem",
                 cursor: "not-allowed"
               }}

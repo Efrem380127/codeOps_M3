@@ -4,9 +4,9 @@ export default function ChartDataTable({ dailyMetrics = [], totalOrders = 0, tot
   return (
     <div
       style={{
-        backgroundColor: "#ffffff",
-        border: "1px solid #e2e8f0",
-        borderRadius: "8px",
+        backgroundColor: "var(--surface)",
+        border: "1px solid var(--rule)",
+        borderRadius: "var(--r)",
         padding: "1.25rem",
         marginTop: "1.5rem"
       }}
@@ -16,7 +16,7 @@ export default function ChartDataTable({ dailyMetrics = [], totalOrders = 0, tot
           width: "100%",
           borderCollapse: "collapse",
           fontSize: "0.875rem",
-          color: "#1e293b"
+          color: "var(--ink-0)"
         }}
       >
         <caption
@@ -25,21 +25,21 @@ export default function ChartDataTable({ dailyMetrics = [], totalOrders = 0, tot
             textAlign: "left",
             fontWeight: "600",
             fontSize: "1rem",
-            color: "#0f172a",
+            color: "var(--ink-0)",
             marginBottom: "0.75rem"
           }}
         >
           Daily Chart Summary (Accessible Tabular View)
         </caption>
         <thead>
-          <tr style={{ borderBottom: "2px solid #cbd5e1", backgroundColor: "#f8fafc" }}>
+          <tr style={{ borderBottom: "2px solid var(--rule)", backgroundColor: "var(--surface-sunken)" }}>
             <th
               scope="col"
               style={{
                 textAlign: "left",
                 padding: "0.625rem 0.75rem",
                 fontWeight: "600",
-                color: "#334155"
+                color: "var(--ink-0)"
               }}
             >
               Date
@@ -50,7 +50,7 @@ export default function ChartDataTable({ dailyMetrics = [], totalOrders = 0, tot
                 textAlign: "right",
                 padding: "0.625rem 0.75rem",
                 fontWeight: "600",
-                color: "#334155"
+                color: "var(--ink-0)"
               }}
             >
               Orders Count (Unit: Orders)
@@ -61,7 +61,7 @@ export default function ChartDataTable({ dailyMetrics = [], totalOrders = 0, tot
                 textAlign: "right",
                 padding: "0.625rem 0.75rem",
                 fontWeight: "600",
-                color: "#334155"
+                color: "var(--ink-0)"
               }}
             >
               Daily Revenue (ETB)
@@ -70,8 +70,8 @@ export default function ChartDataTable({ dailyMetrics = [], totalOrders = 0, tot
         </thead>
         <tbody>
           {dailyMetrics.map((day) => (
-            <tr key={day.dateKey} style={{ borderBottom: "1px solid #e2e8f0" }}>
-              <td style={{ padding: "0.625rem 0.75rem", color: "#334155" }}>
+            <tr key={day.dateKey} style={{ borderBottom: "1px solid var(--rule)" }}>
+              <td style={{ padding: "0.625rem 0.75rem", color: "var(--ink-0)" }}>
                 {day.displayDate} ({day.dayName})
               </td>
               <td
@@ -96,8 +96,8 @@ export default function ChartDataTable({ dailyMetrics = [], totalOrders = 0, tot
           ))}
         </tbody>
         <tfoot>
-          <tr style={{ borderTop: "2px solid #cbd5e1", backgroundColor: "#f8fafc", fontWeight: "600" }}>
-            <td style={{ padding: "0.625rem 0.75rem", color: "#0f172a" }}>
+          <tr style={{ borderTop: "2px solid var(--rule)", backgroundColor: "var(--surface-sunken)", fontWeight: "600" }}>
+            <td style={{ padding: "0.625rem 0.75rem", color: "var(--ink-0)" }}>
               Total
             </td>
             <td
@@ -105,7 +105,7 @@ export default function ChartDataTable({ dailyMetrics = [], totalOrders = 0, tot
                 padding: "0.625rem 0.75rem",
                 textAlign: "right",
                 fontVariantNumeric: "tabular-nums",
-                color: "#0f172a"
+                color: "var(--ink-0)"
               }}
             >
               {totalOrders}
@@ -115,7 +115,7 @@ export default function ChartDataTable({ dailyMetrics = [], totalOrders = 0, tot
                 padding: "0.625rem 0.75rem",
                 textAlign: "right",
                 fontVariantNumeric: "tabular-nums",
-                color: "#0f172a"
+                color: "var(--ink-0)"
               }}
             >
               {etb(totalRevenue)}

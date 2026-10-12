@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export const metadata = {
   title: "Kitchen Dashboard",
-  description: "Staff portal for monitoring incoming orders and kitchen ticket fulfillment.",
+  description: "Staff portal for monitoring incoming orders and kitchen ticket fulfillment."
 };
 
 export default async function KitchenPage() {
@@ -18,7 +18,7 @@ export default async function KitchenPage() {
   if (session.role !== "staff") {
     return (
       <div style={{ padding: "2rem" }}>
-        <h1 style={{ color: "#dc2626" }}>403 - Forbidden</h1>
+        <h1 style={{ color: "var(--danger-ink)" }}>403 - Forbidden</h1>
         <p>Staff role required to view the kitchen dashboard.</p>
         <p>Your current role is: <strong>{session.role}</strong></p>
         <Link href="/">&larr; Return to Home</Link>
@@ -35,7 +35,7 @@ export default async function KitchenPage() {
       </nav>
 
       <h1>Kitchen Dashboard</h1>
-      <p style={{ color: "#4b5563" }}>
+      <p style={{ color: "var(--ink-2)" }}>
         Staff member: <strong>{session.name}</strong> ({session.role})
       </p>
 
@@ -50,8 +50,8 @@ export default async function KitchenPage() {
               style={{
                 marginBottom: "1rem",
                 padding: "1rem",
-                border: "1px solid #e5e7eb",
-                borderRadius: "6px"
+                border: "1px solid var(--rule)",
+                borderRadius: "var(--r)"
               }}
             >
               <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -59,9 +59,9 @@ export default async function KitchenPage() {
                 <span
                   style={{
                     padding: "2px 8px",
-                    borderRadius: "4px",
-                    backgroundColor: order.status === "cancelled" ? "#fee2e2" : "#dcfce7",
-                    color: order.status === "cancelled" ? "#991b1b" : "#166534",
+                    borderRadius: "var(--r)",
+                    backgroundColor: order.status === "cancelled" ? "var(--danger-wash)" : "var(--ok-wash)",
+                    color: order.status === "cancelled" ? "var(--danger-ink)" : "var(--ok-ink)",
                     fontSize: "0.875rem"
                   }}
                 >
@@ -70,7 +70,7 @@ export default async function KitchenPage() {
               </div>
               <p style={{ margin: "4px 0" }}>Customer: {order.name} ({order.phone})</p>
               <p style={{ margin: "4px 0" }}>Area: {order.area}</p>
-              {order.notes && <p style={{ margin: "4px 0", color: "#6b7280" }}>Notes: {order.notes}</p>}
+              {order.notes && <p style={{ margin: "4px 0", color: "var(--ink-3)" }}>Notes: {order.notes}</p>}
             </li>
           ))}
         </ul>

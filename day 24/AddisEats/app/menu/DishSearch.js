@@ -1,169 +1,160 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import Link from "next/link";
 import useSWR from "swr";
+
 import fetcher from "@/lib/fetcher";
+import Icon from "@/app/components/Icon";
 
+const PAGE_SIZE = 4;
+
+/**
+ * Debounced live search over the dish route handler.
+ *
+ * The previous version of this component was largely a status message: it
+ * printed "Search box is idle. Type above or press Escape to reset." in the
+ * resting state, and "Loading dishes..." while a request was in flight. Both
+ * are instructions for operating the interface rather than information about
+ * the menu, and they are the kind of filler that makes a page feel padded.
+ *
+ * Three details make the search itself behave:
+ *
+ *  1. The SWR key is `null` while the box is empty. A null key tells SWR not to
+ *     fetch at all — without it, the empty string is a valid key and every
+ *     keystroke would fire a request.
+ *  2. The term is debounced by 300 ms, so typing "doro" issues one request
+ *     rather than four.
+ *  3. The previous term's results stay mounted while the next request is in
+ *     flight, so the list does not flicker between keystrokes.
+ */
 export default function DishSearch() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-
-  const [term, setTerm] = useState(searchParams.get("search") || "");
-  const [debouncedTerm, setDebouncedTerm] = useState(term);
-
-  const page = Number(searchParams.get("page")) || 1;
+  const [term, setTerm] = useState("");
+  const [debounced, setDebounced] = useState("");
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setDebouncedTerm(term);
+      setDebounced(term.trim());
+      // A new term starts a new result set; staying on page 3 of the previous
+      // one is how a search appears to return nothing.
+      setPage(1);
     }, 300);
+
     return () => clearTimeout(timer);
   }, [term]);
 
-  const key = debouncedTerm.trim()
-    ? `/api/dishes?search=${encodeURIComponent(debouncedTerm.trim())}&page=${page}`
+  const key = debounced
+    ? `/api/dishes?search=${encodeURIComponent(debounced)}&page=${page}&limit=${PAGE_SIZE}`
     : null;
 
-  const { data, isValidating } = useSWR(key, fetcher, {
+  const { data, error, isLoading } = useSWR(key, fetcher, {
     keepPreviousData: true
   });
 
-  const handleSearchChange = (e) => {
-    const val = e.target.value;
-    setTerm(val);
-    const params = new URLSearchParams(searchParams.toString());
-    params.set("page", "1");
-    if (val.trim()) {
-      params.set("search", val);
-    } else {
-      params.delete("search");
-    }
-    router.push(`?${params.toString()}`);
-  };
-
-  const handleKeyDown = (e) => {
-    if (e.key === "Escape") {
-      setTerm("");
-      const params = new URLSearchParams(searchParams.toString());
-      params.delete("search");
-      params.set("page", "1");
-      router.push(`?${params.toString()}`);
-    }
-  };
-
-  const setPage = (newPage) => {
-    const params = new URLSearchParams(searchParams.toString());
-    params.set("page", String(newPage));
-    router.push(`?${params.toString()}`);
-  };
+  const results = data?.dishes ?? [];
+  const totalPages = data?.totalPages ?? 1;
 
   return (
-    <div style={{ margin: "1.5rem 0", maxWidth: "560px" }}>
-      <h2 style={{ fontSize: "1.25rem", color: "#0f172a", marginBottom: "0.5rem" }}>
-        Search Dishes
-      </h2>
-      <label htmlFor="dish-search-input" style={{ display: "block", fontSize: "0.875rem", color: "#475569", marginBottom: "0.35rem" }}>
-        Filter by keyword (Press Escape to clear)
-      </label>
-      <input
-        id="dish-search-input"
-        type="search"
-        value={term}
-        onChange={handleSearchChange}
-        onKeyDown={handleKeyDown}
-        placeholder="Type to search (e.g. Wat, Tibs, Shiro)..."
-        style={{
-          width: "100%",
-          minHeight: "44px",
-          padding: "0.625rem 0.875rem",
-          border: "1px solid #cbd5e1",
-          borderRadius: "6px",
-          marginBottom: "1rem",
-          fontSize: "0.9375rem"
-        }}
-      />
+    <div>
+      <form className="search" role="search" onSubmit={(event) => event.preventDefault()}>
+        <label className="sr-only" htmlFor="dish-search">
+          Search dishes by name
+        </label>
 
-      {!debouncedTerm.trim() ? (
-        <p style={{ color: "#64748b", fontSize: "0.875rem" }}>
-          Search box is idle. Type above or press Escape to reset.
-        </p>
-      ) : !data ? (
-        <p style={{ color: "#64748b", fontSize: "0.875rem" }}>Loading dishes...</p>
-      ) : (
-        <div>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.5rem" }}>
-            <p style={{ margin: 0, fontWeight: 600, color: "#1e293b", fontSize: "0.875rem" }}>
-              Found {data.total} {data.total === 1 ? "dish" : "dishes"}
-            </p>
-            {isValidating && <span style={{ fontSize: "0.8125rem", color: "#64748b" }}>Updating...</span>}
-          </div>
+        <input
+          id="dish-search"
+          type="search"
+          value={term}
+          onChange={(event) => setTerm(event.target.value)}
+          placeholder="Doro, tibs, shiro&hellip;"
+          autoComplete="off"
+          aria-describedby="dish-search-status"
+        />
 
-          {data.dishes.length === 0 ? (
-            <p style={{ marginTop: "1rem", color: "#64748b", fontSize: "0.875rem" }}>
-              No dishes match &quot;{debouncedTerm}&quot;.
+        {term && (
+          <button type="button" className="btn btn-secondary btn-sm" onClick={() => setTerm("")}>
+            Clear
+          </button>
+        )}
+      </form>
+
+      <div id="dish-search-status" className="mt-4" aria-live="polite">
+        {!debounced && (
+          <p className="small muted mb-0">
+            Type a dish name. The search reads the name and the description, so
+            &ldquo;berbere&rdquo; finds every dish that uses it.
+          </p>
+        )}
+
+        {debounced && isLoading && !data && <p className="small muted mb-0">Searching&hellip;</p>}
+
+        {error && (
+          <p className="small mb-0" style={{ color: "var(--danger-ink)" }}>
+            The search request failed. Check the connection and try again.
+          </p>
+        )}
+
+        {debounced && data && results.length === 0 && (
+          <p className="small muted mb-0">
+            No dish matches &ldquo;{debounced}&rdquo;. Try a shorter word, or{" "}
+            <Link href="/menu">browse the whole menu</Link>.
+          </p>
+        )}
+
+        {results.length > 0 && (
+          <>
+            <p className="small muted">
+              {data.total} {data.total === 1 ? "dish" : "dishes"} matching &ldquo;{debounced}&rdquo;
             </p>
-          ) : (
-            <ul style={{ listStyle: "none", padding: 0, marginTop: "0.75rem", display: "flex", flexDirection: "column", gap: "0.5rem" }}>
-              {data.dishes.map((dish) => (
-                <li
-                  key={dish.id}
-                  style={{
-                    padding: "0.75rem 1rem",
-                    border: "1px solid #e2e8f0",
-                    borderRadius: "6px",
-                    backgroundColor: "#ffffff",
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center"
-                  }}
-                >
+
+            <ul className="data-list">
+              {results.map((dish) => (
+                <li key={dish.id}>
                   <span>
-                    <strong style={{ color: "#0f172a" }}>{dish.name}</strong> {dish.spicy && "🌶️"}
+                    <Link href={`/menu/${dish.id}`}>{dish.name}</Link>
+                    {dish.spicy && (
+                      <>
+                        {" "}
+                        <Icon name="flame" style={{ color: "var(--signal)" }} />
+                        {/* The icon is decorative; the fact it encodes is not. */}
+                        <span className="sr-only">Spicy</span>
+                      </>
+                    )}
                   </span>
-                  <span style={{ fontWeight: "700", color: "#b45309" }}>{dish.price} ETB</span>
+                  <span className="num">{dish.price} ETB</span>
                 </li>
               ))}
             </ul>
-          )}
 
-          {data.totalPages > 1 && (
-            <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginTop: "1.25rem" }}>
-              <button
-                type="button"
-                disabled={page <= 1}
-                onClick={() => setPage(page - 1)}
-                aria-label="Go to previous page"
-                style={{
-                  minHeight: "44px",
-                  minWidth: "44px",
-                  padding: "0.5rem 1rem",
-                  cursor: page <= 1 ? "not-allowed" : "pointer"
-                }}
-              >
-                Previous
-              </button>
-              <span style={{ fontSize: "0.875rem", fontWeight: "600", color: "#334155" }}>
-                Page {page} of {data.totalPages}
-              </span>
-              <button
-                type="button"
-                disabled={page >= data.totalPages}
-                onClick={() => setPage(page + 1)}
-                aria-label="Go to next page"
-                style={{
-                  minHeight: "44px",
-                  minWidth: "44px",
-                  padding: "0.5rem 1rem",
-                  cursor: page >= data.totalPages ? "not-allowed" : "pointer"
-                }}
-              >
-                Next
-              </button>
-            </div>
-          )}
-        </div>
-      )}
+            {totalPages > 1 && (
+              <div className="pager">
+                <button
+                  type="button"
+                  className="btn btn-secondary btn-sm"
+                  disabled={page <= 1}
+                  onClick={() => setPage((current) => Math.max(1, current - 1))}
+                >
+                  Previous
+                </button>
+
+                <span className="pager__status">
+                  Page {page} of {totalPages}
+                </span>
+
+                <button
+                  type="button"
+                  className="btn btn-secondary btn-sm"
+                  disabled={page >= totalPages}
+                  onClick={() => setPage((current) => Math.min(totalPages, current + 1))}
+                >
+                  Next
+                </button>
+              </div>
+            )}
+          </>
+        )}
+      </div>
     </div>
   );
 }

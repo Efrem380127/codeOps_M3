@@ -1,196 +1,213 @@
-import Image from "next/image";
 import Link from "next/link";
-import { getSession } from "@/lib/auth";
-import { signOut } from "./actions/auth";
+
+import FeaturedDishes from "./components/FeaturedDishes";
+import Icon from "./components/Icon";
+import { categories, dishes } from "./data/dishes";
 
 export const metadata = {
-  title: "Home",
-  description: "Welcome to Addis Eats. Order freshly cooked authentic Ethiopian dishes, stews, and cultural books.",
+  // No `title` here on purpose: the root layout's `default` is the full brand
+  // string, and setting "Home" would render as "Home | Addis Eats" — a weaker
+  // result for the page that carries the site's primary search presence.
+  description:
+    "Order freshly cooked authentic Ethiopian dishes and stews in Addis Ababa, with live courier tracking to your door."
 };
 
-export default async function Home() {
-  const session = await getSession();
+/**
+ * Home page.
+ *
+ * The previous version of this file was a bare `<h1>`, a photograph, a rounded
+ * panel showing the session, and six links with identical inline styles. Every
+ * one of those is a tell that a page was assembled rather than designed — most
+ * of all the six identical links, which repeated the header's navigation a
+ * second time in a heavier visual weight.
+ *
+ * It is now four sections in three different shapes, which is the point:
+ *
+ *   01  an asymmetric split — heading in a narrow column, content in a wide one
+ *   02  full width, because a grid of dishes earns the room
+ *   03  the same split again, but carrying an ordered list
+ *   04  a single rule-marked block
+ *
+ * A repeated rhythm is what makes a page feel machine-generated, so no two
+ * consecutive sections here are built the same way.
+ *
+ * The account panel is gone from this page entirely. It lives in the header now
+ * (app/components/AccountMenu.jsx), which is where identity belongs and where
+ * it is reachable from every route rather than only from here.
+ */
 
+const STEPS = [
+  {
+    title: "Pick your dishes",
+    body: `Nine dishes across ${categories.length} kitchen sections. Quantities are capped at 20 per dish, so a double-tap on a slow connection cannot order the same plate twice.`
+  },
+  {
+    title: "Check out in one form",
+    body: "Your name, the delivery address and a phone number the courier can call. Nothing else is asked for, because nothing else is used."
+  },
+  {
+    title: "The kitchen cooks it",
+    body: "Orders reach the kitchen in the order they arrive. Nothing is cooked before you order it, which is why the food is hot when it gets to you."
+  },
+  {
+    title: "Follow it to your door",
+    body: "Once a courier is assigned, their position streams to the status page every few seconds until the order is delivered."
+  }
+];
+
+export default function Home() {
   return (
-    <div style={{ padding: "1rem 0" }}>
-      <h1 style={{ fontSize: "2rem", color: "#0f172a", marginBottom: "0.75rem" }}>
-        Welcome to Addis Eats
-      </h1>
+    <>
+      <section className="hero">
+        <div className="hero__inner">
+          <div className="stack">
+            <span className="eyebrow">Addis Ababa &middot; Cooked to order</span>
 
-      <div style={{ margin: "1.5rem 0", maxWidth: "800px" }}>
-        <Image
-          src="/hero.jpg"
-          alt="Addis Eats authentic food and cultural literature display"
-          width={800}
-          height={400}
-          priority
-          sizes="(max-width: 768px) 100vw, 800px"
-          style={{ width: "100%", height: "auto", borderRadius: "8px", display: "block" }}
-        />
-      </div>
+            <h1>Ethiopian food, cooked when you order it.</h1>
 
-      <div style={{ margin: "1.25rem 0", padding: "1.25rem", backgroundColor: "#ffffff", borderRadius: "8px", border: "1px solid #cbd5e1" }}>
-        {session ? (
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "1rem" }}>
-            <span style={{ fontSize: "1rem", color: "#1e293b" }}>
-              Signed in as: <strong>{session.name}</strong> ({session.role})
-            </span>
-            <form action={signOut}>
-              <button
-                type="submit"
-                style={{
-                  minHeight: "44px",
-                  minWidth: "44px",
-                  padding: "0.5rem 1.25rem",
-                  backgroundColor: "#dc2626",
-                  color: "#ffffff",
-                  border: "none",
-                  borderRadius: "6px",
-                  cursor: "pointer",
-                  fontWeight: "600",
-                  display: "inline-flex",
-                  alignItems: "center",
-                  justifyContent: "center"
-                }}
-              >
-                Sign Out
-              </button>
-            </form>
+            <p>
+              Slow-simmered wats, grilled tibs and vegan platters from a kitchen
+              in Addis Ababa — delivered to your door, with the courier&rsquo;s
+              position on a live map while it is on its way.
+            </p>
+
+            <div className="hero__actions">
+              <Link className="btn btn-primary" href="/menu">
+                Browse the menu
+              </Link>
+              <Link className="btn btn-secondary" href="/order-status">
+                Track an order
+              </Link>
+            </div>
           </div>
-        ) : (
-          <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-            <span style={{ color: "#475569" }}>Not signed in.</span>
-            <Link
-              href="/sign-in"
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                justifyContent: "center",
-                minHeight: "44px",
-                padding: "0.5rem 1.25rem",
-                backgroundColor: "#2563eb",
-                color: "#ffffff",
-                borderRadius: "6px",
-                textDecoration: "none",
-                fontWeight: "600"
-              }}
-            >
-              Sign In here
+
+          {/*
+            A specification strip, not the 2x2 grid of rounded stat tiles this
+            slot would usually hold. Values over mono labels, divided by
+            hairlines, reading left to right like the panel on a delivery note.
+            The counts are read from the menu rather than typed in, so they
+            cannot drift out of date.
+          */}
+          <ul className="hero__facts">
+            <li>
+              <strong>{dishes.length}</strong>
+              <span>Dishes on the menu</span>
+            </li>
+            <li>
+              <strong>{categories.length}</strong>
+              <span>Kitchen sections</span>
+            </li>
+            <li>
+              <strong>Same day</strong>
+              <span>Across Addis Ababa</span>
+            </li>
+            <li>
+              <strong>
+                <Icon name="pin" />
+              </strong>
+              <span>Live courier tracking</span>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <section className="section">
+        <div className="split">
+          <div className="split__aside">
+            <span className="section-index">01 &mdash; Browse</span>
+            <h2>What are you hungry for?</h2>
+            <p className="small muted mt-2">
+              {categories.length} kitchen sections. Every dish shows its price up
+              front, so nothing is a surprise at checkout.
+            </p>
+          </div>
+
+          {/*
+            Real links, not buttons. The filter lives in the URL, which is what
+            makes a filtered menu shareable, bookmarkable, and reachable with
+            the back button. The old version of this control was a row of
+            <button> elements with no handler at all.
+          */}
+          <nav className="filters" aria-label="Browse by kitchen section">
+            {categories.map((category) => (
+              <Link
+                key={category}
+                className="chip"
+                href={`/menu?category=${encodeURIComponent(category)}`}
+              >
+                {category}
+              </Link>
+            ))}
+            <Link className="chip" href="/menu">
+              All {dishes.length}
+            </Link>
+          </nav>
+        </div>
+      </section>
+
+      <section className="section">
+        <div className="section-head">
+          <div>
+            <span className="section-index">02 &mdash; From the kitchen</span>
+            <h2>Four to start with</h2>
+          </div>
+          <p className="small muted mb-0">
+            One from each kitchen section, then the next in line — so the first
+            thing you see is the range of the menu rather than its first four
+            rows.
+          </p>
+        </div>
+
+        <FeaturedDishes limit={4} />
+      </section>
+
+      <section className="section">
+        <div className="split">
+          <div className="split__aside">
+            <span className="section-index">03 &mdash; How it works</span>
+            <h2>From order to doorstep</h2>
+            <p className="small muted mt-2">
+              Four steps, one of which you can watch happen in real time.
+            </p>
+          </div>
+
+          {/*
+            The step number is the ordering, so it belongs in the margin as a
+            marker — not repeated inside four boxes that are otherwise the same
+            shape.
+          */}
+          <ol className="steps">
+            {STEPS.map((step, index) => (
+              <li key={step.title}>
+                <span className="steps__n" aria-hidden="true">
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+                <div>
+                  <h3>{step.title}</h3>
+                  <p>{step.body}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
+      <section className="section">
+        <div className="rule-block">
+          <span className="section-index">04 &mdash; Staff</span>
+          <h2>Running the kitchen?</h2>
+          <p className="lede mt-2">
+            The kitchen view lists every order that has been placed, oldest
+            first, and moves it through preparing, on the way and delivered.
+            It is the same order record the customer sees on the status page.
+          </p>
+          <div className="mt-4">
+            <Link className="btn btn-secondary" href="/kitchen">
+              Open the kitchen view
             </Link>
           </div>
-        )}
-      </div>
-
-      <nav aria-label="Main application sections" style={{ display: "flex", gap: "0.75rem", marginTop: "1.5rem", flexWrap: "wrap" }}>
-        <Link
-          href="/menu"
-          style={{
-            minHeight: "44px",
-            display: "inline-flex",
-            alignItems: "center",
-            justifyContent: "center",
-            padding: "0.5rem 1.25rem",
-            backgroundColor: "#ffffff",
-            border: "1px solid #cbd5e1",
-            borderRadius: "6px",
-            color: "#1e293b",
-            textDecoration: "none",
-            fontWeight: "600"
-          }}
-        >
-          Menu & Search
-        </Link>
-        <Link
-          href="/orders"
-          style={{
-            minHeight: "44px",
-            display: "inline-flex",
-            alignItems: "center",
-            justifyContent: "center",
-            padding: "0.5rem 1.25rem",
-            backgroundColor: "#ffffff",
-            border: "1px solid #cbd5e1",
-            borderRadius: "6px",
-            color: "#1e293b",
-            textDecoration: "none",
-            fontWeight: "600"
-          }}
-        >
-          Orders & Dashboard
-        </Link>
-        <Link
-          href="/order-status"
-          style={{
-            minHeight: "44px",
-            display: "inline-flex",
-            alignItems: "center",
-            justifyContent: "center",
-            padding: "0.5rem 1.25rem",
-            backgroundColor: "#ffffff",
-            border: "1px solid #cbd5e1",
-            borderRadius: "6px",
-            color: "#1e293b",
-            textDecoration: "none",
-            fontWeight: "600"
-          }}
-        >
-          Order Status
-        </Link>
-        <Link
-          href="/checkout"
-          style={{
-            minHeight: "44px",
-            display: "inline-flex",
-            alignItems: "center",
-            justifyContent: "center",
-            padding: "0.5rem 1.25rem",
-            backgroundColor: "#ffffff",
-            border: "1px solid #cbd5e1",
-            borderRadius: "6px",
-            color: "#1e293b",
-            textDecoration: "none",
-            fontWeight: "600"
-          }}
-        >
-          Checkout
-        </Link>
-        <Link
-          href="/cart"
-          style={{
-            minHeight: "44px",
-            display: "inline-flex",
-            alignItems: "center",
-            justifyContent: "center",
-            padding: "0.5rem 1.25rem",
-            backgroundColor: "#ffffff",
-            border: "1px solid #cbd5e1",
-            borderRadius: "6px",
-            color: "#1e293b",
-            textDecoration: "none",
-            fontWeight: "600"
-          }}
-        >
-          Cart
-        </Link>
-        <Link
-          href="/kitchen"
-          style={{
-            minHeight: "44px",
-            display: "inline-flex",
-            alignItems: "center",
-            justifyContent: "center",
-            padding: "0.5rem 1.25rem",
-            backgroundColor: "#ffffff",
-            border: "1px solid #cbd5e1",
-            borderRadius: "6px",
-            color: "#1e293b",
-            textDecoration: "none",
-            fontWeight: "600"
-          }}
-        >
-          Kitchen (Staff)
-        </Link>
-      </nav>
-    </div>
+        </div>
+      </section>
+    </>
   );
 }

@@ -1,8 +1,10 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function OrdersError({ error, reset }) {
+  const router = useRouter();
   return (
     <section
       role="alert"
@@ -11,9 +13,9 @@ export default function OrdersError({ error, reset }) {
         padding: "2.5rem 2rem",
         maxWidth: "600px",
         margin: "2rem auto",
-        backgroundColor: "#fff1f2",
-        border: "1px solid #fecdd3",
-        borderRadius: "8px",
+        backgroundColor: "var(--danger-wash)",
+        border: "1px solid var(--danger)",
+        borderRadius: "var(--r)",
         textAlign: "center"
       }}
     >
@@ -23,8 +25,8 @@ export default function OrdersError({ error, reset }) {
           width: "48px",
           height: "48px",
           borderRadius: "50%",
-          backgroundColor: "#ffe4e6",
-          color: "#e11d48",
+          backgroundColor: "var(--danger-wash)",
+          color: "var(--danger-ink)",
           display: "inline-flex",
           alignItems: "center",
           justifyContent: "center",
@@ -41,7 +43,7 @@ export default function OrdersError({ error, reset }) {
         style={{
           fontSize: "1.25rem",
           fontWeight: "600",
-          color: "#9f1239",
+          color: "var(--danger-ink)",
           marginBottom: "0.5rem"
         }}
       >
@@ -50,7 +52,7 @@ export default function OrdersError({ error, reset }) {
 
       <p
         style={{
-          color: "#881337",
+          color: "var(--danger-ink)",
           fontSize: "0.9375rem",
           marginBottom: "1.5rem",
           lineHeight: "1.5"
@@ -62,12 +64,16 @@ export default function OrdersError({ error, reset }) {
       <div style={{ display: "flex", gap: "0.75rem", justifyContent: "center", flexWrap: "wrap" }}>
         <button
           type="button"
-          onClick={() => (typeof reset === "function" ? reset() : (window.location.href = "/orders?state=populated"))}
+          onClick={() =>
+            typeof reset === "function"
+              ? reset()
+              : router.push("/orders?state=populated")
+          }
           style={{
-            backgroundColor: "#e11d48",
-            color: "#ffffff",
+            backgroundColor: "var(--danger-ink)",
+            color: "var(--on-accent)",
             padding: "0.6rem 1.25rem",
-            borderRadius: "6px",
+            borderRadius: "var(--r)",
             border: "none",
             fontWeight: "500",
             cursor: "pointer",
@@ -81,11 +87,11 @@ export default function OrdersError({ error, reset }) {
           href="/orders?state=populated"
           style={{
             display: "inline-block",
-            backgroundColor: "#ffffff",
-            color: "#9f1239",
-            border: "1px solid #fecdd3",
+            backgroundColor: "var(--surface)",
+            color: "var(--danger-ink)",
+            border: "1px solid var(--danger)",
             padding: "0.6rem 1.25rem",
-            borderRadius: "6px",
+            borderRadius: "var(--r)",
             textDecoration: "none",
             fontWeight: "500",
             fontSize: "0.875rem"

@@ -16,7 +16,7 @@ export default async function OrderDetailPage({ params }) {
   if (session && order.sessionId && order.sessionId !== session.id && session.role !== "staff") {
     return (
       <div style={{ padding: "2rem" }}>
-        <h1 style={{ color: "#dc2626" }}>Access Denied</h1>
+        <h1 style={{ color: "var(--danger-ink)" }}>Access Denied</h1>
         <p>You cannot view orders from another account.</p>
         <Link href="/orders">&larr; Back to your orders</Link>
       </div>

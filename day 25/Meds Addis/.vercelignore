@@ -1,0 +1,30 @@
+# Keep the upload to source only.
+#
+# Vercel runs `npm install` and `next build` itself, so build output, caches and
+# local tooling have no business being uploaded. Without this file the CLI sends
+# whatever is on disk, which for this project includes ~1,000-file verification
+# build directories and the agent's scratch folder.
+
+# Build output
+.next/
+.next-verify*/
+.next-stale-*/
+out/
+build/
+*.tsbuildinfo
+
+# Dependencies are installed by the build, not uploaded
+node_modules/
+
+# Local environment — SESSION_SECRET must be set per-environment in Vercel,
+# never shipped from a developer machine
+.env*.local
+
+# Tooling scratch
+.workbuddy-ai/
+.vscode/
+.idea/
+
+# OS noise
+.DS_Store
+Thumbs.db

@@ -26,24 +26,23 @@ export default function SignInForm({ nextUrl }) {
         maxWidth: "460px",
         margin: "0 auto",
         padding: "1.75rem",
-        border: "1px solid #cbd5e1",
-        borderRadius: "8px",
-        backgroundColor: "#ffffff",
-        boxShadow: "0 1px 3px rgba(0,0,0,0.08)"
+        border: "1px solid var(--rule)",
+        borderRadius: "var(--r)",
+        backgroundColor: "var(--surface)"
       }}
     >
-      <h2 style={{ marginBottom: "1.25rem", textAlign: "center", color: "#0f172a" }}>
+      <h2 style={{ marginBottom: "1.25rem", textAlign: "center", color: "var(--ink-0)" }}>
         Sign In
       </h2>
 
       {nextUrl && (
-        <div style={{ padding: "0.625rem 0.875rem", backgroundColor: "#f1f5f9", borderRadius: "6px", marginBottom: "1rem", fontSize: "0.875rem" }}>
+        <div style={{ padding: "0.625rem 0.875rem", backgroundColor: "var(--surface-sunken)", borderRadius: "var(--r)", marginBottom: "1rem", fontSize: "0.875rem" }}>
           Target destination: <code>{nextUrl}</code>
         </div>
       )}
 
       {state?.error && (
-        <p role="alert" style={{ color: "#dc2626", fontSize: "0.875rem", marginBottom: "1rem", fontWeight: "600" }}>
+        <p role="alert" style={{ color: "var(--danger-ink)", fontSize: "0.875rem", marginBottom: "1rem", fontWeight: "600" }}>
           {state.error}
         </p>
       )}
@@ -52,7 +51,7 @@ export default function SignInForm({ nextUrl }) {
         <input type="hidden" name="next" value={nextUrl || ""} />
 
         <div>
-          <label htmlFor="username" style={{ display: "block", marginBottom: "6px", fontWeight: "600", color: "#0f172a" }}>
+          <label htmlFor="username" style={{ display: "block", marginBottom: "6px", fontWeight: "600", color: "var(--ink-0)" }}>
             Username
           </label>
           <input
@@ -67,7 +66,7 @@ export default function SignInForm({ nextUrl }) {
         </div>
 
         <div>
-          <label htmlFor="role" style={{ display: "block", marginBottom: "6px", fontWeight: "600", color: "#0f172a" }}>
+          <label htmlFor="role" style={{ display: "block", marginBottom: "6px", fontWeight: "600", color: "var(--ink-0)" }}>
             Role
           </label>
           <select
@@ -90,10 +89,12 @@ export default function SignInForm({ nextUrl }) {
             width: "100%",
             minHeight: "48px",
             padding: "0.75rem",
-            backgroundColor: isPending ? "#94a3b8" : "#2563eb",
-            color: "#ffffff",
+            backgroundColor: isPending ? "var(--ink-4)" : "var(--signal)",
+            // See CheckoutForm: the pending fill needs an ink label, not the
+            // on-accent label, or "Signing In..." renders white-on-grey.
+            color: isPending ? "var(--ink-0)" : "var(--on-accent)",
             border: "none",
-            borderRadius: "6px",
+            borderRadius: "var(--r)",
             cursor: isPending ? "not-allowed" : "pointer",
             fontWeight: "700",
             fontSize: "1rem"
@@ -103,8 +104,8 @@ export default function SignInForm({ nextUrl }) {
         </button>
       </form>
 
-      <div style={{ marginTop: "1.75rem", borderTop: "1px solid #e2e8f0", paddingTop: "1.25rem" }}>
-        <p style={{ fontSize: "0.875rem", color: "#475569", marginBottom: "0.75rem", fontWeight: "600" }}>
+      <div style={{ marginTop: "1.75rem", borderTop: "1px solid var(--rule)", paddingTop: "1.25rem" }}>
+        <p style={{ fontSize: "0.875rem", color: "var(--ink-2)", marginBottom: "0.75rem", fontWeight: "600" }}>
           Quick test accounts:
         </p>
         <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
@@ -118,8 +119,8 @@ export default function SignInForm({ nextUrl }) {
               justifyContent: "flex-start",
               fontSize: "0.875rem",
               cursor: "pointer",
-              borderRadius: "6px",
-              border: "1px solid #cbd5e1"
+              borderRadius: "var(--r)",
+              border: "1px solid var(--rule)"
             }}
           >
             Abebe Bikila (Customer - has seed order)
@@ -134,8 +135,8 @@ export default function SignInForm({ nextUrl }) {
               justifyContent: "flex-start",
               fontSize: "0.875rem",
               cursor: "pointer",
-              borderRadius: "6px",
-              border: "1px solid #cbd5e1"
+              borderRadius: "var(--r)",
+              border: "1px solid var(--rule)"
             }}
           >
             Chala Kebede (Customer - different account)
@@ -150,8 +151,8 @@ export default function SignInForm({ nextUrl }) {
               justifyContent: "flex-start",
               fontSize: "0.875rem",
               cursor: "pointer",
-              borderRadius: "6px",
-              border: "1px solid #cbd5e1"
+              borderRadius: "var(--r)",
+              border: "1px solid var(--rule)"
             }}
           >
             Chef Almaz (Staff - kitchen access)

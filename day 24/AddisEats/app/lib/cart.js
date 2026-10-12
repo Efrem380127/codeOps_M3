@@ -23,11 +23,31 @@ export function getCartTotals(items) {
   return { itemCount, subtotal, deliveryFee, total: subtotal + deliveryFee };
 }
 
+/**
+ * Filter the menu by kitchen section and by keyword.
+ *
+ * The search covers the name, the description and the ingredient list. It has
+ * to tolerate a dish that has no `ingredients` field: interpolating a missing
+ * value into a template literal yields the string "undefined", so a search for
+ * "undefined" would match every dish that omits the field. Joining the present
+ * fields instead means an absent field simply contributes nothing.
+ */
 export function filterDishes(catalog, category = "all", search = "") {
   const normalizedCategory = category.toLowerCase();
   const term = search.trim().toLowerCase();
-  return catalog.filter((dish) =>
-    (normalizedCategory === "all" || dish.category.toLowerCase() === normalizedCategory) &&
-    (!term || `${dish.name} ${dish.summary} ${dish.ingredients}`.toLowerCase().includes(term))
-  );
+
+  return catalog.filter((dish) => {
+    if (normalizedCategory !== "all" && dish.category.toLowerCase() !== normalizedCategory) {
+      return false;
+    }
+
+    if (!term) return true;
+
+    const haystack = [dish.name, dish.summary, dish.ingredients]
+      .filter(Boolean)
+      .join(" ")
+      .toLowerCase();
+
+    return haystack.includes(term);
+  });
 }

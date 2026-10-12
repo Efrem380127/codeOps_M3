@@ -7,15 +7,15 @@ export default function MapPlaceholder() {
       style={{
         height: "360px",
         width: "100%",
-        backgroundColor: "#f8fafc",
-        border: "1px solid #e2e8f0",
-        borderRadius: "8px",
+        backgroundColor: "var(--surface-sunken)",
+        border: "1px solid var(--rule)",
+        borderRadius: "var(--r)",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
         gap: "0.75rem",
-        color: "#64748b"
+        color: "var(--ink-2)"
       }}
     >
       <div
@@ -23,8 +23,8 @@ export default function MapPlaceholder() {
         style={{
           width: "36px",
           height: "36px",
-          border: "3px solid #cbd5e1",
-          borderTopColor: "#2563eb",
+          border: "3px solid var(--rule)",
+          borderTopColor: "var(--ink-0)",
           borderRadius: "50%",
           animation: "spin 1s linear infinite"
         }}

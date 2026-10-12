@@ -7,9 +7,9 @@ export default function OrdersEmptyState({ isForced = false }) {
       style={{
         padding: "3.5rem 2rem",
         textAlign: "center",
-        backgroundColor: "#ffffff",
-        border: "1px dashed #cbd5e1",
-        borderRadius: "8px",
+        backgroundColor: "var(--surface)",
+        border: "1px dashed var(--rule)",
+        borderRadius: "var(--r)",
         margin: "1.5rem 0"
       }}
     >
@@ -19,8 +19,8 @@ export default function OrdersEmptyState({ isForced = false }) {
           width: "56px",
           height: "56px",
           borderRadius: "50%",
-          backgroundColor: "#f1f5f9",
-          color: "#64748b",
+          backgroundColor: "var(--surface-sunken)",
+          color: "var(--ink-2)",
           display: "inline-flex",
           alignItems: "center",
           justifyContent: "center",
@@ -36,7 +36,7 @@ export default function OrdersEmptyState({ isForced = false }) {
         style={{
           fontSize: "1.375rem",
           fontWeight: "600",
-          color: "#0f172a",
+          color: "var(--ink-0)",
           marginBottom: "0.5rem"
         }}
       >
@@ -47,7 +47,7 @@ export default function OrdersEmptyState({ isForced = false }) {
         style={{
           maxWidth: "460px",
           margin: "0 auto 1.5rem auto",
-          color: "#475569",
+          color: "var(--ink-2)",
           lineHeight: "1.5"
         }}
       >
@@ -60,10 +60,10 @@ export default function OrdersEmptyState({ isForced = false }) {
           href="/menu"
           style={{
             display: "inline-block",
-            backgroundColor: "#2563eb",
-            color: "#ffffff",
+            backgroundColor: "var(--ink-0)",
+            color: "var(--on-accent)",
             padding: "0.6rem 1.25rem",
-            borderRadius: "6px",
+            borderRadius: "var(--r)",
             textDecoration: "none",
             fontWeight: "500",
             fontSize: "0.9375rem"
@@ -77,11 +77,11 @@ export default function OrdersEmptyState({ isForced = false }) {
             href="/orders?state=populated"
             style={{
               display: "inline-block",
-              backgroundColor: "#f8fafc",
-              color: "#334155",
-              border: "1px solid #cbd5e1",
+              backgroundColor: "var(--surface-sunken)",
+              color: "var(--ink-0)",
+              border: "1px solid var(--rule)",
               padding: "0.6rem 1.25rem",
-              borderRadius: "6px",
+              borderRadius: "var(--r)",
               textDecoration: "none",
               fontWeight: "500",
               fontSize: "0.9375rem"

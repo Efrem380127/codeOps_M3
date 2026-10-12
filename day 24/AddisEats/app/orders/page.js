@@ -13,7 +13,7 @@ import { etb } from "@/lib/format";
 
 export const metadata = {
   title: "Order History & Analytics",
-  description: "Aggregated order volume, ETB revenue metrics, fulfillment status, and order transactions.",
+  description: "Aggregated order volume, ETB revenue metrics, fulfillment status, and order transactions."
 };
 
 export default async function OrdersPage({ searchParams }) {
@@ -61,11 +61,11 @@ export default async function OrdersPage({ searchParams }) {
         <StateSwitcher activeState={forcedState || "empty"} />
 
         <div style={{ marginBottom: "1.5rem" }}>
-          <h1 style={{ fontSize: "1.75rem", fontWeight: "700", color: "#0f172a", marginBottom: "0.25rem" }}>
+          <h1 style={{ fontSize: "1.75rem", fontWeight: "700", color: "var(--ink-0)", marginBottom: "0.25rem" }}>
             Orders & Revenue Analytics
           </h1>
           {session && (
-            <p style={{ color: "#64748b", fontSize: "0.875rem" }}>
+            <p style={{ color: "var(--ink-2)", fontSize: "0.875rem" }}>
               Signed in as <strong>{session.name}</strong> ({session.role})
             </p>
           )}
@@ -151,11 +151,11 @@ export default async function OrdersPage({ searchParams }) {
       <StateSwitcher activeState={forcedState || "populated"} />
 
       <header style={{ marginBottom: "1.75rem", background: "transparent", color: "inherit", padding: 0 }}>
-        <h1 style={{ fontSize: "1.75rem", fontWeight: "700", color: "#0f172a", marginBottom: "0.25rem" }}>
+        <h1 style={{ fontSize: "1.75rem", fontWeight: "700", color: "var(--ink-0)", marginBottom: "0.25rem" }}>
           Orders & Revenue Analytics
         </h1>
         {session && (
-          <p style={{ color: "#64748b", fontSize: "0.875rem" }}>
+          <p style={{ color: "var(--ink-2)", fontSize: "0.875rem" }}>
             Signed in as <strong>{session.name}</strong> ({session.role})
           </p>
         )}
@@ -170,29 +170,29 @@ export default async function OrdersPage({ searchParams }) {
           marginBottom: "1.75rem"
         }}
       >
-        <div style={{ backgroundColor: "#ffffff", border: "1px solid #e2e8f0", borderRadius: "8px", padding: "1.25rem" }}>
-          <span style={{ fontSize: "0.875rem", color: "#64748b", display: "block", marginBottom: "0.375rem" }}>
+        <div style={{ backgroundColor: "var(--surface)", border: "1px solid var(--rule)", borderRadius: "var(--r)", padding: "1.25rem" }}>
+          <span style={{ fontSize: "0.875rem", color: "var(--ink-2)", display: "block", marginBottom: "0.375rem" }}>
             Total Revenue
           </span>
-          <strong style={{ fontSize: "1.5rem", color: "#0f172a", fontVariantNumeric: "tabular-nums" }}>
+          <strong style={{ fontSize: "1.5rem", color: "var(--ink-0)", fontVariantNumeric: "tabular-nums" }}>
             {etb(summary.totalRevenue)}
           </strong>
         </div>
 
-        <div style={{ backgroundColor: "#ffffff", border: "1px solid #e2e8f0", borderRadius: "8px", padding: "1.25rem" }}>
-          <span style={{ fontSize: "0.875rem", color: "#64748b", display: "block", marginBottom: "0.375rem" }}>
+        <div style={{ backgroundColor: "var(--surface)", border: "1px solid var(--rule)", borderRadius: "var(--r)", padding: "1.25rem" }}>
+          <span style={{ fontSize: "0.875rem", color: "var(--ink-2)", display: "block", marginBottom: "0.375rem" }}>
             Total Orders
           </span>
-          <strong style={{ fontSize: "1.5rem", color: "#0f172a", fontVariantNumeric: "tabular-nums" }}>
+          <strong style={{ fontSize: "1.5rem", color: "var(--ink-0)", fontVariantNumeric: "tabular-nums" }}>
             {summary.totalOrders}
           </strong>
         </div>
 
-        <div style={{ backgroundColor: "#ffffff", border: "1px solid #e2e8f0", borderRadius: "8px", padding: "1.25rem" }}>
-          <span style={{ fontSize: "0.875rem", color: "#64748b", display: "block", marginBottom: "0.375rem" }}>
+        <div style={{ backgroundColor: "var(--surface)", border: "1px solid var(--rule)", borderRadius: "var(--r)", padding: "1.25rem" }}>
+          <span style={{ fontSize: "0.875rem", color: "var(--ink-2)", display: "block", marginBottom: "0.375rem" }}>
             Average Order Value
           </span>
-          <strong style={{ fontSize: "1.5rem", color: "#0f172a", fontVariantNumeric: "tabular-nums" }}>
+          <strong style={{ fontSize: "1.5rem", color: "var(--ink-0)", fontVariantNumeric: "tabular-nums" }}>
             {etb(summary.averageOrderValue)}
           </strong>
         </div>
@@ -247,13 +247,13 @@ function StateSwitcher({ activeState }) {
         flexWrap: "wrap",
         marginBottom: "1.5rem",
         padding: "0.75rem 1rem",
-        backgroundColor: "#ffffff",
-        border: "1px solid #e2e8f0",
-        borderRadius: "8px",
+        backgroundColor: "var(--surface)",
+        border: "1px solid var(--rule)",
+        borderRadius: "var(--r)",
         fontSize: "0.8125rem"
       }}
     >
-      <span style={{ fontWeight: "600", color: "#475569" }}>Demonstrate States:</span>
+      <span style={{ fontWeight: "600", color: "var(--ink-2)" }}>Demonstrate States:</span>
       {states.map((s) => {
         const isActive = activeState === s.key || (!activeState && s.key === "populated");
         return (
@@ -266,10 +266,10 @@ function StateSwitcher({ activeState }) {
               justifyContent: "center",
               minHeight: "44px",
               padding: "0.5rem 0.875rem",
-              borderRadius: "6px",
-              border: isActive ? "2px solid #2563eb" : "1px solid #cbd5e1",
-              backgroundColor: isActive ? "#eff6ff" : "#ffffff",
-              color: isActive ? "#1d4ed8" : "#475569",
+              borderRadius: "var(--r)",
+              border: isActive ? "2px solid var(--signal)" : "1px solid var(--rule)",
+              backgroundColor: isActive ? "var(--signal-wash)" : "var(--surface)",
+              color: isActive ? "var(--signal-ink)" : "var(--ink-2)",
               textDecoration: "none",
               fontWeight: isActive ? "700" : "500"
             }}

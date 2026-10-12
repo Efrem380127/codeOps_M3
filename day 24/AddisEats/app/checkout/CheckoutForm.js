@@ -57,29 +57,28 @@ export default function CheckoutForm() {
           maxWidth: "520px",
           margin: "0 auto",
           padding: "1.75rem",
-          border: "1px solid #cbd5e1",
-          borderRadius: "8px",
-          backgroundColor: "#ffffff",
-          boxShadow: "0 1px 3px rgba(0,0,0,0.08)"
+          border: "1px solid var(--rule)",
+          borderRadius: "var(--r)",
+          backgroundColor: "var(--surface)"
         }}
       >
-        <h2 style={{ fontSize: "1.5rem", color: "#15803d", marginBottom: "0.5rem" }}>
+        <h2 style={{ fontSize: "1.5rem", color: "var(--ok-ink)", marginBottom: "0.5rem" }}>
           Order Confirmed!
         </h2>
-        <p style={{ margin: "0.25rem 0", color: "#334155" }}>
+        <p style={{ margin: "0.25rem 0", color: "var(--ink-0)" }}>
           Order ID: <strong>{state.order.id}</strong>
         </p>
-        <p style={{ margin: "0.25rem 0", color: "#334155" }}>
+        <p style={{ margin: "0.25rem 0", color: "var(--ink-0)" }}>
           Thank you, <strong>{state.order.name}</strong>. Your order has been placed.
         </p>
-        <p style={{ margin: "0.25rem 0", color: "#334155" }}>
+        <p style={{ margin: "0.25rem 0", color: "var(--ink-0)" }}>
           Status: <strong style={{ textTransform: "capitalize" }}>{state.order.status}</strong>
         </p>
         {cancelMessage && (
           <p
             role="status"
             aria-live="polite"
-            style={{ color: "#dc2626", fontWeight: "600", marginTop: "0.5rem" }}
+            style={{ color: "var(--danger-ink)", fontWeight: "600", marginTop: "0.5rem" }}
           >
             {cancelMessage}
           </p>
@@ -93,10 +92,10 @@ export default function CheckoutForm() {
               marginTop: "1.25rem",
               minHeight: "44px",
               padding: "0.625rem 1.25rem",
-              backgroundColor: "#dc2626",
-              color: "#ffffff",
-              border: "1px solid #b91c1c",
-              borderRadius: "6px",
+              backgroundColor: "var(--danger)",
+              color: "var(--on-accent)",
+              border: "1px solid var(--danger)",
+              borderRadius: "var(--r)",
               cursor: cancelling ? "not-allowed" : "pointer",
               fontWeight: "600"
             }}
@@ -119,15 +118,14 @@ export default function CheckoutForm() {
         gap: "1.25rem",
         maxWidth: "520px",
         margin: "0 auto",
-        backgroundColor: "#ffffff",
+        backgroundColor: "var(--surface)",
         padding: "1.75rem",
-        borderRadius: "8px",
-        border: "1px solid #cbd5e1",
-        boxShadow: "0 1px 3px rgba(0,0,0,0.08)"
+        borderRadius: "var(--r)",
+        border: "1px solid var(--rule)"
       }}
     >
       <div>
-        <label htmlFor="name" style={{ display: "block", marginBottom: "6px", fontWeight: "600", color: "#0f172a" }}>
+        <label htmlFor="name" style={{ display: "block", marginBottom: "6px", fontWeight: "600", color: "var(--ink-0)" }}>
           Full Name
         </label>
         <input
@@ -139,14 +137,14 @@ export default function CheckoutForm() {
           style={{ width: "100%", minHeight: "44px" }}
         />
         {state?.fieldErrors?.name && (
-          <p id="name-error" style={{ color: "#dc2626", fontSize: "0.875rem", margin: "4px 0 0" }}>
+          <p id="name-error" style={{ color: "var(--danger-ink)", fontSize: "0.875rem", margin: "4px 0 0" }}>
             {state.fieldErrors.name}
           </p>
         )}
       </div>
 
       <div>
-        <label htmlFor="phone" style={{ display: "block", marginBottom: "6px", fontWeight: "600", color: "#0f172a" }}>
+        <label htmlFor="phone" style={{ display: "block", marginBottom: "6px", fontWeight: "600", color: "var(--ink-0)" }}>
           TeleBirr Phone Number
         </label>
         <input
@@ -159,14 +157,14 @@ export default function CheckoutForm() {
           style={{ width: "100%", minHeight: "44px" }}
         />
         {state?.fieldErrors?.phone && (
-          <p id="phone-error" style={{ color: "#dc2626", fontSize: "0.875rem", margin: "4px 0 0" }}>
+          <p id="phone-error" style={{ color: "var(--danger-ink)", fontSize: "0.875rem", margin: "4px 0 0" }}>
             {state.fieldErrors.phone}
           </p>
         )}
       </div>
 
       <div>
-        <label htmlFor="area" style={{ display: "block", marginBottom: "6px", fontWeight: "600", color: "#0f172a" }}>
+        <label htmlFor="area" style={{ display: "block", marginBottom: "6px", fontWeight: "600", color: "var(--ink-0)" }}>
           Delivery Area
         </label>
         <select
@@ -183,14 +181,14 @@ export default function CheckoutForm() {
           ))}
         </select>
         {state?.fieldErrors?.area && (
-          <p id="area-error" style={{ color: "#dc2626", fontSize: "0.875rem", margin: "4px 0 0" }}>
+          <p id="area-error" style={{ color: "var(--danger-ink)", fontSize: "0.875rem", margin: "4px 0 0" }}>
             {state.fieldErrors.area}
           </p>
         )}
       </div>
 
       <div>
-        <label htmlFor="notes" style={{ display: "block", marginBottom: "6px", fontWeight: "600", color: "#0f172a" }}>
+        <label htmlFor="notes" style={{ display: "block", marginBottom: "6px", fontWeight: "600", color: "var(--ink-0)" }}>
           Delivery Notes (Optional)
         </label>
         <textarea
@@ -203,7 +201,7 @@ export default function CheckoutForm() {
           style={{ width: "100%", minHeight: "88px" }}
         />
         {state?.fieldErrors?.notes && (
-          <p id="notes-error" style={{ color: "#dc2626", fontSize: "0.875rem", margin: "4px 0 0" }}>
+          <p id="notes-error" style={{ color: "var(--danger-ink)", fontSize: "0.875rem", margin: "4px 0 0" }}>
             {state.fieldErrors.notes}
           </p>
         )}
@@ -217,10 +215,14 @@ export default function CheckoutForm() {
           width: "100%",
           minHeight: "48px",
           padding: "0.75rem 1.5rem",
-          backgroundColor: isPending ? "#94a3b8" : "#2563eb",
-          color: "#ffffff",
+          backgroundColor: isPending ? "var(--ink-4)" : "var(--signal)",
+          // --on-accent is the label for a signal or ink fill; on the grey
+          // pending fill it was white-on-grey at 3.2:1. The button is disabled
+          // while pending, so WCAG does not require it, but "Placing Order..."
+          // is a status message the user has to be able to read.
+          color: isPending ? "var(--ink-0)" : "var(--on-accent)",
           border: "none",
-          borderRadius: "6px",
+          borderRadius: "var(--r)",
           cursor: isPending ? "not-allowed" : "pointer",
           fontWeight: "700",
           fontSize: "1rem"

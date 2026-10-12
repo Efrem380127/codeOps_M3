@@ -1,5 +1,15 @@
 const encoder = new TextEncoder();
-const SECRET = process.env.SESSION_SECRET || "bookstore-session-secret-key-32chars";
+const SECRET = process.env.SESSION_SECRET || "addis-eats-session-secret-key-32chars";
+
+if (process.env.NODE_ENV === "production" && !process.env.SESSION_SECRET) {
+  // Loud, but not fatal. A missing secret in production is a real problem — the
+  // HMAC would fall back to a value that is public in this repository — but a
+  // deployment that refuses to boot is a worse one. Set SESSION_SECRET in the
+  // deployment environment; the fallback is only ever meant for local work.
+  console.warn(
+    "[addis-eats] SESSION_SECRET is not set — the session HMAC is using a public default. Set it in the deployment environment.",
+  );
+}
 
 function toBase64Url(str) {
   return btoa(unescape(encodeURIComponent(str)))

@@ -12,6 +12,10 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Tooling scratch space. It is gitignored, so nothing in here ships, but
+    // without this the linter walks it and reports errors in one-off scripts
+    // that are not part of the application.
+    ".workbuddy-ai/**",
   ]),
 ]);
 
