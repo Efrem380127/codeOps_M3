@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Suspense } from "react";
 import CategoryBar from "./CategoryBar";
-import DishList from "./DishList";
+import BookList from "./BookList";
 import NavigationButton from "./NavigationButton";
 import FilterShell from "./FilterShell";
 
@@ -22,13 +22,13 @@ export default async function Menu() {
       <CategoryBar />
 
       <FilterShell>
-        <Suspense fallback={<p>Loading dishes...</p>}>
-          <DishList />
+        <Suspense fallback={<p>Loading books...</p>}>
+          <BookList />
         </Suspense>
       </FilterShell>
 
-      <h2>Dish Details</h2>
-      <Link href="/menu/1">View Dish 1</Link>
+      <h2>Book Details</h2>
+      <Link href="/menu/1">View Book 1</Link>
     </div>
   );
 }

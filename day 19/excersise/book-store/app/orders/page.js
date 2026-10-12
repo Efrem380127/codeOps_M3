@@ -5,7 +5,7 @@ import { getSession } from "@/lib/auth";
 
 export const metadata = {
   title: "Order History",
-  description: "View your past orders, delivery receipts, and current meal preparation details.",
+  description: "View your past orders, delivery receipts, and current dispatch details.",
 };
 
 export default async function OrdersPage() {
@@ -19,7 +19,7 @@ export default async function OrdersPage() {
         <Link href="/">Home</Link>{" | "}
         <Link href="/menu">Menu</Link>{" | "}
         <Link href="/orders">Orders</Link>{" | "}
-        <Link href="/kitchen">Kitchen</Link>
+        <Link href="/dispatch">Dispatch</Link>
       </nav>
 
       <h1>Orders</h1>

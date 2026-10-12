@@ -13,7 +13,7 @@ const DeliveryMap = dynamic(() => import("./DeliveryMap"), {
 export default function LiveOrderStatus({ initialOrder }) {
   const [order, setOrder] = useState(initialOrder);
   const [status, setStatus] = useState(initialOrder?.status || "preparing");
-  const [currentStep, setCurrentStep] = useState("Order accepted by kitchen");
+  const [currentStep, setCurrentStep] = useState("Order accepted by dispatch");
   const [courier, setCourier] = useState(
     initialOrder?.courierLocation || {
       name: "Dawit Haile",

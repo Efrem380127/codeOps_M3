@@ -1,16 +1,16 @@
 import Link from "next/link";
 import { Suspense } from "react";
 import CategoryBar from "./CategoryBar";
-import DishList from "./DishList";
-import DishSearch from "./DishSearch";
+import BookList from "./BookList";
+import BookSearch from "./BookSearch";
 import NavigationButton from "./NavigationButton";
 import FilterShell from "./FilterShell";
 
 export const revalidate = 60;
 
 export const metadata = {
-  title: "Menu & Specialties",
-  description: "Explore our authentic Ethiopian menu featuring freshly prepared wat stews, grilled tibs, and vegan platters.",
+  title: "Catalog",
+  description: "Explore the catalogue of fiction, science and history titles.",
 };
 
 export default async function Menu() {
@@ -27,19 +27,19 @@ export default async function Menu() {
       </nav>
 
       <Suspense fallback={<p>Loading search...</p>}>
-        <DishSearch />
+        <BookSearch />
       </Suspense>
 
       <CategoryBar />
 
       <FilterShell>
-        <Suspense fallback={<p>Loading dishes...</p>}>
-          <DishList />
+        <Suspense fallback={<p>Loading books...</p>}>
+          <BookList />
         </Suspense>
       </FilterShell>
 
-      <h2>Dish Details</h2>
-      <Link href="/menu/1">View Dish 1</Link>
+      <h2>Book Details</h2>
+      <Link href="/menu/1">View Book 1</Link>
     </div>
   );
 }

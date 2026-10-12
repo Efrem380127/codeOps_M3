@@ -106,7 +106,6 @@ Route (app)                     Revalidate  Expire
 ├ ƒ /api/orders/[id]/stream     -           -        (SSE Live Stream)
 ├ ○ /cart                       -           -        (Static)
 ├ ○ /checkout                   -           -        (Static)
-├ ○ /Home                       -           -        (Static)
 ├ ƒ /kitchen                    -           -        (Protected Dynamic)
 ├ ○ /menu                       1m          1y       (ISR Cached)
 ├   /menu/[id]                  -           -        (SSG Prerendered)

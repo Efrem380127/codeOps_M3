@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export const metadata = {
   title: "Live Order Status",
-  description: "Track real-time cooking progress and estimated delivery times for your Addis Eats meals.",
+  description: "Track real-time dispatch progress and estimated delivery times for your Book Store orders.",
 };
 
 export default async function OrderStatusPage() {

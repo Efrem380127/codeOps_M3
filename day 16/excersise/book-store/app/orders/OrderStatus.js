@@ -6,7 +6,7 @@ import fetcher from "@/lib/fetcher";
 export default function OrderStatus({ id = "1", fallbackData }) {
   const { data: order, error } = useSWR(`/api/orders/${id}`, fetcher, {
     fallbackData,
-    refreshInterval: 3000
+    refreshInterval: 5000
   });
 
   if (error) return <p>Failed to load order status.</p>;

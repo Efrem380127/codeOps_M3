@@ -14,7 +14,7 @@ export default async function OrdersPage() {
         <Link href="/">Home</Link>{" | "}
         <Link href="/menu">Menu</Link>{" | "}
         <Link href="/orders">Orders</Link>{" | "}
-        <Link href="/kitchen">Kitchen</Link>
+        <Link href="/dispatch">Dispatch</Link>
       </nav>
 
       <h1>Orders</h1>

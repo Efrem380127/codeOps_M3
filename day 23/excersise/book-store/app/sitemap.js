@@ -1,4 +1,4 @@
-import { dishes } from "./data/dishes";
+import { books } from "./data/books";
 
 export default function sitemap() {
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
@@ -24,12 +24,12 @@ export default function sitemap() {
     },
   ];
 
-  const dishRoutes = dishes.map((dish) => ({
-    url: `${baseUrl}/menu/${dish.id}`,
+  const bookRoutes = books.map((book) => ({
+    url: `${baseUrl}/menu/${book.id}`,
     lastModified: new Date(),
     changeFrequency: "weekly",
     priority: 0.8,
   }));
 
-  return [...staticRoutes, ...dishRoutes];
+  return [...staticRoutes, ...bookRoutes];
 }

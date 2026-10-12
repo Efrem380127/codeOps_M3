@@ -21,11 +21,11 @@ Before applying optimizations, a production build was created (`npm run build &&
 
 ## 2. Converting `<img>` to `next/image` with Real Dimensions and Honest `sizes`
 Every `<img>` element was replaced with Next.js `<Image>` from `next/image`:
-- **Real Intrinsic Dimensions**: Provided explicit `width` and `height` attributes (e.g. `width={800} height={400}` for hero, `width={300} height={200}` for dish cards).
+- **Real Intrinsic Dimensions**: Provided explicit `width` and `height` attributes (e.g. `width={800} height={400}` for hero, `width={300} height={200}` for book covers).
   - This allows the browser to compute the aspect ratio CSS box (`aspect-ratio: auto 800 / 400`) before network bytes arrive, reserving exact layout space and eliminating image-induced layout shift.
 - **Honest `sizes` Attribute**: Defined responsive viewport rules rather than defaulting to 100vw:
   - Hero image: `sizes="(max-width: 768px) 100vw, 800px"`
-  - Dish cards: `sizes="(max-width: 640px) 100vw, 300px"`
+  - Book cards: `sizes="(max-width: 640px) 100vw, 300px"`
   - This informs the browser during early HTML parsing which optimized image variant (srcset) to download from Next.js's image optimization pipeline (`_next/image`), preventing mobile devices from downloading oversized desktop assets.
 
 ---
@@ -34,7 +34,7 @@ Every `<img>` element was replaced with Next.js `<Image>` from `next/image`:
 By default, Next.js `<Image>` uses native lazy loading (`loading="lazy"`).
 - For the primary above-the-fold hero image (`/hero.jpg` on `app/page.tsx`), lazy loading hurts performance because the browser waits until after layout rendering to initiate the fetch.
 - Adding `priority` (`priority={true}`) injects a `<link rel="preload" as="image" href="..." fetchpriority="high">` tag into the document `<head>`, discovering and streaming the hero image immediately in parallel with critical CSS.
-- **Crucial Rule**: `priority` is added **only** to the single largest above-the-fold LCP image. Below-the-fold dish thumbnails and secondary images omit `priority` so they retain lazy loading and do not compete for critical initial bandwidth.
+- **Crucial Rule**: `priority` is added **only** to the single largest above-the-fold LCP image. Below-the-fold book thumbnails and secondary images omit `priority` so they retain lazy loading and do not compete for critical initial bandwidth.
 
 ---
 

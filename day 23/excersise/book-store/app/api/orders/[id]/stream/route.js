@@ -27,7 +27,7 @@ export async function GET(request, { params }) {
       const sequence = [
         {
           status: "preparing",
-          step: "Kitchen accepted order and is assembling ingredients",
+          step: "Dispatch accepted the order and is picking the titles",
           courier: {
             name: "Dawit Haile",
             vehicle: "Yamaha Motorbike (ET-3401)",
@@ -39,8 +39,8 @@ export async function GET(request, { params }) {
           }
         },
         {
-          status: "cooking",
-          step: "Dishes are actively simmering in the kitchen",
+          status: "packing",
+          step: "Books are being picked and packed",
           courier: {
             name: "Dawit Haile",
             vehicle: "Yamaha Motorbike (ET-3401)",
@@ -53,7 +53,7 @@ export async function GET(request, { params }) {
         },
         {
           status: "out_for_delivery",
-          step: "Courier picked up hot meal and is en route to destination",
+          step: "Courier picked up the parcel and is en route to destination",
           courier: {
             name: "Dawit Haile",
             vehicle: "Yamaha Motorbike (ET-3401)",

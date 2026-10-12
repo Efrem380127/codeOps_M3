@@ -1,15 +1,15 @@
 import { ImageResponse } from "next/og";
-import { dishes } from "@/app/data/dishes";
+import { books } from "@/app/data/books";
 
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
 export default async function Image({ params }) {
   const { id } = await params;
-  const dish = dishes.find((d) => String(d.id) === String(id)) || {
-    name: "Ethiopian Dish",
+  const book = books.find((d) => String(d.id) === String(id)) || {
+    name: "Book Store Title",
     price: 200,
-    summary: "Authentic Ethiopian culinary specialty",
+    summary: "Fiction, science and history title",
   };
 
   return new ImageResponse(
@@ -29,16 +29,16 @@ export default async function Image({ params }) {
         }}
       >
         <div style={{ fontSize: 60, fontWeight: "bold", color: "#fef3c7" }}>
-          {dish.name}
+          {book.name}
         </div>
         <div style={{ fontSize: 36, marginTop: 16, color: "#f59e0b" }}>
-          {dish.price} ETB
+          {book.price} ETB
         </div>
         <div style={{ fontSize: 24, marginTop: 24, color: "#cbd5e1", maxWidth: 900 }}>
-          {dish.summary}
+          {book.summary}
         </div>
         <div style={{ fontSize: 20, marginTop: 32, color: "#94a3b8" }}>
-          Addis Eats Menu
+          Book Store Menu
         </div>
       </div>
     ),

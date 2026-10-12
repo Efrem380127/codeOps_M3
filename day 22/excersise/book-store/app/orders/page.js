@@ -55,7 +55,7 @@ export default async function OrdersPage({ searchParams }) {
           <Link href="/">Home</Link>{" | "}
           <Link href="/menu">Menu</Link>{" | "}
           <Link href="/orders">Orders</Link>{" | "}
-          <Link href="/kitchen">Kitchen</Link>
+          <Link href="/dispatch">Dispatch</Link>
         </nav>
 
         <StateSwitcher activeState={forcedState || "empty"} />
@@ -145,7 +145,7 @@ export default async function OrdersPage({ searchParams }) {
         <Link href="/">Home</Link>{" | "}
         <Link href="/menu">Menu</Link>{" | "}
         <Link href="/orders">Orders</Link>{" | "}
-        <Link href="/kitchen">Kitchen</Link>
+        <Link href="/dispatch">Dispatch</Link>
       </nav>
 
       <StateSwitcher activeState={forcedState || "populated"} />

@@ -1,33 +1,33 @@
 import { notFound } from "next/navigation";
 
-const dishes = [
+const books = [
   {
     id: "1",
-    name: "Shiro",
+    name: "Things Fall Apart",
   },
   {
     id: "2",
-    name: "cake",
+    name: "The Shadow King",
   },
   {
     id: "3",
-    name: "Pasta",
+    name: "Beneath the Lion's Gaze",
   },
 ];
 
-export default async function DishPage({ params }) {
+export default async function BookPage({ params }) {
   const { id } = await params;
 
-  const dish = dishes.find((dish) => dish.id === id);
+  const book = books.find((book) => book.id === id);
 
-  if (!dish) {
+  if (!book) {
     notFound();
   }
 
   return (
     <div>
-      <h1>{dish.name}</h1>
-      <p>Dish ID: {dish.id}</p>
+      <h1>{book.name}</h1>
+      <p>Book ID: {book.id}</p>
     </div>
   );
 }

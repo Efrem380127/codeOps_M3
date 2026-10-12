@@ -1,6 +1,6 @@
 export const metadata = {
   title: "Shopping Cart",
-  description: "Review your selected Ethiopian dishes, adjust quantities, and proceed to checkout.",
+  description: "Review your selected books, adjust quantities, and proceed to checkout.",
 };
 
 export default function Cart() {

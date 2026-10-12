@@ -2,7 +2,7 @@ import CheckoutForm from "./CheckoutForm";
 
 export const metadata = {
   title: "Secure Checkout",
-  description: "Provide delivery details and securely complete your Addis Eats order.",
+  description: "Provide delivery details and securely complete your Book Store order.",
 };
 
 export default function Checkout() {

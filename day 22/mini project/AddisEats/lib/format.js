@@ -1,14 +1,17 @@
 const etbFormatter = new Intl.NumberFormat("en-ET", {
+  style: "currency",
+  currency: "ETB",
   maximumFractionDigits: 0
 });
 
-const whenFormatter = new Intl.DateTimeFormat("en-US", {
+const whenFormatter = new Intl.DateTimeFormat("en-ET", {
   month: "short",
   day: "numeric",
   year: "numeric",
   hour: "numeric",
   minute: "2-digit",
-  hour12: true
+  hour12: true,
+  timeZone: "Africa/Addis_Ababa"
 });
 
 const relativeFormatter = new Intl.RelativeTimeFormat("en", {
@@ -17,7 +20,7 @@ const relativeFormatter = new Intl.RelativeTimeFormat("en", {
 
 export function etb(amount) {
   const num = Number(amount) || 0;
-  return `${etbFormatter.format(num)} ETB`;
+  return etbFormatter.format(num);
 }
 
 export function when(date) {

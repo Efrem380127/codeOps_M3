@@ -16,14 +16,14 @@ const geistMono = Geist_Mono({
 export const metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"),
   title: {
-    default: "Addis Eats | Authentic Ethiopian Food & Books",
-    template: "%s | Addis Eats",
+    default: "Book Store | Fiction, Science & History",
+    template: "%s | Book Store",
   },
-  description: "Browse and order authentic Ethiopian cuisine and cultural literature.",
+  description: "Browse and buy books across fiction, science and history.",
   openGraph: {
-    title: "Addis Eats",
-    description: "Authentic Ethiopian cuisine and cultural literature.",
-    siteName: "Addis Eats",
+    title: "Book Store",
+    description: "Fiction, science and history books.",
+    siteName: "Book Store",
     locale: "en_US",
     type: "website",
   },
@@ -38,8 +38,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </a>
         <Providers>
           <header>
-            <h1>Addis Eats & Book Store</h1>
-            <p>Fresh Ethiopian dishes, cultural books & live delivery tracking</p>
+            <h1>Book Store</h1>
+            <p>Books across fiction, science & history, with live delivery tracking</p>
           </header>
 
           <main id="main-content" tabIndex={-1}>
@@ -47,7 +47,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </main>
 
           <footer>
-            <p>2026 Addis Eats &middot; IBT College Canada CodeOps</p>
+            <p>2026 Book Store &middot; IBT College Canada CodeOps</p>
           </footer>
         </Providers>
 

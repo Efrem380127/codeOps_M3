@@ -7,7 +7,7 @@ export default async function Home() {
 
   return (
     <div style={{ padding: "2rem" }}>
-      <h1>Welcome to Addis Eats</h1>
+      <h1>Welcome to Book Store</h1>
 
       <div style={{ margin: "1rem 0", padding: "1rem", backgroundColor: "#f9fafb", borderRadius: "6px", border: "1px solid #e5e7eb" }}>
         {session ? (
@@ -43,7 +43,7 @@ export default async function Home() {
         <Link href="/order-status">Order Status</Link>
         <Link href="/checkout">Checkout</Link>
         <Link href="/cart">Cart</Link>
-        <Link href="/kitchen">Kitchen (Staff)</Link>
+        <Link href="/dispatch">Dispatch (Staff)</Link>
       </nav>
     </div>
   );

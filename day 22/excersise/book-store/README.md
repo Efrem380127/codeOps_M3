@@ -39,8 +39,8 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 | Method | Endpoint | Description | Status Codes |
 |---|---|---|---|
-| `GET` | `/api/dishes` | Returns full dishes menu | `200 OK` |
-| `GET` | `/api/dishes/[id]` | Returns single dish by ID | `200 OK`, `404 Not Found` |
+| `GET` | `/api/books` | Returns full books menu | `200 OK` |
+| `GET` | `/api/books/[id]` | Returns single book by ID | `200 OK`, `404 Not Found` |
 | `POST` | `/api/orders` | Validates & creates a new order | `201 Created`, `422 Unprocessable Entity` |
 
 ## Server Actions

@@ -142,7 +142,7 @@ export default function SignInForm({ nextUrl }) {
           </button>
           <button
             type="button"
-            onClick={() => setPreset("Chef Almaz", "staff")}
+            onClick={() => setPreset("Selam Tesfaye", "staff")}
             style={{
               minHeight: "44px",
               padding: "0.625rem 1rem",
@@ -154,7 +154,7 @@ export default function SignInForm({ nextUrl }) {
               border: "1px solid #cbd5e1"
             }}
           >
-            Chef Almaz (Staff - kitchen access)
+            Selam Tesfaye (Staff - dispatch access)
           </button>
         </div>
       </div>

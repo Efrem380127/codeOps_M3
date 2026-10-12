@@ -16,14 +16,14 @@ const geistMono = Geist_Mono({
 export const metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"),
   title: {
-    default: "Addis Eats | Authentic Ethiopian Food & Books",
-    template: "%s | Addis Eats",
+    default: "Book Store | Fiction, Science & History",
+    template: "%s | Book Store",
   },
-  description: "Browse and order authentic Ethiopian cuisine and cultural literature.",
+  description: "Browse and buy books across fiction, science and history.",
   openGraph: {
-    title: "Addis Eats",
-    description: "Authentic Ethiopian cuisine and cultural literature.",
-    siteName: "Addis Eats",
+    title: "Book Store",
+    description: "Fiction, science and history books.",
+    siteName: "Book Store",
     locale: "en_US",
     type: "website",
   },

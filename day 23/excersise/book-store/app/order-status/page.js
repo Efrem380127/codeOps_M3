@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export const metadata = {
   title: "Live Order Status & Delivery Map",
-  description: "Track real-time courier movement, SSE connection indicators, and delivery progress for your Addis Eats orders.",
+  description: "Track real-time courier movement, SSE connection indicators, and delivery progress for your Book Store orders.",
 };
 
 export default async function OrderStatusPage({ searchParams }) {

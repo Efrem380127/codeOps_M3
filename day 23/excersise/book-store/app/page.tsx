@@ -5,7 +5,7 @@ import { signOut } from "./actions/auth";
 
 export const metadata = {
   title: "Home",
-  description: "Welcome to Addis Eats. Order freshly cooked authentic Ethiopian dishes, stews, and cultural books.",
+  description: "Welcome to Book Store. Browse fiction, science and history titles.",
 };
 
 export default async function Home() {
@@ -14,13 +14,13 @@ export default async function Home() {
   return (
     <div style={{ padding: "1rem 0" }}>
       <h1 style={{ fontSize: "2rem", color: "#0f172a", marginBottom: "0.75rem" }}>
-        Welcome to Addis Eats
+        Welcome to Book Store
       </h1>
 
       <div style={{ margin: "1.5rem 0", maxWidth: "800px" }}>
         <Image
           src="/hero.jpg"
-          alt="Addis Eats authentic food and cultural literature display"
+          alt="Book Store authentic food and cultural literature display"
           width={800}
           height={400}
           priority
@@ -173,7 +173,7 @@ export default async function Home() {
           Cart
         </Link>
         <Link
-          href="/kitchen"
+          href="/dispatch"
           style={{
             minHeight: "44px",
             display: "inline-flex",
@@ -188,7 +188,7 @@ export default async function Home() {
             fontWeight: "600"
           }}
         >
-          Kitchen (Staff)
+          Dispatch (Staff)
         </Link>
       </nav>
     </div>

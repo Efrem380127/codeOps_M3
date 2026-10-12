@@ -60,7 +60,7 @@ When the user hasn't typed anything, we should not make search requests to the s
 SWR supports conditional fetching by passing `null` as the key:
 ```js
 const key = debouncedTerm.trim()
-  ? `/api/dishes?search=${encodeURIComponent(debouncedTerm.trim())}&page=${page}`
+  ? `/api/books?search=${encodeURIComponent(debouncedTerm.trim())}&page=${page}`
   : null;
 
 const { data } = useSWR(key, fetcher, { keepPreviousData: true });

@@ -1,5 +1,7 @@
 import { cookies } from "next/headers";
 
+// This route must be dynamic: reading cookies() below makes the response
+// depend on who is asking, so it cannot be prerendered at build time.
 export default async function Checkout() {
   const cookieStore = await cookies();
   const theme = cookieStore.get("theme");

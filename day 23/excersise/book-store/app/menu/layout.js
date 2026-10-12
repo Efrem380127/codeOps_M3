@@ -3,7 +3,7 @@ import Counter from "./Counter";
 
 export default function MenuLayout({ children }) {
   const categories = [
-    { name: "All Dishes", href: "/menu" },
+    { name: "All Books", href: "/menu" },
     { name: "Traditional Meat", href: "/menu?category=meat" },
     { name: "Fasting & Veg", href: "/menu?category=fasting" },
     { name: "Tej & Beverages", href: "/menu?category=drinks" }

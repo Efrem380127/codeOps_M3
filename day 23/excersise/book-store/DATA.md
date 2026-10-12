@@ -1,4 +1,7 @@
-# SEO, Metadata & Search Engine Indexing (Day 19)
+# SEO, Metadata & Search Engine Indexing
+
+> Reference notes retained from **D44 · Metadata & SEO**. The metadata, OpenGraph,
+> JSON-LD, sitemap and robots layer described here is present and live in this application.
 
 Notes on setting up global and route-level metadata, dynamic OpenGraph generation with `ImageResponse`, Schema.org structured data, dynamic sitemaps, and robots directives in the Next.js App Router.
 
@@ -10,21 +13,21 @@ In `app/layout.tsx`, root metadata was defined using `metadataBase` and a title 
 export const metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"),
   title: {
-    default: "Addis Eats | Authentic Ethiopian Food & Books",
-    template: "%s | Addis Eats",
+    default: "Book Store | Fiction, Science & History",
+    template: "%s | Book Store",
   },
-  description: "Browse and order authentic Ethiopian cuisine and cultural literature.",
+  description: "Browse and buy books across fiction, science and history.",
   openGraph: {
-    title: "Addis Eats",
-    description: "Authentic Ethiopian cuisine and cultural literature.",
-    siteName: "Addis Eats",
+    title: "Book Store",
+    description: "Fiction, science and history books.",
+    siteName: "Book Store",
     locale: "en_US",
     type: "website",
   },
 };
 ```
 - **`metadataBase`**: Essential for resolving relative OpenGraph images, canonical URLs, and sitemaps into fully qualified URLs (e.g. `http://localhost:3000/opengraph-image`).
-- **`title.template`**: `%s | Addis Eats` automatically formats child page titles (e.g. `Menu & Specialties` becomes `Menu & Specialties | Addis Eats`).
+- **`title.template`**: `%s | Book Store` automatically formats child page titles (e.g. `Catalog` becomes `Catalog | Book Store`).
 - **`title.default`**: Provides the fallback title for routes that do not define their own.
 
 ---
@@ -33,66 +36,66 @@ export const metadata = {
 Every static route was given a human-written, descriptive title and meta description:
 
 - **Home (`/`)**:
-  - Title: `Home` (`Home | Addis Eats`)
-  - Description: *"Welcome to Addis Eats. Order freshly cooked authentic Ethiopian dishes, stews, and cultural books."*
+  - Title: `Home` (`Home | Book Store`)
+  - Description: *"Welcome to Book Store. Browse fiction, science and history titles."*
 - **Menu (`/menu`)**:
-  - Title: `Menu & Specialties`
-  - Description: *"Explore our authentic Ethiopian menu featuring freshly prepared wat stews, grilled tibs, and vegan platters."*
+  - Title: `Catalog`
+  - Description: *"Explore the catalogue of fiction, science and history titles."*
 - **Cart (`/cart`)**:
   - Title: `Shopping Cart`
-  - Description: *"Review your selected Ethiopian dishes, adjust quantities, and proceed to checkout."*
+  - Description: *"Review your selected books, adjust quantities, and proceed to checkout."*
 - **Checkout (`/checkout`)**:
   - Title: `Secure Checkout`
-  - Description: *"Provide delivery details and securely complete your Addis Eats order."*
+  - Description: *"Provide delivery details and securely complete your Book Store order."*
 - **Order Status (`/order-status`)**:
   - Title: `Live Order Status`
-  - Description: *"Track real-time cooking progress and estimated delivery times for your Addis Eats meals."*
+  - Description: *"Track real-time dispatch progress and estimated delivery times for your Book Store orders."*
 - **Orders (`/orders`)**:
   - Title: `Order History`
-  - Description: *"View your past orders, delivery receipts, and current meal preparation details."*
+  - Description: *"View your past orders, delivery receipts, and current dispatch details."*
 - **Sign In (`/sign-in`)**:
   - Title: `Sign In`
-  - Description: *"Sign in to your Addis Eats account to manage orders and track kitchen status."*
-- **Kitchen (`/kitchen`)**:
-  - Title: `Kitchen Dashboard`
-  - Description: *"Staff portal for monitoring incoming orders and kitchen ticket fulfillment."*
+  - Description: *"Sign in to your Book Store account to manage orders and track dispatch status."*
+- **Dispatch (`/dispatch`)**:
+  - Title: `Dispatch Dashboard`
+  - Description: *"Staff portal for monitoring incoming orders and dispatch ticket fulfillment."*
 
 ---
 
-## 3. Dynamic Metadata on Dish Route (`app/menu/[id]/page.js`)
-The dynamic dish route defines `generateMetadata` using the dish's `name`, `price`, and `summary`:
+## 3. Dynamic Metadata on Book Route (`app/menu/[id]/page.js`)
+The dynamic book route defines `generateMetadata` using the book's `name`, `price`, and `summary`:
 ```js
 export async function generateMetadata({ params }) {
   const { id } = await params;
-  const dish = dishes.find((d) => String(d.id) === String(id));
+  const book = books.find((d) => String(d.id) === String(id));
 
-  if (!dish) {
+  if (!book) {
     return {
-      title: "Dish Not Found",
-      description: "The requested Ethiopian dish could not be found.",
+      title: "Book Not Found",
+      description: "The requested book could not be found.",
     };
   }
 
   return {
-    title: `${dish.name} - $${dish.price}`,
-    description: dish.summary,
+    title: `${book.name} - ${book.price} ETB`,
+    description: book.summary,
     openGraph: {
-      title: `${dish.name} - $${dish.price}`,
-      description: dish.summary,
+      title: `${book.name} - ${book.price} ETB`,
+      description: book.summary,
       images: [
         {
-          url: `/menu/${dish.id}/opengraph-image`,
+          url: `/menu/${book.id}/opengraph-image`,
           width: 1200,
           height: 630,
-          alt: `${dish.name} at Addis Eats`,
+          alt: `${book.name} at Book Store`,
         },
       ],
     },
   };
 }
 ```
-- Browsing to `/menu/1` produces the title: `Doro Wat - $320 | Addis Eats`.
-- Meta description dynamically reflects the authentic dish summary.
+- Browsing to `/menu/1` produces the title: `Things Fall Apart - 320 ETB | Book Store`.
+- Meta description dynamically reflects the authentic book summary.
 
 ---
 
@@ -102,26 +105,26 @@ Two OpenGraph generators were implemented using `next/og`:
 1. **Site-wide OpenGraph Image (`app/opengraph-image.js`)**:
    - Generates a 1200x630 banner with branding and subtitle.
    - Automatically mapped to `/opengraph-image` and linked in `<head>` via `<meta property="og:image" content="...">`.
-2. **Per-Dish OpenGraph Image (`app/menu/[id]/opengraph-image.js`)**:
-   - Reads the dynamic route `id` and renders a customized social card with dish name, price in ETB, and summary.
+2. **Per-Book OpenGraph Image (`app/menu/[id]/opengraph-image.js`)**:
+   - Reads the dynamic route `id` and renders a customized social card with book name, price in ETB, and summary.
    - Served at `/menu/[id]/opengraph-image` for social sharing previews (Twitter/X, WhatsApp, LinkedIn, iMessage).
 
 ---
 
 ## 5. Schema.org `MenuItem` JSON-LD Structured Data
-In `app/menu/[id]/page.js`, structured data is generated from the exact same `dish` object rendered on the page:
+In `app/menu/[id]/page.js`, structured data is generated from the exact same `book` object rendered on the page:
 ```jsx
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "MenuItem",
-  name: dish.name,
-  description: dish.summary,
+  name: book.name,
+  description: book.summary,
   offers: {
     "@type": "Offer",
-    price: dish.price,
+    price: book.price,
     priceCurrency: "ETB",
   },
-  image: dish.image,
+  image: book.image,
 };
 
 return (
@@ -141,7 +144,7 @@ return (
 ## 6. Dynamic Sitemap (`app/sitemap.js`)
 `app/sitemap.js` generates search-crawlable URLs while explicitly excluding private/authenticated routes:
 ```js
-import { dishes } from "./data/dishes";
+import { books } from "./data/books";
 
 export default function sitemap() {
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
@@ -152,18 +155,18 @@ export default function sitemap() {
     { url: `${baseUrl}/order-status`, lastModified: new Date(), changeFrequency: "always", priority: 0.5 },
   ];
 
-  const dishRoutes = dishes.map((dish) => ({
-    url: `${baseUrl}/menu/${dish.id}`,
+  const bookRoutes = books.map((book) => ({
+    url: `${baseUrl}/menu/${book.id}`,
     lastModified: new Date(),
     changeFrequency: "weekly",
     priority: 0.8,
   }));
 
-  return [...staticRoutes, ...dishRoutes];
+  return [...staticRoutes, ...bookRoutes];
 }
 ```
 - **Included**: `/`, `/menu`, `/order-status`, and dynamic `/menu/1` through `/menu/9`.
-- **Excluded**: `/cart`, `/checkout`, `/orders`, `/kitchen`, `/sign-in`.
+- **Excluded**: `/cart`, `/checkout`, `/orders`, `/dispatch`, `/sign-in`.
 
 ---
 
@@ -177,7 +180,7 @@ export default function robots() {
     rules: {
       userAgent: "*",
       allow: "/",
-      disallow: ["/cart", "/checkout", "/orders", "/kitchen", "/sign-in"],
+      disallow: ["/cart", "/checkout", "/orders", "/dispatch", "/sign-in"],
     },
     sitemap: `${baseUrl}/sitemap.xml`,
   };
@@ -188,9 +191,9 @@ export default function robots() {
 
 ## 8. View-Source Verification Checklist
 Verified against the running production server source output:
-1. `<title>` on `/menu/1` renders as `Doro Wat - $320 | Addis Eats`.
-2. `<meta name="description" content="...">` renders with dish summary.
+1. `<title>` on `/menu/1` renders as `Things Fall Apart - 320 ETB | Book Store`.
+2. `<meta name="description" content="...">` renders with book summary.
 3. `<meta property="og:image" content="http://localhost:3000/menu/1/opengraph-image">` is present.
 4. `<script type="application/ld+json">` contains valid `@type: "MenuItem"` markup.
-5. `GET /sitemap.xml` responds with XML listing all dishes and omitting private routes.
+5. `GET /sitemap.xml` responds with XML listing all books and omitting private routes.
 6. `GET /robots.txt` outputs `Disallow: /cart` and `Disallow: /checkout` pointing to `Sitemap: http://localhost:3000/sitemap.xml`.

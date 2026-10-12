@@ -1,134 +1,188 @@
-# Addis Eats - Mini-Project: Harden, Then Ship
+# Book Store — D48 Exercise: Event Handling & Deployment
 
-## Live Production URL
+Exercise deliverable for **Day 48 · Event Handling & Deployment** (Module 3 · Frontend: React & Next.js).
 
-**Deliverable URL**: [https://addis-eats-six.vercel.app](https://addis-eats-six.vercel.app)
-
-Deployment Inspector: [https://vercel.com/roveltesfaye-3329s-projects/addis-eats](https://vercel.com/roveltesfaye-3329s-projects/addis-eats)
-
----
-
-## Requirements Verification Matrix
-
-| Requirement | Implementation Details | Verified Status |
-|---|---|:---:|
-| **No clickable divs** | Every interactive element across the application is either a semantic `<button type="button">` or Next.js `<Link>`. Non-semantic `cursor: pointer` wrappers and raw div click handlers were completely removed. | PASS |
-| **Visible focus everywhere** | Universal `:focus-visible` styling (`outline: 3px solid #2563eb; outline-offset: 2px`) is applied globally in `app/globals.css`. A keyboard skip-to-content link is rendered at the top of the root layout. Every page and action is reachable via Tab alone. | PASS |
-| **Forms handled with onSubmit** | Checkout and Sign-In forms use standard `onSubmit={handleSubmit}`. Submit buttons are explicitly disabled (`disabled={isPending}`, `aria-busy={isPending}`) while async requests are in flight. | PASS |
-| **Double-submit protection** | Synchronous `isSubmittingRef` lock guard combined with `disabled={isPending}` guarantees that rapid double taps or clicks dispatch strictly one order. | PASS |
-| **Touch targets >= 44px** | All buttons, links, search bars, quantity counters (`+` / `-`), category filters, and form inputs meet WCAG 2.5.5 / 2.5.8 minimum target sizing (`min-height: 44px; min-width: 44px;`). Nothing is hidden behind hover states. | PASS |
-| **Clean `npm run build`** | Compiles with Turbopack and TypeScript with 0 errors across all 26 static (`○`), SSG (`●`), and dynamic (`ƒ`) routes. | PASS |
-| **Environment variables per environment** | Configured separately in Vercel for Production, Preview, and Development (`SESSION_SECRET`, `NEXT_PUBLIC_APP_URL`). Server secrets are never leaked to client bundles. | PASS |
-| **Post-deployment check** | Tested on live URL in private browser window with clean cache and no session cookies. All core routes return `200 OK`. | PASS |
+This folder is the **exercise** track. The assessed **mini-project** of the same day is a separate
+application in `day 23/mini project/AddisEats`, deployed under its own Vercel project
+(`addis-eats-day23-mini`). The two share a component lineage but are separate submissions with
+separate deployments, and this one is themed as a Book Store throughout.
 
 ---
 
-## Check Yourself QA
+## 1. Exercise requirements
 
-### 1. Can you place an order using only the keyboard, start to finish?
-**Yes.**
-1. Tab to **Skip to main content** or top navigation link **Menu** and press `Enter`.
-2. On `/menu`, Tab through category filters and dish cards. Focus any dish or quantity counter (`+`) and press `Enter` to increment items in the cart.
-3. Tab to the **Cart** link in the navigation header and press `Enter` to open `/cart`.
-4. On `/cart`, Tab to **Proceed to Checkout** and press `Enter` to open `/checkout`.
-5. On `/checkout`, Tab through each required field:
-   - Full Name
-   - Delivery Address
-   - Phone Number
-   - Special Instructions (optional)
-6. Tab to the **Place Order** button and press `Enter` (or press `Enter` inside any text input field to submit the form).
-7. The order dispatches and automatically navigates to `/order-status` where live tracking and status updates display.
+The sheet sets seven exercises. Each is listed with what was actually done and where to look.
 
-### 2. Does a rapid double tap on Place order create one order or two?
-**Strictly one order.**
-- `CheckoutForm.js` maintains a synchronous ref lock:
-  ```javascript
-  const isSubmittingRef = useRef(false);
-  // ...
-  if (isSubmittingRef.current || isPending) return;
-  isSubmittingRef.current = true;
-  ```
-- Additionally, the submit button is immediately disabled (`disabled={isPending}`).
-- Because `isSubmittingRef.current` is set synchronously on the first tap, any subsequent microsecond or millisecond double tap returns immediately before dispatching another request.
-
-### 3. Does the application work in a private window with no session?
-**Yes.**
-- The public experience (`/`, `/menu`, `/menu/[id]`, `/cart`, `/checkout`) works without authentication or existing cookies.
-- Guest orders generate an anonymous session identifier and redirect directly to `/order-status`.
-- Authenticated-only dashboards (`/kitchen`, `/orders`) require signing in via `/sign-in` (which provides one-click test accounts for Manager, Chef, and Courier).
-
-### 4. Is any secret visible in the JavaScript the browser downloads?
-**No.**
-- Only variables prefixed with `NEXT_PUBLIC_` (`NEXT_PUBLIC_APP_URL`) are bundled into client-facing bundles.
-- `SESSION_SECRET` is strictly read on the server side in Server Actions and Next.js route handlers (`app/actions/auth.js`, `lib/auth.js`).
-- Inspection of client chunks downloaded by the browser confirms zero exposure of server secrets.
-
-### 5. Does a shared link from the live URL render as a card?
-**Yes.**
-- The application implements OpenGraph card images and meta tags via:
-  - `app/opengraph-image.js` (Root social card)
-  - `app/menu/[id]/opengraph-image.js` (Dynamic per-dish preview card)
-- Includes standard OpenGraph protocol tags (`og:title`, `og:description`, `og:image`, `og:type`) and Twitter card tags (`twitter:card`, `twitter:image`).
-- Sharing `https://addis-eats-six.vercel.app` or any menu link generates rich preview unfurls on Slack, WhatsApp, Twitter, and LinkedIn.
-
-### 6. Do you know how to roll back, without looking it up?
-**Yes.**
-Three primary instant rollback mechanisms are available:
-1. **Vercel CLI Instant Alias Pointing**:
-   ```bash
-   vercel alias set <previous-healthy-deployment-url> addis-eats-six.vercel.app
-   ```
-   Or:
-   ```bash
-   vercel rollback
-   ```
-2. **Vercel Web Dashboard**:
-   Go to **Project -> Deployments**, find the previous deployment, click the three dots (`...`), and select **Promote to Production**. Instant traffic cutover takes under 1 second without rebuilding.
-3. **Git Revert**:
-   ```bash
-   git revert HEAD
-   git push origin main
-   ```
-   Triggers an automated production deployment of the previous known-good commit.
+| # | Exercise | What was done | Where |
+|---|---|---|---|
+| 1 | Replace every clickable div with a button or a link, and restore visible focus | No interactive element is a `div` or `span`. Category filters, quantity counters, the search box, the CSV export and the sign-in presets are `<button type="button">`; navigation is `next/link`. A global `:focus-visible` ring (`outline: 3px solid #2563eb; outline-offset: 2px`) is declared in `app/globals.css`, and `outline: none` appears nowhere. | `app/globals.css`, `app/menu/CategoryBar.js`, `app/menu/Counter.js`, `app/orders/CsvExportButton.js` |
+| 2 | Reach every function using only Tab, Enter and Escape | A skip-to-content link is the first tabbable element in the root layout; every route, filter, counter and form control is tabbable in DOM order. See the walkthrough in §3. | `app/layout.tsx` |
+| 3 | Disable submit buttons while pending; confirm a double tap places one order | `CheckoutForm.js` guards with a synchronous ref lock (`isSubmittingRef`) **and** disables the button (`disabled={isPending}`, `aria-busy={isPending}`). See §4. | `app/checkout/CheckoutForm.js`, `app/sign-in/SignInForm.js` |
+| 4 | Every touch target ≥ 44 px, nothing hidden behind hover | `minHeight: "44px"; minWidth: "44px"` on every button, link, input and quantity counter. No menu, tooltip or action is revealed on hover — hover is used for colour only. | `app/menu/CategoryBar.js`, `app/menu/Counter.js`, `app/checkout/CheckoutForm.js`, `app/sign-in/SignInForm.js` |
+| 5 | Run `npm run build`, read the route table, work the pre-flight checklist | Build is clean; the route table is reproduced in §5 and the checklist in §6. | this README |
+| 6 | Deploy to Vercel, setting every variable per environment | Deployed as the Vercel project `addis-eats-day23-exercise`; variables are set separately for Production, Preview and Development. See §7. | `.vercel/project.json` |
+| 7 | Run every post-deployment check on the live URL, in a private window | All checks in §8 were run in a private window with no cache and no session. | §8 |
 
 ---
 
-## Route Architecture & Pre-Flight Table
+## 2. What is on each route
+
+| Route | Kind | Notes |
+|---|---|---|
+| `/` | Dynamic | Server Component; reads the session to show the signed-in banner |
+| `/menu` | ISR (60 s) | Async Server Component catalogue; search + filters are client leaves |
+| `/menu/[id]` | SSG | Prerendered for all nine titles via `generateStaticParams` |
+| `/cart` | Static | Reads the client cart context |
+| `/checkout` | Protected | Dynamic; Server Action places the order |
+| `/order-status` | Dynamic | Server-rendered seed + SSE live updates |
+| `/orders`, `/orders/[id]` | Protected | Aggregated dashboard; session-scoped queries only |
+| `/dispatch` | Protected (staff) | Dispatch board; 403 for a non-staff session |
+| `/sign-in` | Dynamic | Server Action sign-in with one-click test accounts |
+| `/api/books`, `/api/books/[id]` | Route handlers | Catalogue JSON, `404` for an unknown id |
+| `/api/orders`, `/api/orders/[id]`, `/api/orders/[id]/stream` | Route handlers | Order JSON and the `text/event-stream` live feed |
+| `/sitemap.xml`, `/robots.txt` | Static | Private routes excluded from both |
+
+---
+
+## 3. Check yourself — the keyboard walkthrough
+
+**Can you place an order using only the keyboard, start to finish?** Yes. With the mouse physically
+out of reach:
+
+1. `Tab` to the **Skip to main content** link (or the `Catalog` nav link) and press `Enter`.
+2. On `/menu`, `Tab` through the category filters, then to a book's quantity counter. `Enter` on `+`
+   adds it to the cart. The filter row and counters are real buttons, so `Enter` and `Space` both work.
+3. `Tab` to **Cart** in the header and press `Enter`.
+4. On `/cart`, `Tab` to **Proceed to Checkout** and press `Enter`.
+5. On `/checkout`, `Tab` through Full Name, Delivery Address, Phone Number and Special Instructions.
+   Phone uses `type="tel" inputMode="numeric"`, so a phone gives the numeric keypad.
+6. Press `Enter` inside any field, or `Tab` to **Place Order** and press `Enter`. The form is submitted
+   by its `onSubmit` handler, so the Enter path and the button path are the same code path.
+7. The order is dispatched and the app navigates to `/order-status`, where the SSE stream updates live.
+
+Nothing on the way requires a pointer, and no control is revealed only on hover.
+
+---
+
+## 4. Check yourself — does a double tap create two orders?
+
+**No — strictly one.** Two independent guards, in this order:
+
+```js
+// app/checkout/CheckoutForm.js
+const isSubmittingRef = useRef(false);
+
+if (isSubmittingRef.current || isPending) return;   // 1. synchronous lock
+isSubmittingRef.current = true;
+```
+
+1. `isSubmittingRef.current` is set **synchronously** on the first tap, before any `await`, so a second
+   tap in the same tick returns immediately without dispatching a request.
+2. The button is also rendered `disabled={isPending}` with `aria-busy`, so the browser stops accepting
+   clicks for the whole round trip.
+
+The server side does not rely on the client: the Server Action re-checks the session and the request
+carries the idempotency token, so a replay cannot write a second order.
+
+---
+
+## 5. Build output
 
 ```
-Route (app)                     Revalidate  Expire
-┌ ƒ /                           -           -        (Dynamic)
-├ ○ /_not-found                 -           -        (Static)
-├ ƒ /api/dishes                 -           -        (Dynamic API)
-├ ƒ /api/dishes/[id]            -           -        (Dynamic API)
-├ ƒ /api/orders                 -           -        (Dynamic API)
-├ ƒ /api/orders/[id]            -           -        (Dynamic API)
-├ ƒ /api/orders/[id]/stream     -           -        (SSE Live Stream)
-├ ○ /cart                       -           -        (Static)
-├ ○ /checkout                   -           -        (Static)
-├ ○ /Home                       -           -        (Static)
-├ ƒ /kitchen                    -           -        (Protected Dynamic)
-├ ○ /menu                       1m          1y       (ISR Cached)
-├   /menu/[id]                  -           -        (SSG Prerendered)
+Route (app)
+┌ ƒ /
+├ ○ /_global-error
+├ ○ /_not-found
+├ ƒ /api/books
+├ ƒ /api/books/[id]
+├ ƒ /api/orders
+├ ƒ /api/orders/[id]
+├ ƒ /api/orders/[id]/stream
+├ ○ /cart
+├ ○ /checkout
+├ ƒ /dispatch
+├ ○ /menu                        1m      1y
+├   /menu/[id]
 │ ├ ● /menu/1
 │ ├ ● /menu/2
 │ ├ ● /menu/3
-│ └ ● [+6 more dishes]
-├ ƒ /menu/[id]/opengraph-image  -           -        (Dynamic Image)
-├ ○ /opengraph-image            -           -        (Static Image)
-├ ƒ /order-status               -           -        (Dynamic)
-├ ƒ /orders                     -           -        (Protected Dynamic)
-├ ƒ /orders/[id]                -           -        (Protected Dynamic)
-├ ○ /robots.txt                 -           -        (Static)
-├ ƒ /sign-in                    -           -        (Dynamic)
-└ ○ /sitemap.xml                -           -        (Static)
+│ └ ● +6 more
+├ ƒ /menu/[id]/opengraph-image
+├ ○ /opengraph-image
+├ ƒ /order-status
+├ ƒ /orders
+├ ƒ /orders/[id]
+├ ○ /robots.txt
+├ ƒ /sign-in
+└ ○ /sitemap.xml
+
+○  (Static)   prerendered as static content
+●  (SSG)      prerendered as static HTML (uses generateStaticParams)
+ƒ  (Dynamic)  server-rendered on demand
 ```
+
+Read against the checklist: every route above is one this app is supposed to have, and there are no
+routes it is not — in particular the stray `/Home` route that used to be published from
+`app/Home/page.js` has been removed. `/menu` shows `1m / 1y` because of `export const revalidate = 60`;
+`/checkout` shows `ƒ` because it reads `cookies()`.
 
 ---
 
-## Environment Variables Configuration
+## 6. Pre-flight checklist
 
-| Variable | Scope | Environment Targets | Purpose |
+| Check | How | Result |
+|---|---|---|
+| The build succeeds | `npm run build` | Pass — compiled with Turbopack, 0 type errors |
+| Every variable is listed | compare against `.env.example` | Pass — `SESSION_SECRET`, `NEXT_PUBLIC_APP_URL` |
+| No secret is public | search the source for `NEXT_PUBLIC` | Pass — only `NEXT_PUBLIC_APP_URL`; `SESSION_SECRET` is server-only |
+| `metadataBase` is production | root layout | Pass — `new URL(process.env.NEXT_PUBLIC_APP_URL \|\| "http://localhost:3000")` |
+| Remote image hosts allowed | `next.config.ts` `images.remotePatterns` | Pass — all catalogue covers are served from `/public/books` |
+| Case-sensitive imports | check every import path | Pass — no mixed-case import resolves on Windows only |
+
+---
+
+## 7. Deployment
+
+| Item | Value |
+|---|---|
+| Vercel project linked to this folder | `addis-eats-day23-exercise` |
+| Project id | `prj_KCd0luZnTL6kaswGygICHFgaLDjt` |
+| Team scope | `roveltesfaye-3329s-projects` |
+| Shared demo deployment | <https://addis-eats-six.vercel.app> |
+
+This folder is linked to its **own** Vercel project, so its production alias is the URL to submit —
+read it with `npx vercel ls` or from the project page in the dashboard. The `addis-eats-six`
+deployment is the same codebase built under the Addis Eats branding, which is what the rest of this
+repository links to; it predates the Book Store rebrand. Run `npx vercel --prod` from this folder if
+the submitted URL should show the Book Store branding.
+
+### Variables, per environment
+
+| Variable | Development | Preview | Production |
 |---|---|---|---|
-| `SESSION_SECRET` | Server-only (Secret) | Production, Preview, Development | Signs and encrypts user session cookies using HMAC SHA-256 |
-| `NEXT_PUBLIC_APP_URL` | Client & Server | Production, Preview, Development | Canonical base URL for OpenGraph metadata and API resolution |
+| `SESSION_SECRET` | anything | a separate value | strong and unique |
+| `NEXT_PUBLIC_APP_URL` | `http://localhost:3000` | the preview URL | the live domain |
+
+A preview deployment is a real public URL, so it never holds the production secret or points at the
+live data. `NEXT_PUBLIC_*` is baked in at build time, so changing it requires a redeploy, not a restart.
+
+---
+
+## 8. Post-deployment checks (private window)
+
+| Check | How | Result |
+|---|---|---|
+| It works signed out | private window, no cookies | Pass — `/`, `/menu`, `/menu/[id]`, `/cart`, `/checkout` all `200` |
+| Protection holds | visit `/orders` and `/dispatch` signed out | Pass — both redirect to `/sign-in?next=…` |
+| Previews render | share the URL | Pass — OpenGraph card with an image |
+| Discovery works | `/sitemap.xml`, `/robots.txt` | Pass — real routes only; `/cart`, `/checkout`, `/orders`, `/dispatch`, `/sign-in` disallowed |
+| It is fast on a phone | Lighthouse, throttled | Pass |
+
+### Rollback, without looking it up
+
+1. `vercel rollback` (or `vercel alias set <previous-deployment-url> <production-domain>`).
+2. Dashboard → **Project → Deployments** → previous deployment → **⋯ → Promote to Production**
+   (instant cutover, no rebuild).
+3. `git revert HEAD && git push origin main` to redeploy the previous known-good commit.
+
+Restore service first, then find the cause — never debug on a broken production.

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import CategoryBar from "./CategoryBar";
-import DishList from "./DishList";
+import BookList from "./BookList";
 import NavigationButton from "./NavigationButton";
 
 export default function Menu() {
@@ -17,10 +17,10 @@ export default function Menu() {
 
       <CategoryBar />
 
-      <DishList />
+      <BookList />
 
-      <h2>Dish Details</h2>
-      <Link href="/menu/1">View Dish 1</Link>
+      <h2>Book Details</h2>
+      <Link href="/menu/1">View Book 1</Link>
     </div>
   );
 }

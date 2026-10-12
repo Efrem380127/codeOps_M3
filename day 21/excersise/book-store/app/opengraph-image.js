@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
 
-export const alt = "Addis Eats - Authentic Ethiopian Food & Books";
+export const alt = "Book Store - Fiction, Science & History Books";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -21,10 +21,10 @@ export default function Image() {
         }}
       >
         <div style={{ fontSize: 64, fontWeight: "bold", color: "#f59e0b" }}>
-          Addis Eats
+          Book Store
         </div>
         <div style={{ fontSize: 28, marginTop: 20, color: "#cbd5e1" }}>
-          Authentic Ethiopian Cuisine &amp; Cultural Books
+          Fiction, Science &amp; History Books
         </div>
       </div>
     ),

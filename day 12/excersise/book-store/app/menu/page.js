@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Suspense } from "react";
 import CategoryBar from "./CategoryBar";
-import DishList from "./DishList";
+import BookList from "./BookList";
 import NavigationButton from "./NavigationButton";
 
 export const revalidate = 60;
@@ -21,11 +21,11 @@ export default function Menu() {
       <CategoryBar />
 
       <Suspense fallback={<p>Loading books...</p>}>
-        <DishList />
+        <BookList />
       </Suspense>
 
-      <h2>Dish Details</h2>
-      <Link href="/menu/1">View Dish 1</Link>
+      <h2>Book Details</h2>
+      <Link href="/menu/1">View Book 1</Link>
     </div>
   );
 }

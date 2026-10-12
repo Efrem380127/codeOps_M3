@@ -2,7 +2,7 @@ import SignInForm from "./SignInForm";
 
 export const metadata = {
   title: "Sign In",
-  description: "Sign in to your Addis Eats account to manage orders and track kitchen status.",
+  description: "Sign in to your Book Store account to manage orders and track dispatch status.",
 };
 
 export default async function SignInPage({ searchParams }) {

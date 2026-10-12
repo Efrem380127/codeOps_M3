@@ -1,5 +1,5 @@
 export default function CategoryBar() {
-  const categories = ["All", "Traditional", "Vegetarian", "Beverages"];
+  const categories = ["All", "Fiction", "Science", "History"];
 
   return (
     <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap", margin: "1rem 0" }}>

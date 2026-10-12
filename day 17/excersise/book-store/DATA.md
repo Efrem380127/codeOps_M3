@@ -53,7 +53,7 @@ Before scoping, any user could view all orders or query another account's order.
 
 ---
 
-## 7. Server-Side Role Check (`/kitchen`)
-A staff-only dashboard was added at `/kitchen`:
+## 7. Server-Side Role Check (`/dispatch`)
+A staff-only dashboard was added at `/dispatch`:
 - The role check `session?.role === "staff"` is executed strictly server-side in the Server Component before any HTML is rendered.
-- If a customer attempts to visit `/kitchen`, the server immediately returns a 403 Forbidden screen without shipping any kitchen orders markup to the client.
+- If a customer attempts to visit `/dispatch`, the server immediately returns a 403 Forbidden screen without shipping any dispatch orders markup to the client.

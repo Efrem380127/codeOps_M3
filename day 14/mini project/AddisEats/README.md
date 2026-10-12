@@ -40,7 +40,6 @@ Route (app)      Revalidate  Expire
 ├ ○ /_not-found
 ├ ○ /cart
 ├ ƒ /checkout
-├ ○ /Home
 ├ ○ /menu                1m      1y
 └   /menu/[id]
   ├ ● /menu/1
