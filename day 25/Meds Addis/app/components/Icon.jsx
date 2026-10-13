@@ -95,29 +95,6 @@ const ICONS = {
     </>
   ),
 
-  user: (
-    <>
-      <circle cx="12" cy="8.2" r="3.7" />
-      <path d="M4.9 20.2a7.1 7.1 0 0 1 14.2 0" />
-    </>
-  ),
-
-  trash: (
-    <>
-      <path d="M3.8 6.4h16.4" />
-      <path d="M9.2 6.4V3.6h5.6v2.8" />
-      <path d="M6.4 6.4 7.5 20.4h9l1.1-14" />
-    </>
-  ),
-
-  download: (
-    <>
-      <path d="M12 3.6v11.2" />
-      <path d="M7.6 10.4 12 14.8l4.4-4.4" />
-      <path d="M4 19.8h16" />
-    </>
-  ),
-
   upload: (
     <>
       <path d="M12 15.4V4.2" />
@@ -168,24 +145,10 @@ const ICONS = {
     </>
   ),
 
-  pin: (
-    <>
-      <path d="M12 20.8s6.4-6 6.4-10.3a6.4 6.4 0 1 0-12.8 0C5.6 14.8 12 20.8 12 20.8z" />
-      <circle cx="12" cy="10.4" r="2.4" />
-    </>
-  ),
-
   arrowRight: (
     <>
       <path d="M4.4 12h15.2" />
       <path d="M13.8 6.2 19.6 12l-5.8 5.8" />
-    </>
-  ),
-
-  arrowLeft: (
-    <>
-      <path d="M19.6 12H4.4" />
-      <path d="M10.2 6.2 4.4 12l5.8 5.8" />
     </>
   ),
 
@@ -214,10 +177,9 @@ const ICONS = {
   ),
 
   /* --- Added for the storefront blocks ------------------------------------
-     The trust strip, the category tiles and the discount badge all needed
-     glyphs the original set did not carry. Same grid, same 1.5 stroke, same
-     square caps — the point of a hand-drawn set is that additions cannot be
-     told apart from the originals. */
+     The trust strip and the category tiles needed glyphs the original set did
+     not carry. Same grid, same 1.5 stroke, same square caps — the point of a
+     hand-drawn set is that additions cannot be told apart from the originals. */
 
   // Trust strip: "Health consult".
   headset: (
@@ -229,19 +191,11 @@ const ICONS = {
     </>
   ),
 
-  // Trust strip: "Best offers", and the discount badge on a product card.
+  // Trust strip: "Best offers".
   tag: (
     <>
       <path d="M3.4 3.4h8.5a1.6 1.6 0 0 1 1.13.47l7.1 7.1a1.6 1.6 0 0 1 0 2.26l-6.4 6.4a1.6 1.6 0 0 1-2.26 0l-7.1-7.1A1.6 1.6 0 0 1 3.4 11.4z" />
       <path d="M7.6 7.6h.01" strokeWidth="2.2" />
-    </>
-  ),
-
-  percent: (
-    <>
-      <path d="M18.6 5.4 5.4 18.6" />
-      <circle cx="7.8" cy="7.8" r="2.4" />
-      <circle cx="16.2" cy="16.2" r="2.4" />
     </>
   ),
 
@@ -251,26 +205,6 @@ const ICONS = {
       <path d="M3.4 4.6h17.2v12.2H3.4z" />
       <path d="M6.4 11.2h2.7l1.6-3.1 2.3 6 1.5-2.9h3.1" />
       <path d="M9.2 20.4h5.6" />
-    </>
-  ),
-
-  // Category tile: "Pet care".
-  paw: (
-    <>
-      <circle cx="7.4" cy="8.2" r="1.9" />
-      <circle cx="12" cy="6.6" r="1.9" />
-      <circle cx="16.6" cy="8.2" r="1.9" />
-      <path d="M12 11.4c2.8 0 5.1 2 5.1 4.5 0 1.8-1.3 3-3 3-1 0-1.5-.5-2.1-.5s-1.1.5-2.1.5c-1.7 0-3-1.2-3-3 0-2.5 2.3-4.5 5.1-4.5z" />
-    </>
-  ),
-
-  // Category tile: "Baby care".
-  baby: (
-    <>
-      <circle cx="12" cy="13.4" r="6.4" />
-      <path d="M12 7c0-1.9 1.4-3.3 3.3-3.3" />
-      <path d="M9.6 12.6h.01M14.4 12.6h.01" strokeWidth="2.2" />
-      <path d="M9.9 16.1c1.2 1 3 1 4.2 0" />
     </>
   ),
 

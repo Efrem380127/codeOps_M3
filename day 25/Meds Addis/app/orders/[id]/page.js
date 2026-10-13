@@ -102,7 +102,7 @@ export default async function OrderDetailPage({ params, searchParams }) {
           <h1>{order.id}</h1>
           <p className="lede mt-2">
             Placed {when.format(new Date(order.placedAt))} ·{" "}
-            <span className={`badge ${order.statusBadge}`}>
+            <span className={`status ${order.statusTone}`}>
               {order.statusLabel}
             </span>
           </p>
@@ -157,7 +157,7 @@ export default async function OrderDetailPage({ params, searchParams }) {
                         {line.missing ? (
                           <span>
                             {line.name}{" "}
-                            <span className="badge badge--out">Unavailable</span>
+                            <span className="status status--out">Unavailable</span>
                           </span>
                         ) : (
                           <Link href={`/medicines/${line.medicineId}`}>
@@ -259,12 +259,12 @@ export default async function OrderDetailPage({ params, searchParams }) {
                 </li>
                 <li>
                   <span className="spec-list__k">Status</span>
-                  <span className={`badge ${
+                  <span className={`status ${
                     prescription.status === "approved"
-                      ? "badge--ok"
+                      ? "status--ok"
                       : prescription.status === "rejected"
-                        ? "badge--out"
-                        : "badge--rx"
+                        ? "status--out"
+                        : "status--rx"
                   }`}>
                     {prescription.status}
                   </span>

@@ -35,7 +35,6 @@ export default function CategoryNav() {
 
         <Link className="cat-nav__link" href="/medicines?offers=1">
           Offers
-          <span className="cat-nav__badge">New</span>
         </Link>
       </div>
     </nav>

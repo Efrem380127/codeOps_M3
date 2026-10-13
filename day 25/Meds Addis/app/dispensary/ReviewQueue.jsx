@@ -43,7 +43,7 @@ function ReviewCard({ prescription }) {
             {prescription.patientName} · uploaded {timeAgo(prescription.uploadedAt)}
           </p>
         </div>
-        <span className={`badge ${prescription.statusBadge}`}>
+        <span className={`status ${prescription.statusTone}`}>
           {prescription.statusLabel}
         </span>
       </div>

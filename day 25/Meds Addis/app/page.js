@@ -47,7 +47,10 @@ const TRUST = [
   {
     icon: "tag",
     title: "Best offers",
-    body: "Up to 21% off selected lines, marked on the card and at checkout.",
+    // "and at checkout" used to end this line, and it was not true: the
+    // struck-through original price is rendered by the catalogue card and
+    // nowhere else. The 21% is the real maximum in app/data/medicines.js.
+    body: "Up to 21% off selected lines, with the original price still shown.",
   },
 ];
 

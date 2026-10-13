@@ -73,7 +73,7 @@ export default async function TrackOrderPage({ params }) {
           <span className="eyebrow">Tracking</span>
           <h1>Order {order.id}</h1>
           <p className="lede mt-2">
-            <span className={`badge ${order.statusBadge}`}>
+            <span className={`status ${order.statusTone}`}>
               {order.statusLabel}
             </span>{" "}
             · placed {when.format(new Date(order.placedAt))}

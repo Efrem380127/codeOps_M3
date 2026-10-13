@@ -231,11 +231,9 @@ export default async function DashboardPage({ searchParams }) {
                     <td className="num">{medicine.stock}</td>
                     <td>
                       {medicine.requiresPrescription ? (
-                        <span className="badge badge--rx">
-                          <Icon name="capsule" /> controlled
-                        </span>
+                        <span className="status status--rx">controlled</span>
                       ) : (
-                        <span className="badge badge--neutral">Open shelf</span>
+                        <span className="status status--neutral">Open shelf</span>
                       )}
                     </td>
                   </tr>

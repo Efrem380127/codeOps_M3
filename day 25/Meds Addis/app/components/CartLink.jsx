@@ -12,7 +12,7 @@ import Icon from "./Icon";
  * around it in the header stays server-rendered.
  *
  * The bubble is only rendered when there is something in the cart. A permanent
- * "0" badge is noise, and it draws the eye to the one number on the page that
+ * "0" bubble is noise, and it draws the eye to the one number on the page that
  * means "you have nothing".
  */
 export default function CartLink() {

@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 import AddToCartButton from "@/app/components/AddToCartButton";
 import Icon from "@/app/components/Icon";
 import EmptyState from "@/app/components/EmptyState";
-import StockBadge, { PrescriptionBadge } from "@/app/components/StockBadge";
+import StockStatus, { PrescriptionMarker } from "@/app/components/StockStatus";
 import { getMedicineById, medicineIds, getReviewsForMedicine } from "@/lib/catalog";
 import { price, dateOnly } from "@/lib/format";
 
@@ -99,9 +99,9 @@ export default async function MedicinePage({ params }) {
         <div className="stack">
           <div>
             <div className="cluster mb-4">
-              <span className="badge badge--neutral">{medicine.category}</span>
-              <StockBadge stock={medicine.stock} />
-              {medicine.requiresPrescription && <PrescriptionBadge />}
+              <span className="status status--neutral">{medicine.category}</span>
+              <StockStatus stock={medicine.stock} />
+              {medicine.requiresPrescription && <PrescriptionMarker />}
             </div>
 
             <h1>{medicine.name}</h1>

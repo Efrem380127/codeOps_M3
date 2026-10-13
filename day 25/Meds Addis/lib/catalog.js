@@ -107,15 +107,21 @@ export function paginate(list, page = 1, pageSize = 6) {
 /* -------------------------------------------------------------------------- */
 
 /**
- * The saving on a line, or null when there is not one.
+ * The markdown on a line, or null when there is not one.
  *
- * The card shows a "% OFF" badge and a struck-through original price, and both
- * are computed from this single object — so the percentage on the badge can
- * never drift from the two numbers printed beside it.
+ * Returns the original price beside the current one, so the card prints the
+ * struck-through figure from the same call that decided there was a discount at
+ * all — the two numbers cannot disagree.
  *
- * Returning null rather than zero matters: a badge that reads "0% OFF" is worse
- * than no badge, and a compareAtPrice that is not actually above the price (a
- * data-entry slip) must not render as a discount at all.
+ * There is no `percent` field any more. It existed to fill the "% OFF" pill
+ * that used to sit on the card's photograph, and when that pill was removed
+ * nothing read it. The struck-through price says the same thing without
+ * needing a number to be computed, rounded and kept in step.
+ *
+ * Returning null rather than zero matters: a compareAtPrice that is not
+ * actually above the price (a data-entry slip) must not render as a discount at
+ * all, and a card reading "was 120, now 120" is worse than one that says
+ * nothing.
  */
 export function discount(medicine) {
   const now = Number(medicine?.price) || 0;
@@ -123,13 +129,7 @@ export function discount(medicine) {
 
   if (!was || !now || was <= now) return null;
 
-  return {
-    was,
-    now,
-    saving: was - now,
-    // Rounded, because a badge is a headline figure — "17% OFF", not 17.35%.
-    percent: Math.round(((was - now) / was) * 100),
-  };
+  return { was, now, saving: was - now };
 }
 
 /** Everything currently marked down — drives the "Offers" strip. */
@@ -141,39 +141,12 @@ export function discountedMedicines() {
 /* Stock                                                                      */
 /* -------------------------------------------------------------------------- */
 
-/**
- * Turns a raw stock count into something the UI can render consistently.
- * Used by the card badge, the detail page and the dashboard stock table, so the
- * thresholds are defined exactly once.
- */
-export function stockState(medicine) {
-  const stock = Number(medicine?.stock) || 0;
-
-  if (stock === 0) {
-    return {
-      key: "out",
-      label: "Out of stock",
-      badge: "badge--out",
-      purchasable: false,
-    };
-  }
-
-  if (stock <= LOW_STOCK_THRESHOLD) {
-    return {
-      key: "low",
-      label: `Only ${stock} left`,
-      badge: "badge--low",
-      purchasable: true,
-    };
-  }
-
-  return {
-    key: "ok",
-    label: "In stock",
-    badge: "badge--ok",
-    purchasable: true,
-  };
-}
+/* `stockState()` used to live here, returning a label plus a `badge--*` class
+   for the card, the detail page and the dashboard table. It was superseded by
+   the stock helper in app/components/StockStatus.jsx — which exists separately
+   and deliberately, because that component renders inside Client Components and
+   importing this module would pull the whole catalogue into the browser bundle.
+   The duplication outlived its purpose, and nothing imported it. */
 
 /** Everything at or below the reorder threshold — drives the dashboard alert. */
 export function lowStockMedicines() {

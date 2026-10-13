@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 
@@ -68,6 +69,15 @@ export default function SignInForm() {
 
   return (
     <div className="auth__card">
+      <Image
+        className="auth__mark"
+        src="/logo/medaddis-mark.png"
+        alt=""
+        width={148}
+        height={192}
+        sizes="56px"
+        priority
+      />
       <span className="eyebrow">Meds Addis</span>
       <h1>Sign in</h1>
       <p className="lede mt-2 mb-6">

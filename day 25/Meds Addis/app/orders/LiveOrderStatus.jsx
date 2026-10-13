@@ -148,7 +148,7 @@ export default function LiveOrderStatus({ orderId, initialOrder }) {
     <div className="card">
       <div className="between">
         <h2 className="card__title mb-0">Live status</h2>
-        <span className={`badge ${order.statusBadge}`}>{order.statusLabel}</span>
+        <span className={`status ${order.statusTone}`}>{order.statusLabel}</span>
       </div>
 
       <ul className="spec-list mt-4">

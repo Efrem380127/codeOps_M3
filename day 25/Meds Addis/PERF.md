@@ -112,7 +112,7 @@ last.
 ## Finding 3 — Server Components keep the catalogue out of the bundle
 
 `/medicines` is only +21 KB gzip over the floor, despite rendering 16 product
-cards with images, badges, prices and filtering. That is the boundary working:
+cards with images, stock states, prices and filtering. That is the boundary working:
 
 - The filtering, the card markup and the `Intl.NumberFormat` price formatting
   run on the server and are **not shipped at all**.

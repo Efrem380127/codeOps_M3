@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 import CategoryNav from "./CategoryNav";
@@ -32,11 +33,19 @@ export default function Header() {
     <header className="site-header">
       <div className="container site-header__bar">
         <Link className="brand" href="/">
-          {/* A drawn mark in a brand tile — a pharmacy cross should be a shape,
-              not a font glyph that renders differently on every platform. */}
-          <span className="brand__mark" aria-hidden="true">
-            <Icon name="plus" />
-          </span>
+          {/* The supplied mark. `alt=""` because the wordmark beside it already
+              carries the accessible name — a second reading of "Meds Addis"
+              would just make a screen reader say it twice. `priority` because
+              it is in the first viewport on every route. */}
+          <Image
+            className="brand__mark"
+            src="/logo/medaddis-mark.png"
+            alt=""
+            width={148}
+            height={192}
+            sizes="38px"
+            priority
+          />
           <span className="brand__text">
             Meds Addis
             <span className="brand__sub">Pharmacy &amp; delivery</span>

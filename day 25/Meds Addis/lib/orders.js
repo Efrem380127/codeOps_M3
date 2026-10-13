@@ -41,14 +41,14 @@ export const ORDER_STATUS_LABEL = {
   [ORDER_STATUS.CANCELLED]: "Cancelled",
 };
 
-/** Badge class per status, so the colour is decided in one place. */
-export const ORDER_STATUS_BADGE = {
-  [ORDER_STATUS.PENDING_VERIFICATION]: "badge--rx",
-  [ORDER_STATUS.VERIFIED]: "badge--info",
-  [ORDER_STATUS.DISPENSING]: "badge--info",
-  [ORDER_STATUS.OUT_FOR_DELIVERY]: "badge--info",
-  [ORDER_STATUS.DELIVERED]: "badge--ok",
-  [ORDER_STATUS.CANCELLED]: "badge--out",
+/** Tone class per status, so the colour is decided in one place. */
+export const ORDER_STATUS_TONE = {
+  [ORDER_STATUS.PENDING_VERIFICATION]: "status--rx",
+  [ORDER_STATUS.VERIFIED]: "status--info",
+  [ORDER_STATUS.DISPENSING]: "status--info",
+  [ORDER_STATUS.OUT_FOR_DELIVERY]: "status--info",
+  [ORDER_STATUS.DELIVERED]: "status--ok",
+  [ORDER_STATUS.CANCELLED]: "status--out",
 };
 
 export const DELIVERY_FEE = 60;
@@ -118,7 +118,7 @@ export function hydrateOrder(order) {
     ...totals,
     itemCount: lines.reduce((sum, line) => sum + line.quantity, 0),
     statusLabel: ORDER_STATUS_LABEL[order.status] ?? order.status,
-    statusBadge: ORDER_STATUS_BADGE[order.status] ?? "badge--neutral",
+    statusTone: ORDER_STATUS_TONE[order.status] ?? "status--neutral",
     needsVerification: lines.some((line) => line.requiresPrescription),
     isCancellable:
       order.status !== ORDER_STATUS.CANCELLED &&

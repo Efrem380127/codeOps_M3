@@ -30,7 +30,7 @@ export default function OrderCard({ order, showCustomer = false }) {
           </p>
         </div>
 
-        <span className={`badge ${order.statusBadge}`}>{order.statusLabel}</span>
+        <span className={`status ${order.statusTone}`}>{order.statusLabel}</span>
       </div>
 
       <ul className="spec-list mt-4 mb-4">

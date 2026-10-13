@@ -60,7 +60,7 @@ export default function MedicinesPage({ searchParams }) {
           <h1>Medicines</h1>
           <p className="lede mt-2">
             Sixteen lines across nine therapeutic categories. Items marked{" "}
-            <span className="badge badge--rx">
+            <span className="status status--rx">
               <Icon name="capsule" /> Prescription required
             </span>{" "}
             are dispensed only after a pharmacist has verified a prescription.

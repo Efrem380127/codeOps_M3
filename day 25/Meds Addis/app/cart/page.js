@@ -4,7 +4,6 @@ import Image from "next/image";
 import Link from "next/link";
 
 import EmptyState from "@/app/components/EmptyState";
-import Icon from "@/app/components/Icon";
 import { useCart, MAX_PER_LINE } from "@/app/components/CartProvider";
 import { price } from "@/lib/format";
 
@@ -87,8 +86,8 @@ export default function CartPage() {
                       {line.strength} · {line.form}
                     </p>
                     {line.requiresPrescription && (
-                      <span className="badge badge--rx mt-2">
-                        <Icon name="capsule" /> Prescription required
+                      <span className="status status--rx mt-2">
+                        Prescription required
                       </span>
                     )}
                   </div>

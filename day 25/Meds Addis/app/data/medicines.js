@@ -357,5 +357,5 @@ export function findMedicine(id) {
   return medicines.find((medicine) => medicine.id === id) ?? null;
 }
 
-/** Stock is "low" below this many units — drives the badge and the dashboard. */
+/** Stock is "low" below this many units — drives the card's stock line and the dashboard. */
 export const LOW_STOCK_THRESHOLD = 10;

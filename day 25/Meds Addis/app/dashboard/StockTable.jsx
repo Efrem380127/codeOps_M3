@@ -8,7 +8,7 @@ import { price, number } from "@/lib/format";
  *
  * The reorder alert is the reason this table exists: a pharmacy that runs out
  * of an antibiotic is a different problem from a shop that runs out of a book.
- * Rows at or below the threshold are marked with a badge AND the table is
+ * Rows at or below the threshold are marked in words AND the table is
  * ordered so they appear first — a colour alone would be invisible to anyone who
  * cannot see it.
  */
@@ -66,11 +66,11 @@ export default function StockTable({ medicines = [], threshold = 10 }) {
                 <td className="num">{price(medicine.price * medicine.stock)}</td>
                 <td>
                   {out ? (
-                    <span className="badge badge--out">Out of stock</span>
+                    <span className="status status--out">Out of stock</span>
                   ) : low ? (
-                    <span className="badge badge--low">Reorder</span>
+                    <span className="status status--low">Reorder</span>
                   ) : (
-                    <span className="badge badge--ok">Healthy</span>
+                    <span className="status status--ok">Healthy</span>
                   )}
                 </td>
               </tr>

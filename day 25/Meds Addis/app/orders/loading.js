@@ -2,8 +2,8 @@
  * Route-level loading UI for the order list.
  *
  * Rendered instantly while getOrdersForUser() awaits, so a slow read does not
- * look like a frozen tab. Shaped like the real list — card, two lines, a badge —
- * so the swap does not move anything.
+ * look like a frozen tab. Shaped like the real list — card, two lines, a
+ * status line — so the swap does not move anything.
  */
 export default function LoadingOrders() {
   return (

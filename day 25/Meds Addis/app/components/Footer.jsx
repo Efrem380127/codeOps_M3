@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 import Icon from "./Icon";
@@ -53,7 +54,17 @@ export default function Footer() {
 
         <div className="site-footer__grid">
           <div>
-            <h2>Meds Addis</h2>
+            <h2 className="site-footer__brand">
+              <Image
+                className="site-footer__mark"
+                src="/logo/medaddis-mark.png"
+                alt=""
+                width={148}
+                height={192}
+                sizes="22px"
+              />
+              <span>Meds Addis IBT College of Canada</span>
+            </h2>
             <p className="small">
               Licensed pharmacy and same-day medicine delivery across Addis
               Ababa. Every prescription-only order is checked by a registered
@@ -101,10 +112,9 @@ export default function Footer() {
         </div>
 
         <p className="site-footer__legal">
-          Meds Addis is a coursework project built for the IBT College Canada
-          CodeOps · Full Stack programme. It is not a real pharmacy: no medicine
-          is dispensed, and no payment is taken. In an emergency, contact a
-          hospital or call 907.
+          Meds Addis is a coursework project for the CodeOps · Full Stack
+          programme. It is not a real pharmacy: no medicine is dispensed, and no
+          payment is taken. In an emergency, contact a hospital or call 907.
         </p>
       </div>
     </footer>

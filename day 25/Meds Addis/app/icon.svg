@@ -1,9 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" role="img" aria-label="Meds Addis">
-  <!--
-    The same device as the header mark: a solid ink square holding a drawn
-    cross. Colours are the computed sRGB for --ink-0 and --paper in the light
-    scheme, because a favicon has no cascade and cannot resolve var().
-  -->
-  <rect width="32" height="32" fill="#10141a"/>
-  <path d="M16 9.5v13M9.5 16h13" fill="none" stroke="#f8fafc" stroke-width="3" stroke-linecap="square"/>
-</svg>

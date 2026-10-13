@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import AddToCartButton from "./AddToCartButton";
-import StockBadge, { PrescriptionBadge } from "./StockBadge";
+import StockStatus, { PrescriptionMarker } from "./StockStatus";
 import { discount } from "@/lib/catalog";
 import { price } from "@/lib/format";
 
@@ -18,10 +18,15 @@ import { price } from "@/lib/format";
  * reserves the correct box before the bytes arrive (that is what keeps CLS at
  * zero) and never downloads a desktop-sized file for a phone.
  *
- * The discount badge and the struck-through original price both come from the
- * same `discount()` call, so the percentage on the badge cannot disagree with
- * the two numbers beside it. When there is no genuine saving the helper returns
- * null and neither is rendered.
+ * Nothing sits on the photograph any more. The card used to carry up to four
+ * capsules — discount, Rx, stock level and category — two of which floated over
+ * the product image. The discount is now carried by the struck-through original
+ * price alone, stock and Rx are plain text under the description, and the
+ * category moved into the meta line beside the generic name.
+ *
+ * The struck-through original price comes from `discount()`, which returns null
+ * when there is no genuine markdown — so a card never prints a "was" figure
+ * that is not actually higher than the price beside it.
  */
 export default function MedicineCard({ medicine }) {
   const deal = discount(medicine);
@@ -36,11 +41,6 @@ export default function MedicineCard({ medicine }) {
           height={300}
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 280px"
         />
-
-        <div className="med-card__flags">
-          {deal && <span className="deal-badge">{deal.percent}% off</span>}
-          {medicine.requiresPrescription && <PrescriptionBadge compact />}
-        </div>
       </div>
 
       <div className="med-card__body">
@@ -49,14 +49,14 @@ export default function MedicineCard({ medicine }) {
         </h3>
 
         <p className="med-card__generic">
-          {medicine.genericName} · {medicine.strength}
+          {medicine.genericName} · {medicine.strength} · {medicine.category}
         </p>
 
         <p className="med-card__desc">{medicine.description}</p>
 
         <div className="cluster">
-          <StockBadge stock={medicine.stock} />
-          <span className="badge badge--neutral">{medicine.category}</span>
+          <StockStatus stock={medicine.stock} />
+          {medicine.requiresPrescription && <PrescriptionMarker compact />}
         </div>
 
         <div className="med-card__foot">

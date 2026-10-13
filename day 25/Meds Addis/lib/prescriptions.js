@@ -25,10 +25,10 @@ export const PRESCRIPTION_STATUS_LABEL = {
   [PRESCRIPTION_STATUS.REJECTED]: "Rejected",
 };
 
-export const PRESCRIPTION_STATUS_BADGE = {
-  [PRESCRIPTION_STATUS.PENDING]: "badge--rx",
-  [PRESCRIPTION_STATUS.APPROVED]: "badge--ok",
-  [PRESCRIPTION_STATUS.REJECTED]: "badge--out",
+export const PRESCRIPTION_STATUS_TONE = {
+  [PRESCRIPTION_STATUS.PENDING]: "status--rx",
+  [PRESCRIPTION_STATUS.APPROVED]: "status--ok",
+  [PRESCRIPTION_STATUS.REJECTED]: "status--out",
 };
 
 const SIMULATED_LATENCY_MS = 200;
@@ -46,7 +46,7 @@ export function hydratePrescription(rx) {
   return {
     ...rx,
     statusLabel: PRESCRIPTION_STATUS_LABEL[rx.status] ?? rx.status,
-    statusBadge: PRESCRIPTION_STATUS_BADGE[rx.status] ?? "badge--neutral",
+    statusTone: PRESCRIPTION_STATUS_TONE[rx.status] ?? "status--neutral",
     reviewerName: reviewer?.name ?? null,
     medicines: (rx.medicineIds ?? [])
       .map((id) => findMedicine(id))

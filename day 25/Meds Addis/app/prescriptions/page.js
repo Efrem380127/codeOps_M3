@@ -97,7 +97,7 @@ export default async function PrescriptionsPage() {
                       </p>
                     </div>
 
-                    <span className={`badge ${rx.statusBadge}`}>
+                    <span className={`status ${rx.statusTone}`}>
                       {rx.statusLabel}
                     </span>
                   </div>

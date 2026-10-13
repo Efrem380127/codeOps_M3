@@ -101,7 +101,7 @@ export default function OrdersTable({ orders = [], sort = "placedAt", dir = "des
               </th>
               <td>{when.format(new Date(order.placedAt))}</td>
               <td>
-                <span className={`badge ${order.statusBadge}`}>
+                <span className={`status ${order.statusTone}`}>
                   {order.statusLabel}
                 </span>
               </td>
