@@ -1,8 +1,6 @@
 import { Suspense } from "react";
 
 import CategoryFilter from "@/app/components/CategoryFilter";
-import FilterShell from "@/app/components/FilterShell";
-import Icon from "@/app/components/Icon";
 import MedicineList from "@/app/components/MedicineList";
 import MedicineSkeleton from "@/app/components/MedicineSkeleton";
 import SearchBox from "./SearchBox";
@@ -52,21 +50,25 @@ export const metadata = {
 export default function MedicinesPage({ searchParams }) {
   return (
     <main id="main" className="page container">
-      {/* --- Static shell: prerendered once, revalidated every 60s --- */}
+      {/* --- Page header ---------------------------------------------------
+          Deliberately lighter than a .section-head, because this is a page
+          title rather than a section title. Three things came off it:
 
-      <div className="section-head">
-        <div>
-          <span className="eyebrow">Catalogue</span>
-          <h1>Medicines</h1>
-          <p className="lede mt-2">
-            Sixteen lines across nine therapeutic categories. Items marked{" "}
-            <span className="status status--rx">
-              <Icon name="capsule" /> Prescription required
-            </span>{" "}
-            are dispensed only after a pharmacist has verified a prescription.
-          </p>
-        </div>
-      </div>
+            - the "Catalogue" eyebrow, which repeated what the h1 and the
+              category nav already say;
+            - a two-line lede, now one sentence at the quieter 13px step;
+            - the results disclosure ("Hide medicines / Results below"), which
+              hid content that was already on screen — see the note below.
+
+          The band is three lines instead of five, so the grid starts higher. */}
+
+      <header className="catalogue-head">
+        <h1>Medicines</h1>
+        <p className="catalogue-head__note">
+          Sixteen lines across nine categories. Prescription-only items are
+          checked by a pharmacist before dispatch.
+        </p>
+      </header>
 
       {/*
         --- Dynamic hole: the only part that reads searchParams ---
@@ -140,19 +142,19 @@ async function CatalogueResults({ searchParams }) {
       />
 
       {/*
-        A second, inner boundary. The chips above paint as soon as the params
-        are known, while the grid below still waits on the catalogue query —
-        so the filter controls are never held hostage by the data.
+        An inner boundary. The chips above paint as soon as the params are
+        known, while the grid below still waits on the catalogue query — so the
+        filter controls are never held hostage by the data.
+
+        A `FilterShell` Client Component used to wrap the list here, so a button
+        could hide and show it. It was removed because it hid content that was
+        already on screen: the results sit directly below the chips, so the
+        control cost a band of vertical space and bought nothing. The
+        composition rule it demonstrated still holds — app/providers.jsx is the
+        worked example now, and BOUNDARY.md points there.
       */}
       <Suspense fallback={<MedicineSkeleton />}>
-        {/*
-          The shell renders immediately; <MedicineList> awaits its data and
-          streams in. FilterShell is a Client Component but its `children` are
-          server output, so none of the list's code enters the browser bundle.
-        */}
-        <FilterShell label="medicines">
-          <MedicineList q={q} category={category} offers={offers} />
-        </FilterShell>
+        <MedicineList q={q} category={category} offers={offers} />
       </Suspense>
     </>
   );

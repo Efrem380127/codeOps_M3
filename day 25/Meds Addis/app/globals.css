@@ -424,6 +424,22 @@ hr {
   max-width: 58ch;
 }
 
+/* The catalogue's page header — a page title, not a section title, so it does
+   not use .section-head. It is deliberately three lines tall: the h1, then one
+   quiet sentence. The "Catalogue" eyebrow above it is gone (the h1 and the
+   category nav already said as much) and the lede dropped from 17px to 13px, so
+   the grid starts roughly a band higher without anything being lost. */
+.catalogue-head {
+  margin-block-end: var(--sp-4);
+}
+
+.catalogue-head__note {
+  margin-block-start: var(--sp-2);
+  max-width: 72ch;
+  color: var(--ink-2);
+  font-size: var(--t-sm);
+}
+
 .stack {
   display: flex;
   flex-direction: column;
@@ -798,6 +814,19 @@ hr {
   overflow-x: auto;
   scrollbar-width: none;
   -ms-overflow-style: none;
+  /* This row is a horizontal scroller with its scrollbar hidden, and it needs
+     about 1308px for eleven links against a 1240px container — so at every
+     width the last link or two are cut off. With no scrollbar and no fade, a
+     half-visible "Offers" reads as a broken layout rather than a scrollable
+     one. The mask is that missing cue: content fades out over the last 32px.
+     When the links do fit, nothing is painted under the fade, so it is
+     invisible — no need to switch it off with JavaScript. */
+  -webkit-mask-image: linear-gradient(
+    to right,
+    #000 calc(100% - 32px),
+    transparent
+  );
+  mask-image: linear-gradient(to right, #000 calc(100% - 32px), transparent);
 }
 
 .cat-nav__inner::-webkit-scrollbar {
@@ -873,13 +902,25 @@ hr {
 
 .site-footer__grid {
   display: grid;
-  gap: var(--sp-6);
+  gap: var(--sp-6) var(--sp-4);
   grid-template-columns: 1fr;
 }
 
-@media (min-width: 720px) {
+@media (min-width: 760px) {
   .site-footer__grid {
-    grid-template-columns: 2fr 1fr 1fr;
+    /* Deliberately the same track geometry as .feature-row above: four equal
+       tracks, the same gap, the same breakpoint. The brand block spans the
+       first two, so Shop lands on track 3 and Account on track 4 — directly
+       under the third and fourth feature. The two rows now read as one grid.
+       They used to be two unrelated ones (4 equal tracks above, 2fr 1fr 1fr
+       below), which is why "Shop" appeared under "24/7 support" as though it
+       belonged to it. */
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--sp-5);
+  }
+
+  .site-footer__grid > :first-child {
+    grid-column: span 2;
   }
 }
 
@@ -912,7 +953,12 @@ hr {
   flex-shrink: 0;
 }
 
-.site-footer ul {
+/* Scoped to the link columns, not to every list in the footer.
+   `.site-footer ul` was a class+type selector (0,1,1) and `.feature-row` is a
+   bare class (0,1,0), so this rule was quietly winning the `gap` on the feature
+   strip and pinning it to 8px — which is why the four features sat almost
+   touching. Naming the container fixes the collision instead of escalating it. */
+.site-footer__grid ul {
   list-style: none;
   padding: 0;
   display: grid;
@@ -1799,81 +1845,45 @@ hr {
    17. Filter bar / pagination
    -------------------------------------------------------------------------- */
 
+/* The category bar. It was twelve full-size chips that wrapped onto two lines
+   and pushed the grid most of a screen down. Smaller type and tighter padding
+   put the whole set on one line at the container's full width — the same links,
+   in the same order, one band lighter.
+
+   It still wraps rather than scrolls on a narrow screen, because a category you
+   cannot see is a category you cannot reach, and these are real <Link>s: they
+   are crawlable and shareable, which is why the route is dynamic in the first
+   place (see the note at the top of app/medicines/page.js). */
 .filters {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--sp-2);
-  margin-block-end: var(--sp-5);
-}
-
-/* The results disclosure. It used to be a bordered button pinned to the left
-   edge of a full-width row with "Results shown below." pushed to the right
-   edge — a band of vertical space spent on a control for content that is
-   already on screen, and one that stretched the width of the page to say two
-   short things. It is now a single quiet line sized to its content: the
-   chevron carries the state visually, the label carries it in words, and the
-   note sits beside it rather than at the far edge. */
-.filter-shell {
-  display: flex;
-  align-items: center;
-  gap: var(--sp-3);
+  /* Column gap tighter than the row gap. The pills carry a border and a shadow,
+     so they already read as separate objects — the air between them was doing
+     nothing except pushing the last two onto a second line. 4px is the number
+     that puts all eleven on one line at the container's full width (measured:
+     1149px of 1176px). The row gap stays roomy for the narrow screens where the
+     row does wrap. */
+  gap: var(--sp-2) var(--sp-1);
   margin-block-end: var(--sp-4);
-  font-size: var(--t-xs);
-}
-
-.filter-shell__toggle {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--sp-1);
-  /* Button chrome reset — this is a text control, not a surface. It still
-     keeps a comfortable pointer target and the global focus ring. */
-  min-height: 24px;
-  padding: 0;
-  border: 0;
-  background: none;
-  color: var(--ink-2);
-  font: inherit;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.filter-shell__toggle:hover {
-  color: var(--brand-ink);
-}
-
-.filter-shell__chevron {
-  width: 14px;
-  height: 14px;
-  transition: transform var(--dur) var(--ease);
-}
-
-/* One glyph, two states. Pointing down when the results are open, right when
-   they are collapsed — a second path would be a second thing to keep in sync. */
-.filter-shell__chevron[data-open="true"] {
-  transform: rotate(90deg);
-}
-
-.filter-shell__note {
-  color: var(--ink-3);
-}
-
-.filter-shell__note::before {
-  content: "·";
-  margin-inline-end: var(--sp-2);
 }
 
 .chip {
   display: inline-flex;
   align-items: center;
   gap: var(--sp-2);
-  min-height: 38px;
-  padding-inline: var(--sp-4);
+  /* Compact enough that all eleven fit one line at 1240px. Still a comfortable
+     pointer target and still the reference's pill — just not a pill sized for a
+     page hero. Weight 500 rather than 600: the filled brand pill already marks
+     the active category, so the rest do not need to shout, and the lighter
+     setting is what buys the last 10px of fit. */
+  min-height: 32px;
+  padding-inline: var(--sp-3);
   border: 1px solid var(--rule);
   border-radius: var(--r-full);
   background: var(--surface);
   color: var(--ink-2);
-  font-size: var(--t-sm);
-  font-weight: 600;
+  font-size: var(--t-xs);
+  font-weight: 500;
   text-decoration: none;
   white-space: nowrap;
   box-shadow: var(--shadow-xs);
@@ -2661,6 +2671,18 @@ textarea:focus-visible,
   display: grid;
   gap: var(--sp-4);
   grid-template-columns: repeat(2, minmax(0, 1fr));
+  /* This is a <ul>. It used to pick up the list reset from `.site-footer ul`;
+     now that rule is scoped to the link columns, the reset has to be stated
+     here — without `padding: 0` the browser's default 40px inline padding would
+     push the strip out of line with the grid below it. */
+  list-style: none;
+  padding: 0;
+  /* The strip is separated from the link grid by a rule rather than by air
+     alone. Without it the two rows ran together and "Shop" read as part of the
+     feature above it. */
+  padding-block-end: var(--sp-6);
+  margin-block-end: var(--sp-6);
+  border-block-end: 1px solid var(--rule);
 }
 
 @media (min-width: 760px) {

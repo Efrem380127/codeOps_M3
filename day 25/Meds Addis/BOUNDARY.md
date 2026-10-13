@@ -16,21 +16,22 @@ A Client Component can render Server Components — but only if they arrive as
 
 ## Where the line is
 
-### Client Components (22)
+### Client Components (26)
 
 | File | Why it must be a Client Component |
 |---|---|
-| `app/providers.jsx` | Wraps `CartProvider` + TanStack `QueryClientProvider` |
+| `app/providers.jsx` | Wraps `CartProvider` around the server-rendered tree |
 | `components/CartProvider.jsx` | Holds cart state in `useState`, persists to `localStorage` |
 | `components/AddToCartButton.jsx` | `onClick`, reads cart context |
 | `components/CartLink.jsx` | Reads cart context to show the item count |
-| `components/Navbar.jsx` | `usePathname()` to mark the active link with `aria-current` |
-| `components/AccountMenu.jsx` | Open/close state for the dropdown |
+| `components/AccountMenu.jsx` | SWR session read + open/close state |
 | `components/SignOutButton.jsx` | `useRouter()` + a pending state on submit |
-| `components/FilterShell.jsx` | `useState` for the show/hide toggle |
+| `components/ThemeToggle.jsx` | Reads `data-theme` through `useSyncExternalStore` |
 | `components/CheckoutForm.jsx` | Form state + `useActionState` |
+| `cart/page.js` | Reads the cart from context |
 | `medicines/SearchBox.jsx` | Debounce timer, `useState`, SWR |
 | `medicines/PagedCatalogue.jsx` | Page state + TanStack Query |
+| `medicines/CatalogueQueryProvider.jsx` | Mounts `QueryClientProvider` for that route only |
 | `orders/LiveOrderStatus.jsx` | SWR polling + `EventSource` |
 | `orders/CancelOrderForm.jsx` | `useActionState` + confirm state |
 | `prescriptions/PrescriptionForm.jsx` | Form state + `useActionState` |
@@ -42,8 +43,11 @@ A Client Component can render Server Components — but only if they arrive as
 | `track/[id]/LiveTracker.jsx` | SWR polling + `EventSource` |
 | `track/[id]/DeliveryMap.jsx` | Leaflet, loaded via `next/dynamic` with `ssr: false` |
 | `sign-in/SignInForm.jsx` | `useActionState` + `useSearchParams` for `?next=` |
+| `error.js`, `medicines/error.js`, `orders/error.js` | Error boundaries — `reset()` and `useEffect` |
 
-Everything else under `app/` is a Server Component.
+Everything else under `app/` is a Server Component. `components/Icon.jsx` reads
+as a client file if you grep for the directive, but the only occurrence is the
+sentence in its own doc comment saying it is *not* one.
 
 ### The ones that are deliberately *not* client
 
@@ -61,25 +65,33 @@ Everything else under `app/` is a Server Component.
 
 ## The composition pattern in practice
 
-`/medicines` is the clearest example. The page needs a filter shell that can
-hide and show results — that needs `useState`, so it needs a Client Component.
+`app/providers.jsx` is the clearest example, and the one that matters most,
+because it sits on every route.
 
 ```jsx
-// app/medicines/page.js  (Server Component)
-<Suspense fallback={<MedicineSkeleton />}>
-  <FilterShell label="medicines">        {/* "use client" */}
-    <MedicineList q={q} category={category} />   {/* Async Server Component */}
-  </FilterShell>
-</Suspense>
+// app/layout.js  (Server Component)
+<Providers>                      {/* "use client" */}
+  <Header />
+  {children}                     {/* server-rendered page output */}
+  <Footer />
+</Providers>
 ```
 
-`FilterShell` decides *whether* to show its children. It never sees what they
-are — `children` is an opaque, already-rendered React node. So the catalogue
-filtering, the card markup and the `Intl.NumberFormat` price formatting all stay
-on the server, and `FilterShell` ships as a few hundred bytes of toggle logic.
+`Providers` is a Client Component, but it never sees what its `children` are —
+`children` is an opaque, already-rendered React node. So `/`, `/medicines`,
+`/orders` and every other page stay Server Components, and nothing below
+`Providers` is dragged into the client bundle by being a descendant of it.
+`Providers` ships as a context wrapper and nothing else.
 
-Importing `MedicineList` *inside* `FilterShell.jsx` would have done the
-opposite: it would have dragged the whole catalogue into the browser bundle.
+Importing the pages *inside* `Providers` would have done the opposite: it would
+have made every route a client route.
+
+There used to be a second, smaller example here: a `FilterShell` on `/medicines`
+that took `MedicineList` as `children` so a button could hide and show the grid.
+Both the button and the component were removed, because the results were already
+visible directly below it — the disclosure cost a band of vertical space and
+bought nothing. The rule it demonstrated is the same rule `Providers`
+demonstrates, and it still holds.
 
 ## The two boundary mistakes that actually bit
 

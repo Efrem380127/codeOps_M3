@@ -111,11 +111,7 @@ export default function Footer() {
           </div>
         </div>
 
-        <p className="site-footer__legal">
-          Meds Addis is a coursework project for the CodeOps · Full Stack
-          programme. It is not a real pharmacy: no medicine is dispensed, and no
-          payment is taken. In an emergency, contact a hospital or call 907.
-        </p>
+        <p className="site-footer__legal">Meds Addis Ethiopia</p>
       </div>
     </footer>
   );

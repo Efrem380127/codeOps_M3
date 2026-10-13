@@ -116,9 +116,10 @@ cards with images, stock states, prices and filtering. That is the boundary work
 
 - The filtering, the card markup and the `Intl.NumberFormat` price formatting
   run on the server and are **not shipped at all**.
-- `FilterShell` is a Client Component, but `MedicineList` arrives as its
-  `children` prop, already rendered. So only the toggle logic ships.
-- The +21 KB is SWR, the debounced search box, and the paged list.
+- `MedicineList` is an Async Server Component, and nothing client-side imports
+  it, so its filtering and card markup are never in the browser bundle at all.
+- The +21 KB is SWR, the debounced search box, the paged list, and the cart
+  context — not the catalogue.
 
 `BOUNDARY.md` has the full reasoning.
 

@@ -18,10 +18,10 @@ request", the query is wrong.
 | **Route handler / Server Action** | It writes, or it must set a cookie, or a client component needs to fetch after hydration. |
 
 `"use client"` is placed on the **leaf** that needs it, never on the tree that
-contains it. `app/components/FilterShell.jsx` is the worked example: it is a
-Client Component that takes `children` already rendered on the server, so
-`MedicineList` — with all its filtering and card markup — stays a Server
-Component and ships zero JavaScript.
+contains it. `app/providers.jsx` is the worked example: it is a Client Component
+that takes `children` already rendered on the server, so every page under it —
+`/medicines` with its filtering and card markup included — stays a Server
+Component and ships zero JavaScript of its own.
 
 ---
 
