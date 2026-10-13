@@ -212,6 +212,104 @@ const ICONS = {
       fill="currentColor"
     />
   ),
+
+  /* --- Added for the storefront blocks ------------------------------------
+     The trust strip, the category tiles and the discount badge all needed
+     glyphs the original set did not carry. Same grid, same 1.5 stroke, same
+     square caps — the point of a hand-drawn set is that additions cannot be
+     told apart from the originals. */
+
+  // Trust strip: "Health consult".
+  headset: (
+    <>
+      <path d="M4.4 13.6v-2.4a7.6 7.6 0 0 1 15.2 0v2.4" />
+      <path d="M4.4 13h1.7a1.2 1.2 0 0 1 1.2 1.2v3.3a1.2 1.2 0 0 1-1.2 1.2H4.4z" />
+      <path d="M19.6 13h-1.7a1.2 1.2 0 0 0-1.2 1.2v3.3a1.2 1.2 0 0 0 1.2 1.2h1.7z" />
+      <path d="M19.6 18.4v.5a2.4 2.4 0 0 1-2.4 2.4h-2.6" />
+    </>
+  ),
+
+  // Trust strip: "Best offers", and the discount badge on a product card.
+  tag: (
+    <>
+      <path d="M3.4 3.4h8.5a1.6 1.6 0 0 1 1.13.47l7.1 7.1a1.6 1.6 0 0 1 0 2.26l-6.4 6.4a1.6 1.6 0 0 1-2.26 0l-7.1-7.1A1.6 1.6 0 0 1 3.4 11.4z" />
+      <path d="M7.6 7.6h.01" strokeWidth="2.2" />
+    </>
+  ),
+
+  percent: (
+    <>
+      <path d="M18.6 5.4 5.4 18.6" />
+      <circle cx="7.8" cy="7.8" r="2.4" />
+      <circle cx="16.2" cy="16.2" r="2.4" />
+    </>
+  ),
+
+  // Category tile: "Devices" — a monitor showing a trace.
+  monitor: (
+    <>
+      <path d="M3.4 4.6h17.2v12.2H3.4z" />
+      <path d="M6.4 11.2h2.7l1.6-3.1 2.3 6 1.5-2.9h3.1" />
+      <path d="M9.2 20.4h5.6" />
+    </>
+  ),
+
+  // Category tile: "Pet care".
+  paw: (
+    <>
+      <circle cx="7.4" cy="8.2" r="1.9" />
+      <circle cx="12" cy="6.6" r="1.9" />
+      <circle cx="16.6" cy="8.2" r="1.9" />
+      <path d="M12 11.4c2.8 0 5.1 2 5.1 4.5 0 1.8-1.3 3-3 3-1 0-1.5-.5-2.1-.5s-1.1.5-2.1.5c-1.7 0-3-1.2-3-3 0-2.5 2.3-4.5 5.1-4.5z" />
+    </>
+  ),
+
+  // Category tile: "Baby care".
+  baby: (
+    <>
+      <circle cx="12" cy="13.4" r="6.4" />
+      <path d="M12 7c0-1.9 1.4-3.3 3.3-3.3" />
+      <path d="M9.6 12.6h.01M14.4 12.6h.01" strokeWidth="2.2" />
+      <path d="M9.9 16.1c1.2 1 3 1 4.2 0" />
+    </>
+  ),
+
+  // Category tile: "Personal care".
+  bottle: (
+    <>
+      <path d="M9.6 2.6h4.8v2.7l1.9 2.3a3.4 3.4 0 0 1 .8 2.2v8.4a2.8 2.8 0 0 1-2.8 2.8h-4.6a2.8 2.8 0 0 1-2.8-2.8V9.8a3.4 3.4 0 0 1 .8-2.2l1.9-2.3z" />
+      <path d="M6.9 12.4h10.2" />
+    </>
+  ),
+
+  // Footer feature row: "Medicine guide".
+  book: (
+    <>
+      <path d="M12 7.6C10.6 6.3 8.7 5.6 6.4 5.6H3.6v12.1h2.8c2.3 0 4.2.7 5.6 2 1.4-1.3 3.3-2 5.6-2h2.8V5.6h-2.8c-2.3 0-4.2.7-5.6 2z" />
+      <path d="M12 7.6v12.1" />
+    </>
+  ),
+
+  heart: (
+    <path d="M12 20.2s-7.3-4.6-7.3-9.5A4.35 4.35 0 0 1 12 8.2a4.35 4.35 0 0 1 7.3 2.5c0 4.9-7.3 9.5-7.3 9.5z" />
+  ),
+
+  // Category tile: "Respiratory".
+  lungs: (
+    <>
+      <path d="M12 3.8v10" />
+      <path d="M12 8.2c-.6-.8-1.5-1.2-2.4-1.2-1.6 0-2.9 1.4-3.1 3.1l-.7 5.4a2.7 2.7 0 0 0 2.7 3.1c1.5 0 2.7-1.2 2.7-2.7v-2.7" />
+      <path d="M12 8.2c.6-.8 1.5-1.2 2.4-1.2 1.6 0 2.9 1.4 3.1 3.1l.7 5.4a2.7 2.7 0 0 1-2.7 3.1c-1.5 0-2.7-1.2-2.7-2.7v-2.7" />
+    </>
+  ),
+
+  // Category tile: "Gastrointestinal".
+  stomach: (
+    <>
+      <path d="M9 3.2h4.4" />
+      <path d="M11.2 3.2v3.6c0 1.1-.5 1.9-1.5 2.5-1.9 1.2-3 3-3 5.2a5.3 5.3 0 0 0 5.3 5.3h1.2a5.3 5.3 0 0 0 5.3-5.3c0-2.2-1.3-4-3.3-4.8" />
+    </>
+  ),
 };
 
 export default function Icon({ name, className = "", ...rest }) {

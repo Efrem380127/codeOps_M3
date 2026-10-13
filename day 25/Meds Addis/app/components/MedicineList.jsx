@@ -13,21 +13,21 @@ import { getMedicines, filterMedicines } from "@/lib/catalog";
  * `searchParams` is passed in from the page rather than read here, so this
  * component stays a pure function of its props.
  */
-export default async function MedicineList({ q = "", category = "" }) {
+export default async function MedicineList({ q = "", category = "", offers = false }) {
   const all = await getMedicines();
-  const results = filterMedicines(all, { q, category });
+  const results = filterMedicines(all, { q, category, offers });
 
   if (results.length === 0) {
     return (
       <EmptyState
         icon="search"
-        title="No medicines match that search"
+        title={offers ? "No reduced lines match that filter" : "No medicines match that search"}
         actionHref="/medicines"
         actionLabel="Clear filters"
       >
-        Try the generic name instead of the brand — searching for
-        &ldquo;amoxicillin&rdquo; finds the same medicine as
-        &ldquo;Amoxil&rdquo;.
+        {offers
+          ? "Nothing in that combination is currently reduced. Clear the filter to see the whole catalogue."
+          : "Try the generic name instead of the brand — searching for “amoxicillin” finds the same medicine as “Amoxil”."}
       </EmptyState>
     );
   }
@@ -37,6 +37,7 @@ export default async function MedicineList({ q = "", category = "" }) {
       <p className="small muted mb-4" aria-live="polite">
         Showing {results.length} of {all.length} medicines
         {category ? ` in ${category}` : ""}
+        {offers ? " on offer" : ""}
         {q ? ` matching “${q}”` : ""}.
       </p>
 

@@ -128,10 +128,16 @@ async function CatalogueResults({ searchParams }) {
   const params = await searchParams;
   const q = typeof params?.q === "string" ? params.q : "";
   const category = typeof params?.category === "string" ? params.category : "";
+  const offers = params?.offers === "1";
 
   return (
     <>
-      <CategoryFilter categories={categories} active={category} query={q} />
+      <CategoryFilter
+        categories={categories}
+        active={category}
+        query={q}
+        offers={offers}
+      />
 
       {/*
         A second, inner boundary. The chips above paint as soon as the params
@@ -145,7 +151,7 @@ async function CatalogueResults({ searchParams }) {
           server output, so none of the list's code enters the browser bundle.
         */}
         <FilterShell label="medicines">
-          <MedicineList q={q} category={category} />
+          <MedicineList q={q} category={category} offers={offers} />
         </FilterShell>
       </Suspense>
     </>

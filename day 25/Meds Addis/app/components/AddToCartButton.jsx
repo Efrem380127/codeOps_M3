@@ -6,6 +6,14 @@ import Icon from "./Icon";
 /**
  * Add to cart, with an inline quantity stepper.
  *
+ * Two shapes:
+ *   - default        a labelled button, used on the detail page and anywhere
+ *                    there is room for words.
+ *   - variant="round" a circular icon button, used in the product grid where
+ *                    the card's foot is already carrying the price. It keeps
+ *                    an aria-label, so the accessible name is unaffected by the
+ *                    label being invisible.
+ *
  * Accessibility decisions worth naming:
  *   - It is a real <button>, not a clickable div.
  *   - When the item is already in the cart the control becomes a labelled
@@ -14,14 +22,26 @@ import Icon from "./Icon";
  *   - Out of stock disables the button AND sets aria-disabled, so the reason is
  *     available to assistive technology, not just visually greyed out.
  */
-export default function AddToCartButton({ medicine, size = "sm" }) {
+export default function AddToCartButton({ medicine, size = "sm", variant = "text" }) {
   const { cart, add, remove, setQuantity } = useCart();
 
   const line = cart.find((item) => item.medicineId === medicine.id);
   const soldOut = (medicine.stock ?? 0) === 0;
+  const round = variant === "round";
 
   if (soldOut) {
-    return (
+    return round ? (
+      <button
+        type="button"
+        className="add-round add-round--off"
+        disabled
+        aria-disabled="true"
+        aria-label={`${medicine.name} is out of stock`}
+        title="This medicine is out of stock"
+      >
+        <Icon name="close" />
+      </button>
+    ) : (
       <button
         type="button"
         className="btn btn--outline btn--sm"
@@ -35,7 +55,17 @@ export default function AddToCartButton({ medicine, size = "sm" }) {
   }
 
   if (!line) {
-    return (
+    return round ? (
+      <button
+        type="button"
+        className="add-round"
+        onClick={() => add(medicine, 1)}
+        aria-label={`Add ${medicine.name} to cart`}
+        title="Add to cart"
+      >
+        <Icon name="plus" />
+      </button>
+    ) : (
       <button
         type="button"
         className={`btn btn--primary btn--${size}`}
@@ -64,7 +94,8 @@ export default function AddToCartButton({ medicine, size = "sm" }) {
       </button>
 
       <span className="small" aria-live="polite">
-        <strong>{line.quantity}</strong> in cart
+        <strong>{line.quantity}</strong>
+        {round ? "" : " in cart"}
       </span>
 
       <button

@@ -59,11 +59,15 @@ export async function getReviewsForMedicine(medicineId) {
 /* handler without touching the fixtures twice.                               */
 /* -------------------------------------------------------------------------- */
 
-export function filterMedicines(list, { q = "", category = "" } = {}) {
+export function filterMedicines(list, { q = "", category = "", offers = false } = {}) {
   const needle = String(q).trim().toLowerCase();
 
   return list.filter((medicine) => {
     if (category && medicine.category !== category) return false;
+
+    // "Offers" is a filter over the same catalogue rather than a second one, so
+    // it composes with the category and the search instead of replacing them.
+    if (offers && discount(medicine) === null) return false;
 
     if (!needle) return true;
 
@@ -96,6 +100,41 @@ export function paginate(list, page = 1, pageSize = 6) {
     total,
     totalPages,
   };
+}
+
+/* -------------------------------------------------------------------------- */
+/* Pricing                                                                    */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * The saving on a line, or null when there is not one.
+ *
+ * The card shows a "% OFF" badge and a struck-through original price, and both
+ * are computed from this single object — so the percentage on the badge can
+ * never drift from the two numbers printed beside it.
+ *
+ * Returning null rather than zero matters: a badge that reads "0% OFF" is worse
+ * than no badge, and a compareAtPrice that is not actually above the price (a
+ * data-entry slip) must not render as a discount at all.
+ */
+export function discount(medicine) {
+  const now = Number(medicine?.price) || 0;
+  const was = Number(medicine?.compareAtPrice) || 0;
+
+  if (!was || !now || was <= now) return null;
+
+  return {
+    was,
+    now,
+    saving: was - now,
+    // Rounded, because a badge is a headline figure — "17% OFF", not 17.35%.
+    percent: Math.round(((was - now) / was) * 100),
+  };
+}
+
+/** Everything currently marked down — drives the "Offers" strip. */
+export function discountedMedicines() {
+  return medicines.filter((medicine) => discount(medicine) !== null);
 }
 
 /* -------------------------------------------------------------------------- */

@@ -1,4 +1,4 @@
-import { Archivo, IBM_Plex_Mono } from "next/font/google";
+import { Plus_Jakarta_Sans, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
 
 import Header from "@/app/components/Header";
@@ -10,18 +10,18 @@ import Providers from "@/app/providers";
  * blocking request to fonts.googleapis.com, no layout shift from a late font
  * swap, and no third-party request in the visitor's network tab.
  *
- * Archivo is a grotesque drawn for signage and technical documentation. It has
- * the proportions of the Swiss tradition without being Helvetica, which is
- * exactly what a pharmacy label should sound like. It replaced Geist — the
- * create-next-app default, and the single most recognisable marker of an
- * unstyled Next.js project.
+ * Plus Jakarta Sans is the family the reference design sets everything in — a
+ * geometric sans with slightly rounded terminals and a tall x-height, which is
+ * what gives a consumer storefront its friendly, high-legibility tone. It
+ * replaced Archivo when the interface moved from the Clinical Swiss direction
+ * to the reference's.
  *
- * IBM Plex Mono carries every number, batch code and identifier. It was drawn
- * for IBM's brand rather than for a code editor, so it reads as instrument
- * labelling rather than as a developer terminal.
+ * IBM Plex Mono is retained, but only for identifiers — order numbers, batch
+ * codes, the dashboard's tabular figures. The reference sets no mono at all,
+ * and nowhere that a number is merely decorative uses it.
  */
-const archivo = Archivo({
-  variable: "--font-archivo",
+const jakarta = Plus_Jakarta_Sans({
+  variable: "--font-jakarta",
   subsets: ["latin"],
   display: "swap",
 });
@@ -89,7 +89,7 @@ export const viewport = {
    * rather than eyeballed, so the address bar and the page are the same colour.
    */
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f8fafc" },
+    { media: "(prefers-color-scheme: light)", color: "#f9fbfd" },
     { media: "(prefers-color-scheme: dark)", color: "#0a0c10" },
   ],
   colorScheme: "light dark",
@@ -112,7 +112,7 @@ export default function RootLayout({ children }) {
   return (
     <html
       lang="en"
-      className={`${archivo.variable} ${plexMono.variable}`}
+      className={`${jakarta.variable} ${plexMono.variable}`}
       // data-theme is written by the boot script above, which React cannot know
       // about at render time. Suppressing the warning here is correct: the
       // mismatch is intentional and already resolved before hydration.

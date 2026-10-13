@@ -72,7 +72,11 @@ export default function CartPage() {
                     width={80}
                     height={80}
                     sizes="80px"
-                    style={{ borderRadius: "var(--r)", objectFit: "cover" }}
+                    style={{
+                      borderRadius: "var(--r)",
+                      objectFit: "contain",
+                      background: "var(--surface-sunken)",
+                    }}
                   />
 
                   <div style={{ flex: 1, minWidth: "12rem" }}>

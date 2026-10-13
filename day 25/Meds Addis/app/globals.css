@@ -1,7 +1,9 @@
 /* ==========================================================================
    Meds Addis — design system
-   Clinical Swiss: a regulated medical label, not a consumer app.
-   See .impeccable.md for the direction this encodes.
+
+   Rounded, teal and softly elevated, following the reference design supplied
+   for this pass: a consumer-facing pharmacy storefront rather than a regulated
+   label. See .impeccable.md for the direction this encodes.
 
    Hand-written CSS. No framework: the whole surface is controlled from here.
    Order: tokens -> reset -> base -> layout -> components -> states -> a11y
@@ -37,63 +39,87 @@
 
   /* --- Surfaces -----------------------------------------------------------
      `paper` is deliberately not #fff. A page of pure white is one of the
-     clearest signals of an unstyled default. */
-  --paper: light-dark(oklch(98.4% 0.003 255), oklch(15.5% 0.008 255));
+     clearest signals of an unstyled default. It is lighter than it was, to sit
+     under the elevated white cards the reference uses. */
+  --paper: light-dark(oklch(98.8% 0.003 240), oklch(15.5% 0.008 255));
   --surface: light-dark(oklch(100% 0 0), oklch(19.5% 0.008 255));
-  --surface-sunken: light-dark(oklch(96.6% 0.004 255), oklch(23.5% 0.008 255));
+  --surface-sunken: light-dark(oklch(97.2% 0.005 220), oklch(23.5% 0.008 255));
 
   /* --- Rules --------------------------------------------------------------
-     The only mechanism for depth in this system. There are no shadows. */
-  --rule: light-dark(oklch(89% 0.006 255), oklch(29% 0.010 255));
-  --rule-strong: light-dark(oklch(78% 0.008 255), oklch(40% 0.012 255));
-  --rule-ink: var(--ink-0);
+     Hairlines are no longer the only mechanism for depth, but they still do
+     the work inside tables, lists and the spec blocks. */
+  --rule: light-dark(oklch(92.5% 0.006 230), oklch(29% 0.010 255));
+  --rule-strong: light-dark(oklch(84% 0.008 230), oklch(40% 0.012 255));
+
+  /* --- Brand --------------------------------------------------------------
+     Sampled from the reference rather than eyeballed: #17a69a, the teal that
+     carries the primary buttons, the price highlights and the tinted panels.
+     oklch(65% 0.111 186) is that exact colour converted, so its lightness
+     steps stay perceptually even alongside the neutral ramp.
+     This is now the accent of the whole interface. */
+  --brand: light-dark(oklch(65% 0.111 186), oklch(74% 0.108 186));
+  --brand-strong: light-dark(oklch(56% 0.108 186), oklch(66% 0.110 186));
+  --brand-ink: light-dark(oklch(45% 0.100 186), oklch(84% 0.080 186));
+  --brand-wash: light-dark(oklch(96.5% 0.030 186), oklch(27% 0.045 186));
+  --brand-rule: light-dark(oklch(87% 0.055 186), oklch(42% 0.070 186));
+  --on-brand: oklch(100% 0 0);
 
   /* --- Signal -------------------------------------------------------------
-     Prescription amber. The single accent in the system. It marks
-     prescription-only lines, stock warnings, and focus. Nothing else.
+     Prescription amber. No longer the brand colour — teal took that job. It
+     now means exactly one thing: this line is prescription-only, or this stock
+     is running low. Keeping it is what stops the pharmacy distinction from
+     dissolving into a single brand hue.
      Desaturated slightly in dark mode, where saturated colour glares. */
   --signal: light-dark(oklch(65% 0.150 68), oklch(76% 0.135 68));
   --signal-ink: light-dark(oklch(42% 0.115 62), oklch(86% 0.105 72));
   --signal-wash: light-dark(oklch(96.5% 0.028 72), oklch(27% 0.045 66));
-  --signal-rule: light-dark(oklch(82% 0.105 68), oklch(45% 0.090 68));
-
-  /* The signal as a pressed fill. Deliberately deep in BOTH schemes, because
-     the label on it has to be light in both — which is what --signal-ink
-     cannot provide, since it flips to a light amber in dark mode. Pointing a
-     hover state at --signal-ink produced white-on-light-amber there. */
-  --signal-strong: light-dark(oklch(50% 0.150 68), oklch(54% 0.140 68));
-
-  /* Text placed on a signal or ink fill.
-     Amber is light in both schemes, so this is dark in both — unlike Addis
-     Eats, where paprika is dark in light mode and the token therefore flips.
-     Same name, different profile, because the colour itself differs. */
-  --on-accent: oklch(24% 0.055 68);
-  --on-accent-strong: oklch(98% 0.015 68);
 
   /* --- Semantic -----------------------------------------------------------
-     Kept muted on purpose. A system with one signal colour cannot afford a
-     second one shouting at the same volume. */
-  --ok: light-dark(oklch(52% 0.098 158), oklch(74% 0.090 158));
-  --ok-ink: light-dark(oklch(40% 0.088 158), oklch(84% 0.080 158));
-  --ok-wash: light-dark(oklch(96.5% 0.022 158), oklch(26% 0.035 158));
+     Held at a green hue clearly separated from the brand teal (152 against
+     186), so "in stock" and "this is the brand" never read as the same
+     message. Kept muted: a system with one accent cannot afford a second
+     colour shouting at the same volume. */
+  --ok: light-dark(oklch(52% 0.100 152), oklch(74% 0.092 152));
+  --ok-ink: light-dark(oklch(40% 0.088 152), oklch(84% 0.080 152));
+  --ok-wash: light-dark(oklch(96.5% 0.022 152), oklch(26% 0.035 152));
 
   --danger: light-dark(oklch(52% 0.170 27), oklch(72% 0.150 27));
   --danger-ink: light-dark(oklch(43% 0.160 27), oklch(84% 0.090 27));
   --danger-wash: light-dark(oklch(96.5% 0.022 27), oklch(26% 0.050 27));
 
   /* --- Geometry -----------------------------------------------------------
-     Zero radius. Sharp rectangles are the printed-form metaphor, and they are
-     the single most visible break from the rounded-card default. Circles are
-     allowed only for status dots, which are genuinely circular objects. */
-  --r: 0px;
+     Rounded, following the reference: pill controls, softly rounded cards and
+     a generous radius on the large tinted panels. */
+  --r-xs: 6px;
+  --r-sm: 10px;
+  --r: 14px;
+  --r-lg: 20px;
+  --r-xl: 28px;
   --r-full: 999px;
 
+  /* --- Depth --------------------------------------------------------------
+     The previous system had no shadows at all; depth came from hairlines. The
+     reference leans on soft elevation instead, so these are deliberately wide
+     and low-contrast rather than dark and tight.
+     light-dark() accepts colours only, so the shadow colour is its own token
+     and each shadow composes around it. */
+  --shadow-color: light-dark(rgb(16 24 40 / 0.07), rgb(0 0 0 / 0.55));
+  --shadow-color-lg: light-dark(rgb(16 24 40 / 0.13), rgb(0 0 0 / 0.65));
+  --shadow-xs: 0 1px 2px var(--shadow-color);
+  --shadow-sm: 0 1px 3px var(--shadow-color);
+  --shadow: 0 4px 16px -4px var(--shadow-color);
+  --shadow-lg: 0 16px 40px -12px var(--shadow-color-lg);
+  --shadow-brand: 0 10px 28px -10px
+    color-mix(in oklab, var(--brand) 50%, transparent);
+
   /* --- Type ---------------------------------------------------------------
-     One grotesque for structure, one mono for data. The reference says most
-     projects need one family, not two; this needs two because numbers are a
-     first-class content type here, not an afterthought. */
-  --font-sans: var(--font-archivo), "Archivo", ui-sans-serif, system-ui,
-    -apple-system, "Segoe UI", sans-serif;
+     One family for structure, one mono for data. The reference sets everything
+     in a single geometric sans, which is what Plus Jakarta Sans is; the mono
+     survives only for identifiers, batch codes and order numbers, where
+     tabular figures genuinely help.
+     The reference says most projects need one family, not two. */
+  --font-sans: var(--font-jakarta), "Plus Jakarta Sans", ui-sans-serif,
+    system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-mono: var(--font-plex-mono), "IBM Plex Mono", ui-monospace,
     SFMono-Regular, Menlo, Consolas, monospace;
 
@@ -107,11 +133,11 @@
   --t-lg: 1.375rem; /* 22px */
   --t-xl: 1.875rem; /* 30px */
   --t-2xl: 2.375rem; /* 38px */
-  --t-display: clamp(2.5rem, 1.5rem + 4.4vw, 4.5rem);
+  --t-display: clamp(2.5rem, 1.4rem + 4.6vw, 4.75rem);
 
-  --lh-tight: 1.02;
-  --lh-head: 1.14;
-  --lh-body: 1.55;
+  --lh-tight: 1.05;
+  --lh-head: 1.2;
+  --lh-body: 1.6;
 
   /* --- Space --------------------------------------------------------------
      Not a uniform progression. The jump from sp-6 to sp-7 is deliberately
@@ -126,11 +152,11 @@
   --sp-8: 4.5rem;
   --sp-9: 7rem;
 
-  --ring: 0 0 0 2px var(--paper), 0 0 0 4px var(--signal);
+  --ring: 0 0 0 2px var(--paper), 0 0 0 4px var(--brand);
   --ring-danger: 0 0 0 2px var(--paper), 0 0 0 4px var(--danger);
 
-  --container: 1200px;
-  --header-h: 64px;
+  --container: 1240px;
+  --header-h: 68px;
 
   /* Exponential ease-out. Nothing in this system bounces. */
   --ease: cubic-bezier(0.16, 1, 0.3, 1);
@@ -335,16 +361,15 @@ hr {
   max-width: 62ch;
 }
 
-/* Section numbering, in mono, like a specification sheet. This replaces the
-   uppercase eyebrow that used to sit above every heading — a device so common
-   it had stopped carrying information. */
+/* Section numbering. The reference carries no eyebrow above its headings, so
+   this is the quietest possible label: brand-tinted, small and semibold,
+   sitting directly above the heading it belongs to. */
 .section-index {
   display: block;
-  font-family: var(--font-mono);
-  font-size: var(--t-2xs);
-  font-weight: 500;
-  letter-spacing: 0.1em;
-  color: var(--ink-3);
+  font-size: var(--t-xs);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--brand-ink);
   margin-block-end: var(--sp-3);
 }
 
@@ -364,26 +389,31 @@ hr {
   }
 }
 
-/* Legacy label style. Kept because several pages use it, but restyled as a
-   mono annotation rather than an uppercase brand chip. */
+/* Legacy label style. Kept because several pages use it, restyled to the
+   reference's language: a small brand-tinted label behind a brand dash.
+
+   Sentence case, not uppercase. The markup already authors these as sentences
+   — "Staff workspace", "Catalogue", "Tracking" — and forcing them into
+   uppercase with wide tracking is the single most reliable marker of a
+   generated interface. The dash and the brand ink carry the "this is a label"
+   signal instead, which is what the reference does. */
 .eyebrow {
   display: inline-flex;
   align-items: center;
   gap: var(--sp-2);
-  font-family: var(--font-mono);
-  font-size: var(--t-2xs);
-  font-weight: 500;
-  letter-spacing: 0.09em;
-  text-transform: uppercase;
-  color: var(--ink-3);
+  font-size: var(--t-xs);
+  font-weight: 700;
+  letter-spacing: 0.005em;
+  color: var(--brand-ink);
   margin-block-end: var(--sp-3);
 }
 
 .eyebrow::before {
   content: "";
-  width: 14px;
-  height: 1px;
-  background: var(--signal);
+  width: 16px;
+  height: 2px;
+  border-radius: var(--r-full);
+  background: var(--brand);
   flex-shrink: 0;
 }
 
@@ -444,11 +474,9 @@ hr {
 }
 
 .data-list dt {
-  font-family: var(--font-mono);
   font-size: var(--t-2xs);
   font-weight: 500;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  letter-spacing: 0.01em;
   color: var(--ink-3);
   padding-block-start: 3px;
 }
@@ -481,26 +509,27 @@ hr {
 
 /* --------------------------------------------------------------------------
    6. Site header
+
+   Two rows, following the reference: the utility row (brand, search, upload,
+   account, cart) and the category bar underneath. Both are sticky, so the
+   search field is reachable from anywhere in the catalogue.
    -------------------------------------------------------------------------- */
 
 .site-header {
   position: sticky;
   top: 0;
   z-index: 50;
-  background-color: var(--paper);
-  border-block-end: 1px solid var(--rule);
-  /* The regulatory band. One 2px amber rule across the top of every page is
-     the cheapest possible brand device, and it is the only place amber appears
-     without meaning "prescription". */
-  border-block-start: 2px solid var(--signal);
+  background: var(--surface);
+  box-shadow: var(--shadow-xs);
 }
 
 .site-header__bar {
   min-height: var(--header-h);
   display: flex;
   align-items: center;
-  gap: var(--sp-4);
+  gap: var(--sp-3);
   flex-wrap: wrap;
+  padding-block: var(--sp-3);
 }
 
 .brand {
@@ -509,31 +538,33 @@ hr {
   gap: var(--sp-3);
   text-decoration: none;
   color: var(--ink-0);
-  font-weight: 600;
+  font-weight: 800;
   letter-spacing: -0.03em;
   font-size: var(--t-md);
-  margin-inline-end: auto;
+  flex-shrink: 0;
 }
 
 .brand:hover {
   color: var(--ink-0);
 }
 
-/* Was a gradient tile. Now a solid ink square holding a drawn cross — a
-   mark, not a decoration. */
+/* A brand tile holding a drawn cross — a mark, not a decoration. The soft teal
+   glow under it is the only place the brand colour is used decoratively. */
 .brand__mark {
   display: grid;
   place-items: center;
-  width: 30px;
-  height: 30px;
-  background: var(--ink-0);
-  color: var(--paper);
+  width: 38px;
+  height: 38px;
+  border-radius: var(--r-sm);
+  background: var(--brand);
+  color: var(--on-brand);
+  box-shadow: var(--shadow-brand);
   flex-shrink: 0;
 }
 
 .brand__mark .icon {
-  width: 15px;
-  height: 15px;
+  width: 19px;
+  height: 19px;
 }
 
 .brand__text {
@@ -542,172 +573,283 @@ hr {
   line-height: 1.1;
 }
 
+/* The reference uppercases its logotype subtitle, but that word is
+   "PHARMACY" — eight characters. Ours is "Pharmacy & delivery", twenty, and
+   uppercasing a phrase that long stops reading as a logotype and starts
+   reading as a shout. Sentence case, tighter tracking. */
 .brand__sub {
-  font-family: var(--font-mono);
-  font-size: 0.625rem;
-  font-weight: 400;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.005em;
   color: var(--ink-3);
   margin-block-start: 2px;
 }
 
-/* Primary nav: a horizontal bar on desktop, a toggleable panel on mobile. */
-.nav-toggle {
+/* --- Search --------------------------------------------------------------
+   A pill: grey glyph on the left, filled circular button on the right. It is a
+   real GET form (see SearchBar.jsx), so the focus ring has to sit on the whole
+   control rather than on the bare input. */
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  flex: 1 1 300px;
+  min-width: 0;
+  max-width: 560px;
+  padding: 5px 5px 5px var(--sp-4);
+  background: var(--surface-sunken);
+  border: 1px solid var(--rule);
+  border-radius: var(--r-full);
+  transition: background-color var(--dur) var(--ease),
+    border-color var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
+}
+
+.search-bar:focus-within {
+  background: var(--surface);
+  border-color: var(--brand-rule);
+  box-shadow: 0 0 0 4px var(--brand-wash);
+}
+
+.search-bar__glyph {
+  width: 18px;
+  height: 18px;
+  color: var(--ink-3);
+  flex-shrink: 0;
+}
+
+.search-bar__input {
+  flex: 1;
+  min-width: 0;
+  padding-block: 9px;
+  border: 0;
+  background: none;
+  outline: none;
+  font: inherit;
+  font-size: var(--t-sm);
+  color: var(--ink-0);
+}
+
+.search-bar__input::placeholder {
+  color: var(--ink-4);
+}
+
+/* The WebKit clear button is a different shape on every platform and lands on
+   top of our own controls. */
+.search-bar__input::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.search-bar__submit {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  flex-shrink: 0;
+  border: 0;
+  border-radius: var(--r-full);
+  background: var(--brand);
+  color: var(--on-brand);
+  transition: background-color var(--dur) var(--ease);
+}
+
+.search-bar__submit:hover {
+  background: var(--brand-strong);
+}
+
+.search-bar__submit .icon {
+  width: 17px;
+  height: 17px;
+}
+
+/* --- Utility actions ------------------------------------------------------ */
+
+.site-header__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  margin-inline-start: auto;
+}
+
+.header-action {
   display: inline-flex;
   align-items: center;
   gap: var(--sp-2);
-  min-height: 44px;
+  min-height: 42px;
   padding-inline: var(--sp-3);
-  border: 1px solid var(--rule-strong);
-  border-radius: var(--r);
-  background: transparent;
-  font-family: var(--font-mono);
-  font-size: var(--t-2xs);
-  font-weight: 500;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.nav-toggle__bars {
-  display: grid;
-  gap: 3px;
-}
-
-.nav-toggle__bars span {
-  display: block;
-  width: 16px;
-  height: 1.5px;
-  background: var(--ink-0);
-}
-
-.site-nav {
-  display: none;
-  flex-basis: 100%;
-}
-
-.site-nav[data-open="true"] {
-  display: block;
-  background: var(--paper);
-  border-block-start: 1px solid var(--rule);
-  padding-block: var(--sp-2) var(--sp-3);
-}
-
-.site-nav__list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-}
-
-.site-nav__link {
-  display: flex;
-  align-items: center;
-  min-height: 44px;
-  padding-inline: var(--sp-2);
-  border-radius: var(--r);
-  color: var(--ink-2);
+  border-radius: var(--r-full);
+  color: var(--ink-1);
   text-decoration: none;
   font-size: var(--t-sm);
-  font-weight: 500;
-  letter-spacing: -0.006em;
-  /* The active state is a rule under the word, not a filled pill. */
-  border-block-end: 2px solid transparent;
-}
-
-.site-nav__link:hover {
-  color: var(--ink-0);
-  border-block-end-color: var(--rule-strong);
-}
-
-.site-nav__link[aria-current="page"] {
-  color: var(--ink-0);
   font-weight: 600;
-  border-block-end-color: var(--signal);
+  white-space: nowrap;
+  transition: color var(--dur) var(--ease),
+    background-color var(--dur) var(--ease);
 }
 
-@media (min-width: 900px) {
-  .nav-toggle {
-    display: none;
-  }
-
-  .site-nav,
-  .site-nav[data-open="false"] {
-    display: block;
-    flex-basis: auto;
-    background: none;
-    border: 0;
-    padding: 0;
-  }
-
-  .site-nav__list {
-    flex-direction: row;
-    align-items: center;
-    gap: var(--sp-4);
-  }
-
-  .site-nav__link {
-    min-height: 40px;
-    padding-inline: 0;
-  }
+.header-action:hover {
+  color: var(--brand-ink);
+  background: var(--brand-wash);
 }
 
-/* Cart. A rectangle with a hairline, not a filled pill. */
+.header-action .icon {
+  width: 18px;
+  height: 18px;
+}
+
+/* Cart. A light pill with a filled count bubble, as in the reference. */
 .cart-pill {
   display: inline-flex;
   align-items: center;
   gap: var(--sp-2);
-  min-height: 44px;
-  padding-inline: var(--sp-4);
-  border: 1px solid var(--ink-0);
-  border-radius: var(--r);
-  background: transparent;
+  min-height: 42px;
+  padding-inline: var(--sp-3);
+  border: 1px solid var(--rule);
+  border-radius: var(--r-full);
+  background: var(--surface-sunken);
   color: var(--ink-0);
   text-decoration: none;
-  font-family: var(--font-mono);
-  font-size: var(--t-2xs);
-  font-weight: 500;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  font-size: var(--t-sm);
+  font-weight: 600;
   white-space: nowrap;
-  transition: background-color var(--dur) var(--ease),
-    color var(--dur) var(--ease);
+  transition: border-color var(--dur) var(--ease),
+    background-color var(--dur) var(--ease), color var(--dur) var(--ease);
 }
 
 .cart-pill:hover {
-  background: var(--ink-0);
-  color: var(--paper);
+  border-color: var(--brand-rule);
+  background: var(--brand-wash);
+  color: var(--brand-ink);
 }
 
-.cart-pill__count {
+.cart-pill__icon {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+}
+
+.cart-pill__icon .icon {
+  width: 19px;
+  height: 19px;
+}
+
+.cart-pill__bubble {
+  position: absolute;
+  inset-block-start: -8px;
+  inset-inline-end: -10px;
+  display: grid;
+  place-items: center;
+  min-width: 18px;
+  height: 18px;
+  padding-inline: 4px;
+  border-radius: var(--r-full);
+  background: var(--brand);
+  color: var(--on-brand);
+  font-size: 0.625rem;
+  font-weight: 700;
+  line-height: 1;
   font-variant-numeric: tabular-nums;
-  font-weight: 600;
 }
 
 /* Theme control. Sits beside the cart and behaves like a form control. */
 .theme-toggle {
   display: inline-grid;
   place-items: center;
-  width: 44px;
-  height: 44px;
-  border: 1px solid var(--rule-strong);
-  border-radius: var(--r);
+  width: 42px;
+  height: 42px;
+  border: 1px solid var(--rule);
+  border-radius: var(--r-full);
   background: transparent;
   color: var(--ink-2);
+  transition: color var(--dur) var(--ease),
+    border-color var(--dur) var(--ease), background-color var(--dur) var(--ease);
+}
+
+.theme-toggle:hover {
+  color: var(--brand-ink);
+  border-color: var(--brand-rule);
+  background: var(--brand-wash);
+}
+
+.theme-toggle .icon {
+  width: 18px;
+  height: 18px;
+}
+
+/* --- Category bar ---------------------------------------------------------
+   The second row. Scrolls horizontally rather than collapsing into a
+   disclosure, so every category is reachable without JavaScript and without an
+   open/closed state that can get out of sync with the route. */
+
+.cat-nav {
+  border-block-start: 1px solid var(--rule);
+  background: var(--surface);
+}
+
+.cat-nav__inner {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-1);
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.cat-nav__inner::-webkit-scrollbar {
+  display: none;
+}
+
+.cat-nav__link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-3) var(--sp-3);
+  color: var(--ink-2);
+  text-decoration: none;
+  font-size: var(--t-sm);
+  font-weight: 600;
+  white-space: nowrap;
+  border-block-end: 2px solid transparent;
   transition: color var(--dur) var(--ease),
     border-color var(--dur) var(--ease);
 }
 
-.theme-toggle:hover {
-  color: var(--ink-0);
-  border-color: var(--ink-0);
+.cat-nav__link:hover {
+  color: var(--brand-ink);
+  border-block-end-color: var(--brand-rule);
 }
 
-.theme-toggle .icon {
-  width: 17px;
-  height: 17px;
+.cat-nav__badge {
+  padding: 2px 7px;
+  border-radius: var(--r-full);
+  background: var(--brand);
+  color: var(--on-brand);
+  font-size: 0.5625rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* On a narrow screen the search field takes its own full-width row, so the
+   brand and the actions share the first line instead of the field squeezing
+   them into a second, ragged one. */
+@media (max-width: 899px) {
+  .search-bar {
+    order: 3;
+    flex-basis: 100%;
+    max-width: none;
+  }
+}
+
+@media (max-width: 640px) {
+  /* The icon keeps the control recognisable; the label would push the actions
+     onto a second line. The link carries aria-label, so the accessible name
+     survives hiding the text. */
+  .header-action__label,
+  .cart-pill__label {
+    display: none;
+  }
 }
 
 /* --------------------------------------------------------------------------
@@ -720,8 +862,8 @@ hr {
 
 .site-footer {
   flex-shrink: 0;
-  background: var(--paper);
-  border-block-start: 1px solid var(--rule-strong);
+  background: var(--surface-sunken);
+  border-block-start: 1px solid var(--rule);
   color: var(--ink-2);
   padding-block: var(--sp-7) var(--sp-5);
 }
@@ -744,11 +886,9 @@ hr {
 
 .site-footer h2 {
   color: var(--ink-0);
-  font-family: var(--font-mono);
   font-size: var(--t-2xs);
   font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.01em;
   margin-block-end: var(--sp-3);
 }
 
@@ -764,18 +904,24 @@ hr {
   margin-block-start: var(--sp-6);
   padding-block-start: var(--sp-4);
   border-block-start: 1px solid var(--rule);
-  font-family: var(--font-mono);
   font-size: var(--t-2xs);
-  letter-spacing: 0.04em;
+  letter-spacing: 0.005em;
   color: var(--ink-3);
 }
 
 /* --------------------------------------------------------------------------
    8. Buttons
 
-   Primary is near-black ink, not the accent colour. In a system where amber
-   means "prescription", a brand-coloured button would dilute the one signal
-   the interface has.
+   Primary is brand teal — the reference's accent, and the colour the whole
+   interface now uses for anything you can act on. The previous direction made
+   it near-black ink and reserved amber for the prescription path; the reference
+   instead puts the prescription CTA in the same teal as everything else, and
+   distinguishes it by size and placement rather than by hue.
+
+   There is deliberately no amber button variant any more. Amber means
+   prescription-only or low-stock, both of which are *states* you read, not
+   actions you take. A filled amber button put the warning colour under the
+   user's cursor, which is the one place it should never be.
    -------------------------------------------------------------------------- */
 
 .btn {
@@ -785,13 +931,13 @@ hr {
   gap: var(--sp-2);
   /* 44px minimum touch target on every button, everywhere. */
   min-height: 44px;
-  padding: 0 var(--sp-4);
+  padding: 0 var(--sp-5);
   border: 1px solid transparent;
-  border-radius: var(--r);
+  border-radius: var(--r-full);
   background: var(--surface);
   color: var(--ink-0);
   font-size: var(--t-sm);
-  font-weight: 500;
+  font-weight: 600;
   letter-spacing: -0.004em;
   line-height: 1;
   text-decoration: none;
@@ -807,27 +953,29 @@ hr {
 }
 
 .btn--primary {
-  background: var(--ink-0);
-  border-color: var(--ink-0);
-  color: var(--paper);
+  background: var(--brand);
+  border-color: var(--brand);
+  color: var(--on-brand);
+  box-shadow: var(--shadow-brand);
 }
 
 .btn--primary:hover {
-  background: var(--ink-1);
-  border-color: var(--ink-1);
-  color: var(--paper);
+  background: var(--brand-strong);
+  border-color: var(--brand-strong);
+  color: var(--on-brand);
 }
 
 .btn--outline {
-  border-color: var(--rule-strong);
-  background: transparent;
+  border-color: var(--rule);
+  background: var(--surface);
   color: var(--ink-0);
+  box-shadow: var(--shadow-xs);
 }
 
 .btn--outline:hover {
-  border-color: var(--ink-0);
-  background: transparent;
-  color: var(--ink-0);
+  border-color: var(--brand-rule);
+  background: var(--brand-wash);
+  color: var(--brand-ink);
 }
 
 .btn--ghost {
@@ -838,23 +986,6 @@ hr {
 .btn--ghost:hover {
   background: var(--surface-sunken);
   color: var(--ink-0);
-}
-
-/* The one button that is allowed to carry amber, because it is the
-   prescription path. */
-.btn--signal {
-  background: var(--signal);
-  border-color: var(--signal);
-  color: var(--on-accent);
-}
-
-/* Presses to a deeper amber that stays deep in both schemes, so the label can
-   stay light in both. This used to point at --signal-ink, which is a light
-   amber in dark mode — the hover state was white on light amber. */
-.btn--signal:hover {
-  background: var(--signal-strong);
-  border-color: var(--signal-strong);
-  color: var(--on-accent-strong);
 }
 
 .btn--danger {
@@ -881,17 +1012,19 @@ hr {
 /* --------------------------------------------------------------------------
    9. Surfaces
 
-   `.card` is retained because the pages use it, but it no longer means
-   "rounded box with a shadow". It is a bordered region on paper, and the
-   border is a hairline. Most content should not need it at all — a rule
-   separates just as well and weighs less.
+   `.card` is retained because the pages use it. It is the reference's card:
+   a rounded, softly elevated surface on a tinted page. The radius and the
+   shadow are the point — a card that is only a hairline border reads as a
+   table cell, which is what the previous direction wanted and this one does
+   not.
    -------------------------------------------------------------------------- */
 
 .card {
   background: var(--surface);
   border: 1px solid var(--rule);
-  border-radius: var(--r);
+  border-radius: var(--r-lg);
   padding: var(--sp-5);
+  box-shadow: var(--shadow-xs);
 }
 
 .card--flush {
@@ -904,86 +1037,41 @@ hr {
   margin-block-end: var(--sp-2);
 }
 
-/* A region marked by a single heavy edge rather than a full box. Used where a
-   box would be too much furniture. */
-.rule-block {
-  border-inline-start: 2px solid var(--signal);
-  padding-inline-start: var(--sp-4);
-}
-
-/* --------------------------------------------------------------------------
-   Numbered procedure.
-
-   Replaces four identical cards each headed "Step 1", "Step 2"… The ordering
-   is the only information the number carries, so it belongs in the margin as
-   a marker rather than repeated inside the same box four times.
-   -------------------------------------------------------------------------- */
-
-.steps {
-  list-style: none;
-  padding: 0;
-  display: grid;
-  gap: 0;
-  border-block-start: 1px solid var(--rule-strong);
-}
-
-.steps li {
-  display: grid;
-  grid-template-columns: 2.25rem minmax(0, 1fr);
-  gap: var(--sp-3);
-  padding-block: var(--sp-4);
-  border-block-end: 1px solid var(--rule);
-}
-
-.steps li:last-child {
-  border-block-end: 0;
-}
-
-.steps__n {
-  font-family: var(--font-mono);
-  font-size: var(--t-2xs);
-  font-weight: 500;
-  letter-spacing: 0.08em;
-  color: var(--signal-ink);
-  padding-block-start: 3px;
-}
-
-.steps h3 {
-  font-size: var(--t-base);
-  font-weight: 600;
-  letter-spacing: -0.012em;
-}
-
-.steps p {
-  font-size: var(--t-sm);
-  color: var(--ink-2);
-  margin-block-start: var(--sp-1);
-  max-width: 62ch;
-}
-
 /* --------------------------------------------------------------------------
    10. Hero
 
-   The gradient panel is gone. The type carries it: a heavy top rule, an
-   oversized headline on the left of an asymmetric grid, and a data strip set
-   in mono underneath. No fill, no shadow, no rounded container.
+   Two-tone headline on the left, the product render on the right, and a
+   social-proof row under the buttons. The headline's second line carries the
+   brand colour — the cheapest way to make a hero feel branded without painting
+   the whole panel.
    -------------------------------------------------------------------------- */
 
+/* The reference's hero is a tinted panel, not a bare band of page. The gradient
+   runs teal-to-surface on the diagonal so the panel is visible in light mode
+   without being a block of colour, and reads as a lifted surface in dark mode. */
 .hero {
-  padding-block: var(--sp-6) var(--sp-7);
-  border-block-start: 2px solid var(--ink-0);
-  margin-block-end: var(--sp-7);
+  padding: var(--sp-6) var(--sp-4);
+  margin-block-end: var(--sp-6);
+  border-radius: var(--r-xl);
+  background: linear-gradient(135deg, var(--brand-wash), var(--surface) 68%);
+  box-shadow: var(--shadow-xs);
+}
+
+@media (min-width: 640px) {
+  .hero {
+    padding: var(--sp-7) var(--sp-6);
+  }
 }
 
 .hero__inner {
   display: grid;
   gap: var(--sp-6);
-  align-items: end;
+  align-items: center;
 }
 
 @media (min-width: 960px) {
   .hero__inner {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 0.62fr);
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
     gap: var(--sp-8);
   }
 }
@@ -991,75 +1079,119 @@ hr {
 .hero h1 {
   color: var(--ink-0);
   font-size: var(--t-display);
-  font-weight: 600;
-  letter-spacing: -0.042em;
+  font-weight: 800;
+  letter-spacing: -0.045em;
   line-height: var(--lh-tight);
-  max-width: 14ch;
+  max-width: 15ch;
 }
 
-.hero p {
+/* The accent half of the headline. `display: block` puts it on its own line
+   regardless of where the text happens to wrap. */
+.hero__accent {
+  display: block;
+  color: var(--brand);
+}
+
+.hero__lede {
   color: var(--ink-2);
   font-size: var(--t-md);
-  line-height: 1.5;
-  max-width: 46ch;
+  line-height: 1.6;
+  max-width: 44ch;
+  margin-block-start: var(--sp-4);
 }
 
 .hero__actions {
   display: flex;
   flex-wrap: wrap;
   gap: var(--sp-3);
-  margin-block-start: var(--sp-2);
+  margin-block-start: var(--sp-5);
 }
 
-/* The trust markers, restyled from four rounded tiles into a specification
-   strip: mono labels above values, divided by vertical hairlines. */
-.hero__facts {
+.btn--lg {
+  min-height: 52px;
+  padding-inline: var(--sp-6);
+  font-size: var(--t-base);
+}
+
+/* Social proof. Initials rather than stock faces: a row of photographs of
+   people who do not exist is worse than no faces at all, and initials in the
+   brand tint carry the same "other people use this" signal honestly. */
+.hero__proof {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-5);
+  flex-wrap: wrap;
+  margin-block-start: var(--sp-6);
+  padding-block-start: var(--sp-5);
+  border-block-start: 1px solid var(--rule);
+}
+
+.avatars {
+  display: flex;
+  flex-shrink: 0;
+}
+
+.avatar {
   display: grid;
-  gap: 0;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  list-style: none;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  margin-inline-start: -11px;
+  border: 2px solid var(--surface);
+  border-radius: var(--r-full);
+  background: var(--brand-wash);
+  color: var(--brand-ink);
+  font-size: var(--t-xs);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.avatar:first-child {
+  margin-inline-start: 0;
+}
+
+.hero__proof-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-5);
+  margin: 0;
   padding: 0;
-  border-block-start: 1px solid var(--rule-strong);
+  list-style: none;
 }
 
-@media (min-width: 560px) {
-  .hero__facts {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-}
-
-.hero__facts li {
-  padding: var(--sp-3) var(--sp-4) var(--sp-3) 0;
-  border-inline-end: 1px solid var(--rule);
-}
-
-.hero__facts li:last-child {
-  border-inline-end: 0;
-}
-
-@media (min-width: 560px) {
-  .hero__facts li + li {
-    padding-inline-start: var(--sp-4);
-  }
-}
-
-.hero__facts strong {
+.hero__proof-list strong {
   display: block;
-  font-size: var(--t-lg);
-  font-weight: 600;
-  letter-spacing: -0.03em;
-  line-height: 1.1;
+  font-size: var(--t-md);
+  font-weight: 700;
+  letter-spacing: -0.02em;
   color: var(--ink-0);
 }
 
-.hero__facts span {
+.hero__proof-list span {
   display: block;
-  margin-block-start: var(--sp-1);
-  font-family: var(--font-mono);
-  font-size: var(--t-2xs);
-  letter-spacing: 0.07em;
-  text-transform: uppercase;
+  margin-block-start: 1px;
+  font-size: var(--t-xs);
   color: var(--ink-3);
+}
+
+/* No background of its own. This used to carry a radial brand-wash gradient,
+   which could never be seen: the hero image is an opaque JPEG on a white
+   ground, and at 100% width in a square box it covers the container completely.
+   The panel that is actually visible is the `.hero` gradient behind it. What
+   the visual needs is an edge, so it gets a radius and a shadow — without them
+   the white image merges into the near-white page in light mode and the panel
+   only appears to exist in dark mode. */
+.hero__visual {
+  position: relative;
+  border-radius: var(--r-xl);
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+}
+
+.hero__visual img {
+  display: block;
+  width: 100%;
+  height: auto;
 }
 
 /* --------------------------------------------------------------------------
@@ -1081,29 +1213,33 @@ hr {
   flex-direction: column;
   background: var(--surface);
   border: 1px solid var(--rule);
-  border-radius: var(--r);
+  border-radius: var(--r-lg);
   overflow: hidden;
-  transition: border-color var(--dur) var(--ease);
+  box-shadow: var(--shadow-xs);
+  transition: box-shadow var(--dur) var(--ease),
+    border-color var(--dur) var(--ease), transform var(--dur) var(--ease);
 }
 
 .med-card:hover {
-  border-color: var(--ink-0);
+  border-color: var(--brand-rule);
+  box-shadow: var(--shadow);
+  transform: translateY(-2px);
 }
 
 .med-card__media {
   position: relative;
   aspect-ratio: 4 / 3;
   background: var(--surface-sunken);
-  border-block-end: 1px solid var(--rule);
+  padding: var(--sp-4);
 }
 
+/* `contain`, not `cover`. The catalogue photography is bottles and boxes on
+   white; cropping them to fill the box cuts the tops off the ones that are
+   taller than they are wide. */
 .med-card__media img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  /* Product photography is the one place a slight desaturation helps: it keeps
-     the grid from turning into a colour swatch board. */
-  filter: saturate(0.85);
+  object-fit: contain;
 }
 
 .med-card__flags {
@@ -1140,12 +1276,11 @@ hr {
   text-decoration: underline;
 }
 
-/* The generic name was italic. Italic is a decorative signal; mono is a
-   functional one — this is the substance name, the thing you look up. */
+/* The generic name is the substance, so it stays quieter than the brand name
+   but in the body face — the reference sets no mono anywhere a number is not
+   actually being compared. */
 .med-card__generic {
-  font-family: var(--font-mono);
-  font-size: var(--t-2xs);
-  letter-spacing: 0.02em;
+  font-size: var(--t-xs);
   color: var(--ink-3);
 }
 
@@ -1177,8 +1312,7 @@ hr {
 }
 
 .price__unit {
-  font-family: var(--font-mono);
-  font-size: var(--t-2xs);
+  font-size: var(--t-xs);
   font-weight: 400;
   color: var(--ink-3);
 }
@@ -1186,53 +1320,57 @@ hr {
 /* --------------------------------------------------------------------------
    12. Tags
 
-   Was a row of filled pill badges — the single most recognisable marker of a
-   generated interface. Now an outlined mono tag, like a marker on a label.
-   Only the prescription tag is allowed to carry amber.
+   Filled pills, as on the reference — soft tinted washes with a matching ink,
+   no border, no monospace. The wash is what makes a tag read as a tag at a
+   glance; an outlined mono tag reads as a marker on a shipping label, which
+   was the previous direction's intent.
+
+   Only the prescription and low-stock tags carry amber, and only because they
+   are warnings. Stock, offers and information all resolve to green or brand.
    -------------------------------------------------------------------------- */
 
 .badge {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  padding: 2px 6px;
-  border: 1px solid currentColor;
-  border-radius: var(--r);
-  background: transparent;
-  font-family: var(--font-mono);
+  padding: 3px 9px;
+  border: 1px solid transparent;
+  border-radius: var(--r-full);
+  background: var(--surface-sunken);
   font-size: var(--t-2xs);
-  font-weight: 500;
-  letter-spacing: 0.07em;
-  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.01em;
   white-space: nowrap;
 }
 
 .badge--rx {
   color: var(--signal-ink);
-  border-color: var(--signal-rule);
   background: var(--signal-wash);
 }
 
 .badge--ok {
   color: var(--ok-ink);
+  background: var(--ok-wash);
 }
 
 .badge--low {
   color: var(--signal-ink);
-  border-color: var(--signal-rule);
   background: var(--signal-wash);
 }
 
 .badge--out {
   color: var(--danger-ink);
+  background: var(--danger-wash);
 }
 
 .badge--info {
-  color: var(--ink-2);
+  color: var(--brand-ink);
+  background: var(--brand-wash);
 }
 
 .badge--neutral {
-  color: var(--ink-3);
+  color: var(--ink-2);
+  background: var(--surface-sunken);
 }
 
 /* --------------------------------------------------------------------------
@@ -1262,11 +1400,9 @@ hr {
 }
 
 .field__label {
-  font-family: var(--font-mono);
   font-size: var(--t-2xs);
   font-weight: 500;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  letter-spacing: 0.01em;
   color: var(--ink-2);
 }
 
@@ -1279,14 +1415,16 @@ hr {
 .select,
 .textarea {
   width: 100%;
-  min-height: 44px;
-  padding: var(--sp-3);
-  border: 1px solid var(--rule-strong);
+  min-height: 46px;
+  padding: var(--sp-3) var(--sp-4);
+  border: 1px solid var(--rule);
   border-radius: var(--r);
   background: var(--surface);
   color: var(--ink-0);
   font-size: var(--t-sm);
-  transition: border-color var(--dur) var(--ease);
+  box-shadow: var(--shadow-xs);
+  transition: border-color var(--dur) var(--ease),
+    box-shadow var(--dur) var(--ease);
 }
 
 .textarea {
@@ -1302,14 +1440,14 @@ hr {
 .input:hover,
 .select:hover,
 .textarea:hover {
-  border-color: var(--ink-0);
+  border-color: var(--brand-rule);
 }
 
 .input:focus,
 .select:focus,
 .textarea:focus {
   outline: none;
-  border-color: var(--ink-0);
+  border-color: var(--brand);
   box-shadow: var(--ring);
 }
 
@@ -1342,7 +1480,7 @@ hr {
   width: 20px;
   height: 20px;
   margin-block-start: 2px;
-  accent-color: var(--ink-0);
+  accent-color: var(--brand);
   flex-shrink: 0;
 }
 
@@ -1359,19 +1497,22 @@ hr {
 /* --------------------------------------------------------------------------
    14. Alerts
 
-   A single heavy left rule, no fill by default. An alert is a statement, and
-   the statement is the text — the colour only tells you how to read it.
+   A tinted, rounded panel — the same soft wash the tags use, at panel scale.
+   The heavy left rule the previous direction used is gone: a 3px edge on a
+   square box reads as a form-validation error from 2014, and the reference
+   has no such device anywhere on it.
+
+   Colour still only says how to read the message. The title carries meaning.
    -------------------------------------------------------------------------- */
 
 .alert {
   display: flex;
   gap: var(--sp-3);
-  padding: var(--sp-4);
-  border: 1px solid var(--rule);
-  border-inline-start-width: 3px;
-  border-radius: var(--r);
+  padding: var(--sp-4) var(--sp-5);
+  border: 1px solid transparent;
+  border-radius: var(--r-lg);
   font-size: var(--t-sm);
-  background: var(--surface);
+  background: var(--surface-sunken);
   color: var(--ink-1);
 }
 
@@ -1382,33 +1523,40 @@ hr {
 }
 
 .alert--ok {
-  border-inline-start-color: var(--ok);
+  background: var(--ok-wash);
 }
 
 .alert--warn {
-  border-inline-start-color: var(--signal);
   background: var(--signal-wash);
 }
 
 .alert--error {
-  border-inline-start-color: var(--danger);
+  background: var(--danger-wash);
 }
 
 .alert--info {
-  border-inline-start-color: var(--ink-0);
+  background: var(--brand-wash);
 }
 
 /* --------------------------------------------------------------------------
    15. Tables
 
-   This is the densest surface in the product and it should look like it. No
-   outer card, no rounded wrapper — just rules.
+   A rounded card that happens to contain a table, rather than a table sitting
+   naked on the page. The previous direction deliberately specified "no outer
+   card, no rounded wrapper"; the reference wraps every region, so the table is
+   a region too.
+
+   The header band is tinted so the column labels stay legible against the
+   rows without needing a heavier rule to separate them.
    -------------------------------------------------------------------------- */
 
 .table-wrap {
   width: 100%;
   overflow-x: auto;
-  border-block-start: 1px solid var(--rule-strong);
+  border: 1px solid var(--rule);
+  border-radius: var(--r-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-xs);
 }
 
 .table {
@@ -1420,32 +1568,28 @@ hr {
 
 .table caption {
   text-align: start;
-  padding-block: var(--sp-3);
-  font-family: var(--font-mono);
+  padding: var(--sp-3) var(--sp-4);
   font-size: var(--t-2xs);
   font-weight: 500;
-  letter-spacing: 0.09em;
-  text-transform: uppercase;
+  letter-spacing: 0.01em;
   color: var(--ink-3);
 }
 
 .table th,
 .table td {
-  padding: var(--sp-3) var(--sp-3);
+  padding: var(--sp-3) var(--sp-4);
   text-align: start;
   border-block-end: 1px solid var(--rule);
   vertical-align: middle;
 }
 
 .table thead th {
-  background: transparent;
-  border-block-end: 1px solid var(--rule-strong);
-  font-family: var(--font-mono);
+  background: var(--surface-sunken);
+  border-block-end: 1px solid var(--rule);
   font-size: var(--t-2xs);
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--ink-3);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: var(--ink-2);
   white-space: nowrap;
 }
 
@@ -1454,7 +1598,7 @@ hr {
 }
 
 .table tbody tr:hover td {
-  background: var(--surface-sunken);
+  background: var(--brand-wash);
 }
 
 .table .num {
@@ -1524,32 +1668,44 @@ hr {
 /* --------------------------------------------------------------------------
    16. States — loading / empty / error
 
-   No dashed border and no decorative icon medallion. A rule above, a mono
-   label, and a sentence that tells the user what to do next.
+   A rounded, softly elevated panel with a brand-tinted icon well, centred.
+   The previous direction refused both the panel and the medallion — "a rule
+   above, a mono label" — which reads as a specification sheet when what the
+   user is actually looking at is a dead end. An empty state is the moment that
+   most needs to feel reassuring, and the reference's whole language is
+   reassuring.
+
+   The icon well is the same brand square the prescription banner uses, so an
+   empty catalogue and the upload CTA read as one family rather than two.
    -------------------------------------------------------------------------- */
 
 .state {
   display: grid;
-  justify-items: start;
-  text-align: start;
+  justify-items: center;
+  text-align: center;
   gap: var(--sp-3);
-  padding: var(--sp-7) 0;
-  border-block-start: 1px solid var(--rule-strong);
+  padding: var(--sp-7) var(--sp-5);
+  border: 1px solid var(--rule);
+  border-radius: var(--r-xl);
+  background: var(--surface);
+  box-shadow: var(--shadow-xs);
 }
 
 .state__icon {
   display: grid;
   place-items: center;
-  width: 40px;
-  height: 40px;
-  border: 1px solid var(--rule-strong);
-  color: var(--ink-2);
+  width: 56px;
+  height: 56px;
+  border: 0;
+  border-radius: var(--r);
+  background: var(--brand-wash);
+  color: var(--brand-ink);
   margin-block-end: var(--sp-1);
 }
 
 .state__icon .icon {
-  width: 18px;
-  height: 18px;
+  width: 26px;
+  height: 26px;
 }
 
 .state h2,
@@ -1592,24 +1748,31 @@ hr {
 
 .skeleton--card {
   height: 300px;
+  border-radius: var(--r-lg);
 }
 
 .skeleton--line {
   height: 12px;
+  border-radius: var(--r-full);
   margin-block-end: var(--sp-2);
 }
 
 .skeleton--line-sm {
   height: 12px;
   width: 55%;
+  border-radius: var(--r-full);
 }
 
-/* Spinner (used by map + async buttons) */
+/* Spinner (used by map + async buttons).
+   Both edges are `currentColor`, so one rule works on paper and on a filled
+   brand button. The previous pair was a hardcoded rule-strong track with an
+   ink head, which went invisible the moment the spinner landed on a button
+   whose own colour was close to the track. */
 .spinner {
   width: 16px;
   height: 16px;
-  border: 1.5px solid var(--rule-strong);
-  border-block-start-color: var(--ink-0);
+  border: 2px solid color-mix(in oklab, currentColor 25%, transparent);
+  border-block-start-color: currentColor;
   border-radius: var(--r-full);
   animation: spin 0.7s linear infinite;
 }
@@ -1634,32 +1797,33 @@ hr {
 .chip {
   display: inline-flex;
   align-items: center;
+  gap: var(--sp-2);
   min-height: 38px;
-  padding-inline: var(--sp-3);
-  border: 1px solid var(--rule-strong);
-  border-radius: var(--r);
-  background: transparent;
+  padding-inline: var(--sp-4);
+  border: 1px solid var(--rule);
+  border-radius: var(--r-full);
+  background: var(--surface);
   color: var(--ink-2);
-  font-family: var(--font-mono);
-  font-size: var(--t-2xs);
-  font-weight: 500;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  font-size: var(--t-sm);
+  font-weight: 600;
   text-decoration: none;
+  white-space: nowrap;
+  box-shadow: var(--shadow-xs);
   transition: border-color var(--dur) var(--ease),
     color var(--dur) var(--ease), background-color var(--dur) var(--ease);
 }
 
 .chip:hover {
-  border-color: var(--ink-0);
-  color: var(--ink-0);
+  border-color: var(--brand-rule);
+  background: var(--brand-wash);
+  color: var(--brand-ink);
 }
 
 .chip[aria-pressed="true"],
 .chip[data-active="true"] {
-  background: var(--ink-0);
-  border-color: var(--ink-0);
-  color: var(--paper);
+  background: var(--brand);
+  border-color: var(--brand);
+  color: var(--on-brand);
 }
 
 .pager {
@@ -1674,11 +1838,10 @@ hr {
 }
 
 .pager__status {
-  font-family: var(--font-mono);
   font-size: var(--t-2xs);
-  letter-spacing: 0.07em;
-  text-transform: uppercase;
+  letter-spacing: 0.01em;
   color: var(--ink-3);
+  font-weight: 600;
 }
 
 /* --------------------------------------------------------------------------
@@ -1701,8 +1864,10 @@ hr {
 
 .detail__media {
   border: 1px solid var(--rule);
+  border-radius: var(--r-xl);
   overflow: hidden;
   background: var(--surface-sunken);
+  box-shadow: var(--shadow-xs);
 }
 
 .detail__media img {
@@ -1710,28 +1875,38 @@ hr {
   height: auto;
 }
 
+/* The price strip is a soft sunken band rather than a pair of hairlines. It is
+   the one number the page exists to show, so it gets a surface of its own. */
 .detail__price {
   display: flex;
   align-items: baseline;
   gap: var(--sp-3);
-  padding-block: var(--sp-3);
-  border-block: 1px solid var(--rule);
+  padding: var(--sp-4) var(--sp-5);
+  border-radius: var(--r-lg);
+  background: var(--surface-sunken);
 }
 
-/* A specification table, the way a drug monograph prints its data. */
+/* A specification table, the way a drug monograph prints its data — but in the
+   reference's wrapper rather than as a bare stack of rules. `overflow: hidden`
+   is what lets the row dividers run edge to edge and still be clipped by the
+   rounded corner. */
 .spec-list {
   list-style: none;
   padding: 0;
   display: grid;
   gap: 0;
-  border-block-start: 1px solid var(--rule-strong);
+  overflow: hidden;
+  border: 1px solid var(--rule);
+  border-radius: var(--r-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-xs);
 }
 
 .spec-list li {
   display: grid;
   grid-template-columns: 38% 1fr;
   gap: var(--sp-3);
-  padding-block: var(--sp-3);
+  padding: var(--sp-3) var(--sp-5);
   font-size: var(--t-sm);
   border-block-end: 1px solid var(--rule);
 }
@@ -1741,13 +1916,23 @@ hr {
 }
 
 .spec-list__k {
-  font-family: var(--font-mono);
   font-size: var(--t-2xs);
   font-weight: 500;
-  letter-spacing: 0.07em;
-  text-transform: uppercase;
+  letter-spacing: 0.01em;
   color: var(--ink-3);
   padding-block-start: 2px;
+}
+
+/* A spec list or table that already sits inside a card drops its own wrapper.
+   Without this the cart's order summary is a bordered box inside a bordered
+   box with a shadow inside a shadow, which is the specific thing that makes a
+   page look assembled rather than designed. The dividers stay. */
+.card .spec-list,
+.card .table-wrap {
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  background: transparent;
 }
 
 /* --------------------------------------------------------------------------
@@ -1765,8 +1950,8 @@ hr {
   position: relative;
   padding-inline-start: var(--sp-6);
   padding-block-end: var(--sp-5);
-  border-inline-start: 1px solid var(--rule-strong);
-  margin-inline-start: 4px;
+  border-inline-start: 2px solid var(--rule);
+  margin-inline-start: 6px;
 }
 
 .timeline li:last-child {
@@ -1774,27 +1959,39 @@ hr {
   padding-block-end: 0;
 }
 
-/* A square node, not a circle. Consistent with the rectilinear system. */
+/* A round node on a round line. The previous direction made both square, "to be
+   consistent with the rectilinear system" — but the rectilinear system is gone,
+   and a filled circle on a connector is what a progress rail looks like
+   everywhere the user has already seen one. The `-8px` places the node's centre
+   on the 2px border: the border spans -2…0 from the padding box, so its centre
+   is -1, and half of 14px is 7. */
 .timeline li::before {
   content: "";
   position: absolute;
-  inset-inline-start: -4.5px;
+  inset-inline-start: -8px;
   inset-block-start: 4px;
-  width: 8px;
-  height: 8px;
+  width: 14px;
+  height: 14px;
+  border-radius: var(--r-full);
   background: var(--paper);
-  border: 1px solid var(--rule-strong);
+  border: 2px solid var(--rule-strong);
 }
 
 .timeline li[data-done="true"]::before {
-  background: var(--ink-0);
-  border-color: var(--ink-0);
+  background: var(--brand);
+  border-color: var(--brand);
 }
 
 .timeline li[data-current="true"]::before {
-  background: var(--signal);
-  border-color: var(--signal);
-  box-shadow: 0 0 0 3px var(--signal-wash);
+  background: var(--brand);
+  border-color: var(--brand);
+  box-shadow: 0 0 0 4px var(--brand-wash);
+}
+
+/* The current step's label carries the brand too, so the rail and the text
+   agree about which step the order is actually on. */
+.timeline li[data-current="true"] .timeline__label {
+  color: var(--brand-ink);
 }
 
 .timeline__label {
@@ -1805,10 +2002,10 @@ hr {
 }
 
 .timeline__meta {
-  font-family: var(--font-mono);
   font-size: var(--t-2xs);
-  letter-spacing: 0.04em;
+  letter-spacing: 0.01em;
   color: var(--ink-3);
+  font-weight: 600;
 }
 
 /* --------------------------------------------------------------------------
@@ -1816,9 +2013,11 @@ hr {
    -------------------------------------------------------------------------- */
 
 .map-frame {
-  border: 1px solid var(--rule-strong);
+  border: 1px solid var(--rule);
+  border-radius: var(--r-xl);
   overflow: hidden;
   background: var(--surface);
+  box-shadow: var(--shadow-xs);
 }
 
 .map-frame .leaflet-container {
@@ -1862,35 +2061,34 @@ hr {
 
 /* --------------------------------------------------------------------------
    21. Stat tiles + charts
+
+   Four rounded cards — which is exactly what the reference's trust strip is:
+   four bordered, softly elevated boxes in a row. The previous direction cut the
+   wrapper off the tiles ("in a dense dashboard, four bordered boxes is four
+   boxes too many") and the result was four floating numbers with no edges,
+   which is harder to scan rather than easier. A dashboard is where a card earns
+   its keep.
    -------------------------------------------------------------------------- */
 
 .stats {
   display: grid;
-  gap: 0;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 170px), 1fr));
+  gap: var(--sp-4);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 190px), 1fr));
   margin-block-end: var(--sp-6);
-  border-block-start: 1px solid var(--rule-strong);
 }
 
-/* Stat tiles lose their card wrapper entirely. In a dense dashboard, four
-   bordered boxes is four boxes too many. */
 .stat {
-  background: transparent;
-  padding: var(--sp-4) var(--sp-4) var(--sp-4) 0;
-  border-inline-end: 1px solid var(--rule);
-  border-block-end: 1px solid var(--rule);
-}
-
-.stat:last-child {
-  border-inline-end: 0;
+  background: var(--surface);
+  padding: var(--sp-5);
+  border: 1px solid var(--rule);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-xs);
 }
 
 .stat__label {
-  font-family: var(--font-mono);
   font-size: var(--t-2xs);
   font-weight: 500;
-  letter-spacing: 0.09em;
-  text-transform: uppercase;
+  letter-spacing: 0.01em;
   color: var(--ink-3);
 }
 
@@ -1903,11 +2101,15 @@ hr {
   margin-block-start: var(--sp-2);
 }
 
+/* Not mono. Every use of this class in the app is a sentence — "6 orders,
+   cancellations excluded", "value waiting on verification" — and mono on prose
+   is exactly the mismatch the label pass was fixing. Mono is left for the two
+   places that hold something you would compare or copy: `.mono` (an error
+   digest) and `<samp>`. */
 .stat__delta {
-  font-family: var(--font-mono);
   font-size: var(--t-2xs);
   font-weight: 500;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.005em;
   color: var(--ink-3);
   margin-block-start: var(--sp-1);
 }
@@ -1916,9 +2118,11 @@ hr {
 .chart {
   width: 100%;
   height: 300px;
-  background: transparent;
+  background: var(--surface);
   border: 1px solid var(--rule);
+  border-radius: var(--r-lg);
   padding: var(--sp-4);
+  box-shadow: var(--shadow-xs);
 }
 
 .chart-grid {
@@ -1943,17 +2147,23 @@ hr {
   margin-block: var(--sp-7);
 }
 
-/* No floating card. The form is the page. */
+/* A floating card, as the reference wraps everything else. The previous
+   direction had the form be the page, marked by a 2px ink rule across the top —
+   a good idea for a dense internal tool and a poor one for the first screen a
+   customer ever sees. */
 .auth__card {
-  background: transparent;
-  border-block-start: 2px solid var(--ink-0);
-  padding-block: var(--sp-6) 0;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: var(--r-xl);
+  padding: var(--sp-6);
+  box-shadow: var(--shadow);
 }
 
 .demo-accounts {
   margin-block-start: var(--sp-5);
-  padding: var(--sp-4);
+  padding: var(--sp-4) var(--sp-5);
   border: 1px solid var(--rule);
+  border-radius: var(--r-lg);
   background: var(--surface-sunken);
   font-size: var(--t-xs);
 }
@@ -1966,20 +2176,18 @@ hr {
 }
 
 .demo-accounts dt {
-  font-family: var(--font-mono);
   font-size: var(--t-2xs);
   font-weight: 500;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  letter-spacing: 0.01em;
   color: var(--ink-3);
   padding-block-start: 2px;
 }
 
 .demo-accounts dd {
   margin: 0;
-  font-family: var(--font-mono);
   color: var(--ink-1);
   overflow-wrap: anywhere;
+  font-weight: 600;
 }
 
 /* --------------------------------------------------------------------------
@@ -2054,11 +2262,14 @@ hr {
    24. Accessibility
    -------------------------------------------------------------------------- */
 
-/* Visible keyboard focus everywhere, but never on mouse click. The ring is
-   amber because focus genuinely requires the user's attention — the one
-   legitimate use of the signal colour outside a prescription state. */
+/* Visible keyboard focus everywhere, but never on mouse click.
+   The ring is brand teal, not the amber signal: amber now means "prescription
+   required" and "low stock" and nothing else, and a focus ring sharing a colour
+   with a warning makes every focused control look like a warning. Teal is also
+   the reference's interactive accent, so focus reads as part of the same
+   language rather than as a third colour. */
 :focus-visible {
-  outline: 2px solid var(--signal);
+  outline: 2px solid var(--brand);
   outline-offset: 2px;
 }
 
@@ -2068,7 +2279,7 @@ input:focus-visible,
 select:focus-visible,
 textarea:focus-visible,
 [tabindex]:focus-visible {
-  outline: 2px solid var(--signal);
+  outline: 2px solid var(--brand);
   outline-offset: 2px;
 }
 
@@ -2095,7 +2306,6 @@ textarea:focus-visible,
   .site-footer,
   .btn,
   .skip-link,
-  .nav-toggle,
   .theme-toggle {
     display: none !important;
   }
@@ -2109,4 +2319,318 @@ textarea:focus-visible,
   .table-wrap {
     border-color: #999;
   }
+}
+
+/* --------------------------------------------------------------------------
+   26. Storefront blocks
+
+   The reference's home-page furniture: the trust strip, the category tiles,
+   the discount badge, the prescription banner and the footer's feature row.
+
+   Grouped here rather than interleaved into sections 8-12, because they all
+   arrived in one pass and share a single visual language — rounded, softly
+   elevated, brand-tinted icon wells. Keeping them together is what makes that
+   language visible as a set rather than as six unrelated rules.
+   -------------------------------------------------------------------------- */
+
+/* --- Section head with a "view all" link ----------------------------------
+   The reference puts a quiet link on the right of every section heading. */
+
+.section-head__link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-1);
+  color: var(--brand-ink);
+  text-decoration: none;
+  font-size: var(--t-sm);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.section-head__link:hover {
+  color: var(--brand);
+}
+
+.section-head__link .icon {
+  width: 16px;
+  height: 16px;
+}
+
+/* --- Trust strip ---------------------------------------------------------- */
+
+.trust-strip {
+  display: grid;
+  gap: var(--sp-4);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  padding: var(--sp-5);
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: var(--r-xl);
+  box-shadow: var(--shadow-xs);
+}
+
+@media (min-width: 760px) {
+  .trust-strip {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--sp-5);
+  }
+}
+
+.trust-item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-3);
+}
+
+.trust-item__icon {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  border-radius: var(--r-sm);
+  background: var(--brand-wash);
+  color: var(--brand-ink);
+}
+
+.trust-item__icon .icon {
+  width: 22px;
+  height: 22px;
+}
+
+.trust-item h3 {
+  font-size: var(--t-sm);
+  font-weight: 700;
+  letter-spacing: -0.012em;
+}
+
+.trust-item p {
+  margin-block-start: 2px;
+  font-size: var(--t-xs);
+  line-height: 1.45;
+  color: var(--ink-3);
+}
+
+/* --- Category tiles -------------------------------------------------------
+   Nine therapeutic categories. The icon well is the tile's only decoration;
+   the label carries the meaning. */
+
+.cat-grid {
+  display: grid;
+  gap: var(--sp-4);
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 150px), 1fr));
+}
+
+.cat-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-5) var(--sp-3);
+  text-align: center;
+  text-decoration: none;
+  color: var(--ink-1);
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-xs);
+  transition: border-color var(--dur) var(--ease),
+    box-shadow var(--dur) var(--ease), transform var(--dur) var(--ease),
+    color var(--dur) var(--ease);
+}
+
+.cat-tile:hover {
+  color: var(--brand-ink);
+  border-color: var(--brand-rule);
+  box-shadow: var(--shadow);
+  transform: translateY(-2px);
+}
+
+.cat-tile__icon {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: var(--r);
+  background: var(--brand-wash);
+  color: var(--brand);
+}
+
+.cat-tile__icon .icon {
+  width: 26px;
+  height: 26px;
+}
+
+.cat-tile span {
+  font-size: var(--t-xs);
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+/* --- Deal badge and compare-at price -------------------------------------- */
+
+.deal-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 9px;
+  border-radius: var(--r-full);
+  background: var(--brand);
+  color: var(--on-brand);
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+.price__was {
+  margin-inline-start: var(--sp-2);
+  font-size: var(--t-xs);
+  font-weight: 400;
+  color: var(--ink-3);
+  text-decoration: line-through;
+}
+
+/* The Offers chip is a toggle, so it has to read as "on" when it is on —
+   which the neutral chip styling alone does not convey. */
+.chip--offers[data-active="true"] {
+  background: var(--brand);
+  border-color: var(--brand);
+  color: var(--on-brand);
+}
+
+/* Circular add-to-cart, as on the reference's product cards. */
+.add-round {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border: 0;
+  border-radius: var(--r-full);
+  background: var(--brand);
+  color: var(--on-brand);
+  box-shadow: var(--shadow-brand);
+  transition: background-color var(--dur) var(--ease);
+}
+
+.add-round:hover {
+  background: var(--brand-strong);
+}
+
+.add-round .icon {
+  width: 18px;
+  height: 18px;
+}
+
+/* Sold out. Kept the same size so a row of cards does not go ragged, and
+   desaturated rather than removed so the control's absence is explained. */
+.add-round--off,
+.add-round--off:hover {
+  background: var(--surface-sunken);
+  color: var(--ink-4);
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+/* --- Prescription banner --------------------------------------------------
+   The one block on the page that earns a filled tint: it is the path a
+   visitor with a prescription actually needs, and it is the brand colour
+   doing work rather than decoration. */
+
+.rx-banner {
+  position: relative;
+  display: grid;
+  gap: var(--sp-5);
+  align-items: center;
+  padding: var(--sp-6);
+  border: 1px solid var(--brand-rule);
+  border-radius: var(--r-xl);
+  background: var(--brand-wash);
+  overflow: hidden;
+}
+
+@media (min-width: 880px) {
+  .rx-banner {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: var(--sp-6);
+    padding: var(--sp-6) var(--sp-7);
+  }
+}
+
+.rx-banner__icon {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border-radius: var(--r);
+  background: var(--brand);
+  color: var(--on-brand);
+  box-shadow: var(--shadow-brand);
+}
+
+.rx-banner__icon .icon {
+  width: 27px;
+  height: 27px;
+}
+
+.rx-banner h2 {
+  font-size: var(--t-xl);
+  letter-spacing: -0.03em;
+}
+
+.rx-banner p {
+  margin-block-start: var(--sp-2);
+  max-width: 54ch;
+  color: var(--ink-2);
+}
+
+/* --- Footer feature row --------------------------------------------------- */
+
+.feature-row {
+  display: grid;
+  gap: var(--sp-4);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+@media (min-width: 760px) {
+  .feature-row {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--sp-5);
+  }
+}
+
+.feature {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-3);
+}
+
+.feature__icon {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: var(--r-sm);
+  background: var(--brand-wash);
+  color: var(--brand-ink);
+}
+
+.feature__icon .icon {
+  width: 20px;
+  height: 20px;
+}
+
+.feature h3 {
+  font-size: var(--t-sm);
+  font-weight: 700;
+  letter-spacing: -0.012em;
+}
+
+.feature p {
+  margin-block-start: 2px;
+  font-size: var(--t-xs);
+  line-height: 1.45;
+  color: var(--ink-3);
 }

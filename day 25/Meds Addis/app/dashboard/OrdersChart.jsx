@@ -23,9 +23,11 @@ import { dateOnly } from "@/lib/format";
  * Rendered alongside <OrdersTimeTable> for the same reason the revenue chart
  * sits beside its table: the chart is aria-hidden, the table carries the data.
  *
- * The line is ink, not the accent. A trend line is not a signal — it is the
- * baseline the rest of the dashboard is read against, and amber is reserved for
- * things that need acting on.
+ * The line is brand teal. It used to be ink, on the reasoning that "a trend
+ * line is not a signal, and amber is reserved for things that need acting on".
+ * That was right about amber and wrong about ink: on a page whose every
+ * interactive accent is teal, an ink line reads as a border rather than as
+ * data. Amber still stays out of it.
  */
 export default function OrdersChart({ data = [] }) {
   if (data.length === 0) {
@@ -60,8 +62,8 @@ export default function OrdersChart({ data = [] }) {
           <Tooltip
             formatter={(value, name) => [value, name]}
             contentStyle={{
-              borderRadius: 0,
-              border: "1px solid var(--rule-strong)",
+              borderRadius: 10,
+              border: "1px solid var(--rule)",
               background: "var(--surface)",
               color: "var(--ink-0)",
               fontSize: 13,
@@ -71,10 +73,10 @@ export default function OrdersChart({ data = [] }) {
             type="monotone"
             dataKey="orders"
             name="Orders"
-            stroke="var(--ink-0)"
-            strokeWidth={1.75}
-            dot={{ r: 2.5, fill: "var(--ink-0)", strokeWidth: 0 }}
-            activeDot={{ r: 4, fill: "var(--signal)", strokeWidth: 0 }}
+            stroke="var(--brand)"
+            strokeWidth={2}
+            dot={{ r: 2.5, fill: "var(--brand)", strokeWidth: 0 }}
+            activeDot={{ r: 5, fill: "var(--brand-strong)", strokeWidth: 0 }}
           />
         </LineChart>
       </ResponsiveContainer>

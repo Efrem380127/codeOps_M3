@@ -1,10 +1,12 @@
 import { Suspense } from "react";
+import Image from "next/image";
 import Link from "next/link";
 
 import FeaturedMedicines from "@/app/components/FeaturedMedicines";
 import MedicineSkeleton from "@/app/components/MedicineSkeleton";
 import Icon from "@/app/components/Icon";
 import { categories } from "@/lib/catalog";
+import { iconForCategory } from "@/lib/category-icons";
 
 export const metadata = {
   title: "Meds Addis — Online Pharmacy & Same-Day Delivery",
@@ -21,126 +23,164 @@ export const metadata = {
  * Contentful Paint element (the hero heading) is painted from the very first
  * HTML response and does not wait on the catalogue.
  *
- * The layout deliberately avoids one rhythm repeated four times. Sections 01
- * and 03 use an asymmetric split — heading in a narrow column, content in a
- * wide one. Section 02 is full width, because a product grid earns the room.
- * Section 04 is a single rule-marked block. Four sections, three different
- * shapes.
+ * The blocks follow the reference design: hero, trust strip, category tiles,
+ * the product row, then the prescription banner. The footer's feature row lives
+ * in <Footer>, so it appears on every page rather than only this one.
  */
 
-const STEPS = [
+const TRUST = [
   {
-    title: "Search the catalogue",
-    body: "Sixteen lines across nine therapeutic categories, with the generic name, strength, pack size and stock level on every entry.",
+    icon: "truck",
+    title: "Fast delivery",
+    body: "Same-day across Addis Ababa, on a courier you can watch move.",
   },
   {
-    title: "Upload a prescription if it is needed",
-    body: "Anything marked Rx cannot be dispensed without one. Upload it once and it covers every order it names.",
+    icon: "check",
+    title: "100% genuine",
+    body: "Sourced from licensed wholesalers, with batch and expiry recorded.",
   },
   {
-    title: "A pharmacist checks it",
-    body: "A registered pharmacist reviews the prescriber's licence before the order moves. Nothing prescription-only leaves the dispensary unchecked.",
+    icon: "headset",
+    title: "Pharmacist advice",
+    body: "Every prescription-only line is checked before it is dispensed.",
   },
   {
-    title: "Track it to the door",
-    body: "Once dispensed, your courier's position streams to the tracking page every few seconds until it arrives.",
+    icon: "tag",
+    title: "Best offers",
+    body: "Up to 21% off selected lines, marked on the card and at checkout.",
   },
 ];
+
+/* Initials rather than photographs. A row of stock faces is the one piece of
+   the reference that cannot be reproduced honestly — these are not real
+   customers, and pretending otherwise would be worse than having no faces. */
+const PATIENTS = ["ST", "AB", "MK", "HG"];
 
 export default function HomePage() {
   return (
     <main id="main" className="page container">
       <section className="hero">
         <div className="hero__inner">
-          <div className="stack">
+          <div>
             <span className="eyebrow">Addis Ababa · Same-day delivery</span>
 
-            <h1>Your pharmacy, without the queue.</h1>
+            {/* Two-tone: the second line carries the brand colour, which is the
+                cheapest way to make a hero feel branded. */}
+            <h1 className="mt-2">
+              Your health,
+              <span className="hero__accent">our priority.</span>
+            </h1>
 
-            <p>
+            <p className="hero__lede">
               Order genuine medicines from a licensed dispensary, have
               prescription-only items checked by a registered pharmacist, and
               watch your courier cross the city in real time.
             </p>
 
             <div className="hero__actions">
-              <Link className="btn btn--primary" href="/medicines">
-                Browse medicines
+              <Link className="btn btn--primary btn--lg" href="/medicines">
+                Shop medicines
+                <Icon name="arrowRight" />
               </Link>
-              <Link className="btn btn--outline" href="/prescriptions">
-                Upload a prescription
+              <Link className="btn btn--outline btn--lg" href="/prescriptions">
+                <Icon name="upload" />
+                Upload prescription
               </Link>
+            </div>
+
+            <div className="hero__proof">
+              <span className="avatars" aria-hidden="true">
+                {PATIENTS.map((initials) => (
+                  <span key={initials} className="avatar">
+                    {initials}
+                  </span>
+                ))}
+              </span>
+
+              <ul className="hero__proof-list">
+                <li>
+                  <strong>9</strong>
+                  <span>Therapeutic categories</span>
+                </li>
+                <li>
+                  <strong>16</strong>
+                  <span>Lines in stock</span>
+                </li>
+                <li>
+                  <strong>Same day</strong>
+                  <span>Across Addis Ababa</span>
+                </li>
+              </ul>
             </div>
           </div>
 
-          {/*
-            Was a 2×2 grid of rounded tiles holding four big numbers — the
-            hero-stat template, and one of the more reliable tells that a page
-            was assembled rather than designed. Now it is a specification strip:
-            values over mono labels, divided by hairlines, reading left to right
-            like the data panel on a dispensing label.
-          */}
-          <ul className="hero__facts">
-            <li>
-              <strong>9</strong>
-              <span>Therapeutic categories</span>
-            </li>
-            <li>
-              <strong>Same day</strong>
-              <span>Across Addis Ababa</span>
-            </li>
-            <li>
-              <strong>
-                <Icon name="shield" />
-              </strong>
-              <span>Pharmacist verified</span>
-            </li>
-            <li>
-              <strong>Live</strong>
-              <span>Courier tracking</span>
-            </li>
-          </ul>
+          <div className="hero__visual">
+            <Image
+              src="/hero/hero-pharmacy.jpg"
+              alt="A robotic arm holding a medicine bottle above a lit dispensing platform"
+              width={1024}
+              height={1024}
+              priority
+              sizes="(max-width: 959px) 100vw, 46vw"
+            />
+          </div>
         </div>
       </section>
 
-      <section className="section">
-        <div className="split">
-          <div className="split__aside">
-            <span className="section-index">01 — Browse</span>
-            <h2>What are you looking for?</h2>
-            <p className="small muted mt-2">
-              Nine therapeutic categories. Every entry shows its generic name
-              and current stock, so nothing is a surprise at checkout.
-            </p>
-          </div>
-
-          <nav className="filters" aria-label="Browse by category">
-            {categories.map((category) => (
-              <Link
-                key={category}
-                className="chip"
-                href={`/medicines?category=${encodeURIComponent(category)}`}
-              >
-                {category}
-              </Link>
-            ))}
-            <Link className="chip" href="/medicines">
-              All 16
-            </Link>
-          </nav>
-        </div>
+      <section className="section" aria-label="Why order from Meds Addis">
+        <ul className="trust-strip">
+          {TRUST.map((item) => (
+            <li key={item.title} className="trust-item">
+              <span className="trust-item__icon" aria-hidden="true">
+                <Icon name={item.icon} />
+              </span>
+              <div>
+                <h3>{item.title}</h3>
+                <p>{item.body}</p>
+              </div>
+            </li>
+          ))}
+        </ul>
       </section>
 
       <section className="section">
         <div className="section-head">
           <div>
-            <span className="section-index">02 — In stock now</span>
+            <span className="section-index">01 — Shop by category</span>
+            <h2>What are you looking for?</h2>
+          </div>
+          <Link className="section-head__link" href="/medicines">
+            View all
+            <Icon name="chevronRight" />
+          </Link>
+        </div>
+
+        <nav className="cat-grid" aria-label="Browse by category">
+          {categories.map((category) => (
+            <Link
+              key={category}
+              className="cat-tile"
+              href={`/medicines?category=${encodeURIComponent(category)}`}
+            >
+              <span className="cat-tile__icon" aria-hidden="true">
+                <Icon name={iconForCategory(category)} />
+              </span>
+              <span>{category}</span>
+            </Link>
+          ))}
+        </nav>
+      </section>
+
+      <section className="section">
+        <div className="section-head">
+          <div>
+            <span className="section-index">02 — Popular products</span>
             <h2>Popular this week</h2>
           </div>
-          <p className="small muted mb-0">
-            Drawn from what is on the shelf today, so nothing here turns out to
-            be unavailable at checkout.
-          </p>
+          <Link className="section-head__link" href="/medicines?offers=1">
+            View all
+            <Icon name="chevronRight" />
+          </Link>
         </div>
 
         <Suspense fallback={<MedicineSkeleton count={4} />}>
@@ -149,51 +189,25 @@ export default function HomePage() {
       </section>
 
       <section className="section">
-        <div className="split">
-          <div className="split__aside">
-            <span className="section-index">03 — Procedure</span>
-            <h2>From search to doorstep</h2>
-            <p className="small muted mt-2">
-              Four steps, one of which exists because the medicine is
-              prescription-only.
+        <div className="rx-banner">
+          <span className="rx-banner__icon" aria-hidden="true">
+            <Icon name="file" />
+          </span>
+
+          <div>
+            <h2>Upload a prescription, get medicines delivered</h2>
+            <p>
+              Anything marked Rx cannot be dispensed without one. Upload it once
+              and a pharmacist will review it against the prescriber register —
+              approved prescriptions are then reused automatically on later
+              orders.
             </p>
           </div>
 
-          {/*
-            Was four identical cards each headed "Step 1", "Step 2" and so on.
-            The number is the ordering, so it belongs in the margin as a
-            marker — not inside a box that repeats the same shape four times.
-          */}
-          <ol className="steps">
-            {STEPS.map((step, index) => (
-              <li key={step.title}>
-                <span className="steps__n" aria-hidden="true">
-                  {String(index + 1).padStart(2, "0")}
-                </span>
-                <div>
-                  <h3>{step.title}</h3>
-                  <p>{step.body}</p>
-                </div>
-              </li>
-            ))}
-          </ol>
-        </div>
-      </section>
-
-      <section className="section">
-        {/* Amber is meaningful here and nowhere else on this page: this is the
-            prescription path. */}
-        <div className="rule-block">
-          <span className="section-index">04 — Prescriptions</span>
-          <h2>Have a prescription to hand?</h2>
-          <p className="lede mt-2">
-            Upload it and a pharmacist will review it against the prescriber
-            register. Approved prescriptions are reused automatically on later
-            orders.
-          </p>
-          <div className="mt-4">
-            <Link className="btn btn--primary" href="/prescriptions">
-              Upload a prescription
+          <div>
+            <Link className="btn btn--primary btn--lg" href="/prescriptions">
+              <Icon name="upload" />
+              Upload now
             </Link>
           </div>
         </div>

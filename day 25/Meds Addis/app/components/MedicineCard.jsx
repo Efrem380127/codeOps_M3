@@ -3,6 +3,7 @@ import Link from "next/link";
 
 import AddToCartButton from "./AddToCartButton";
 import StockBadge, { PrescriptionBadge } from "./StockBadge";
+import { discount } from "@/lib/catalog";
 import { price } from "@/lib/format";
 
 /**
@@ -16,8 +17,15 @@ import { price } from "@/lib/format";
  * The image uses explicit width/height and a `sizes` hint so the browser
  * reserves the correct box before the bytes arrive (that is what keeps CLS at
  * zero) and never downloads a desktop-sized file for a phone.
+ *
+ * The discount badge and the struck-through original price both come from the
+ * same `discount()` call, so the percentage on the badge cannot disagree with
+ * the two numbers beside it. When there is no genuine saving the helper returns
+ * null and neither is rendered.
  */
 export default function MedicineCard({ medicine }) {
+  const deal = discount(medicine);
+
   return (
     <article className="med-card">
       <div className="med-card__media">
@@ -30,6 +38,7 @@ export default function MedicineCard({ medicine }) {
         />
 
         <div className="med-card__flags">
+          {deal && <span className="deal-badge">{deal.percent}% off</span>}
           {medicine.requiresPrescription && <PrescriptionBadge compact />}
         </div>
       </div>
@@ -53,10 +62,11 @@ export default function MedicineCard({ medicine }) {
         <div className="med-card__foot">
           <span className="price">
             {price(medicine.price)}
+            {deal && <span className="price__was">{price(deal.was)}</span>}
             <span className="price__unit"> / {medicine.packSize}</span>
           </span>
 
-          <AddToCartButton medicine={medicine} />
+          <AddToCartButton medicine={medicine} variant="round" />
         </div>
       </div>
     </article>
