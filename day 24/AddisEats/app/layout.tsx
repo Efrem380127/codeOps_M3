@@ -1,11 +1,11 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Archivo, Fraunces, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
 import Providers from "./components/Providers";
 import AccountMenu from "./components/AccountMenu";
 import CartLink from "./components/CartLink";
 import ThemeToggle from "./components/ThemeToggle";
-import Icon from "./components/Icon";
 
 /**
  * Fonts are self-hosted by next/font at build time. The previous version of
@@ -113,9 +113,16 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <header className="site-header">
             <div className="header-container">
               <Link href="/" className="brand-title">
-                <span className="brand-mark" aria-hidden="true">
-                  <Icon name="bowl" />
-                </span>
+                {/* The client's own pot mark. Decorative, so it is hidden from
+                    assistive tech: the link text "Addis Eats" is the label. */}
+                <Image
+                  src="/logo/addis-eats-mark.png"
+                  alt=""
+                  width={30}
+                  height={30}
+                  className="brand-mark-img"
+                  priority
+                />
                 Addis Eats
               </Link>
 

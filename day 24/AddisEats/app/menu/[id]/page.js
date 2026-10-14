@@ -26,11 +26,11 @@ export async function generateMetadata({ params }) {
     // price denominated in birr, which is what the visitor saw in the browser
     // tab and in every link preview. It now reads the way the price reads
     // everywhere else in the application.
-    title: `${dish.name} — ${dish.price} ETB`,
+    title: `${dish.name} · ${dish.price} ETB`,
     description: dish.summary,
     alternates: { canonical: `/menu/${dish.id}` },
     openGraph: {
-      title: `${dish.name} — ${dish.price} ETB`,
+      title: `${dish.name} · ${dish.price} ETB`,
       description: dish.summary,
       images: [
         {

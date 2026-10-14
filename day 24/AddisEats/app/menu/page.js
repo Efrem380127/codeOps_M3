@@ -48,7 +48,7 @@ export default async function Menu({ searchParams }) {
           <span className="eyebrow">Cooked to order</span>
           <h1>Menu</h1>
           <p className="lede mt-2">
-            {dishes.length} dishes across {categories.length} kitchen sections —
+            {dishes.length} dishes across {categories.length} kitchen sections:
             slow-simmered wats, grilled tibs and vegan platters, priced in birr.
           </p>
         </div>
@@ -57,7 +57,7 @@ export default async function Menu({ searchParams }) {
       <section className="section">
         <div className="split">
           <div className="split__aside">
-            <span className="section-index">01 &mdash; Sections</span>
+            <span className="section-index">01 &middot; Sections</span>
             <h2>Filter the menu</h2>
             <p className="small muted mt-2">
               The filter lives in the address bar, so a filtered menu can be
@@ -112,7 +112,7 @@ export default async function Menu({ searchParams }) {
       <section className="section">
         <div className="section-head">
           <div>
-            <span className="section-index">02 &mdash; Live search</span>
+            <span className="section-index">02 &middot; Live search</span>
             <h2>Search by name</h2>
           </div>
           <p className="small muted mb-0">

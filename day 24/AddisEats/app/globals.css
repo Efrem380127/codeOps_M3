@@ -357,23 +357,18 @@ p {
   letter-spacing: -0.022em;
 }
 
-/* A filled berbere tile holding a drawn mark. The tile is the app's colour at
-   its smallest size, which is what makes the header recognisable before any
-   text is read. */
-.brand-mark {
-  display: grid;
-  place-items: center;
-  width: 34px;
-  height: 34px;
-  background: var(--signal);
-  color: var(--on-accent);
+/* The client's own pot mark, not a drawn glyph. In dark mode it sits on a
+   warm light tile: the logo's teal ink is dark, and on a dark header it would
+   fall below the 3:1 floor for graphics. */
+.brand-mark-img {
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
   border-radius: var(--r-sm);
+  background: light-dark(transparent, oklch(96% 0.012 85));
+  padding: light-dark(0px, 2px);
+  box-sizing: border-box;
   flex-shrink: 0;
-}
-
-.brand-mark .icon {
-  width: 15px;
-  height: 15px;
 }
 
 .header-nav {
