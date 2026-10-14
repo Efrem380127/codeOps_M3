@@ -33,7 +33,7 @@ export default function FeaturedDishes({ limit = 4 }) {
   const featured = [...firstOfEachSection, ...remainder].slice(0, limit);
 
   return (
-    <div className="menu-grid">
+    <div className="menu-grid menu-grid--featured">
       {featured.map((dish) => (
         <FoodCard key={dish.id} dish={dish} />
       ))}

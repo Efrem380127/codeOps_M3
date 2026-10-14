@@ -217,6 +217,21 @@ The one full-bleed element in the system.
   `--signal`, set in the sans so it aligns without the mono's optical weight.
 - Card lifts 2px and the shadow deepens on hover.
 
+### 5. Card Grids
+
+Two grids, and the difference matters:
+
+- **The menu page** uses `.menu-grid` with `repeat(auto-fill, minmax(280px,
+  1fr))`. Nine dishes divide evenly by three, so auto-fill is the right tool.
+- **The home page's featured row** uses `.menu-grid--featured`, which names its
+  column counts (1, then 2 at 560px, then 4 at 1024px). Auto-fill gave three
+  columns on a desktop container, so the section that says "Four to start with"
+  rendered as three cards plus one orphan with two empty slots beside it. A
+  named column count cannot leave a card stranded.
+
+Verified even at 390 / 560 / 768 / 1024 / 1280 / 1440 / 1920 with zero
+horizontal overflow at every width.
+
 ### 5. The Closing Band (`.cta-band`)
 
 - Deep green `--field` slab, `--r-lg` radius, cream type. The same ground as the

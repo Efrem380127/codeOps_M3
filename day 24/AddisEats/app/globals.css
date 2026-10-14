@@ -918,6 +918,30 @@ aside,
   margin-block-start: var(--sp-4);
 }
 
+/* The home page's featured row.
+   The shared `.menu-grid` auto-fills at 280px, which on a desktop container
+   gives three columns. Four featured dishes then land as three plus one
+   orphan, with two empty slots beside it, in the very section that says
+   "Four to start with". This variant names its column counts instead, so the
+   row is always a clean 1, 2 or 4 across. It is only used here: the menu page
+   keeps the auto-fill grid, where nine dishes divide evenly by three. */
+.menu-grid--featured {
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 560px) {
+  .menu-grid--featured {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .menu-grid--featured {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--sp-4);
+  }
+}
+
 .food-card {
   position: relative;
   background: var(--surface);
