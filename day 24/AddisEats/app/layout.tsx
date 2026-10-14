@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Archivo, Fraunces, IBM_Plex_Mono } from "next/font/google";
+import { Archivo, Caveat, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
 import Providers from "./components/Providers";
 import AccountMenu from "./components/AccountMenu";
@@ -14,28 +14,31 @@ import ThemeToggle from "./components/ThemeToggle";
  * a privacy leak to a third party for no benefit. next/font downloads the files
  * at build time and serves them from our own origin.
  *
- * Fraunces is the display face. It is a soft serif with a variable optical
- * size, drawn for headlines, and it is deliberately warm rather than neutral:
- * at large sizes it reads as a painted sign over a food stall. It carries the
- * wordmark, every headline and every dish name, and nothing else.
+ * Archivo is both the display and the body face. At its heaviest weight, set
+ * in uppercase with tight tracking, it carries every headline: the reference
+ * direction is a heavy grotesque shouting from a stall sign, and the weight is
+ * what does the shouting. The same family at normal weights carries running
+ * text, so the page has one voice rather than two.
  *
- * Archivo carries running text and controls. It is a grotesque drawn for
- * signage, so it stays legible at small sizes without competing with Fraunces.
+ * Caveat is the script. It carries exactly one thing: the orange subline under
+ * a section headline ("Cooked to order", "Three simple steps"). Used anywhere
+ * else it would stop being an accent and start being a font choice.
  *
  * IBM Plex Mono is kept for one job only: numbers that have to line up in a
- * column on the kitchen ticket. It is no longer used for prices or labels,
- * where monospace was reading as instrument panel rather than as food.
+ * column on the kitchen ticket. It is not used for prices or labels, where
+ * monospace was reading as instrument panel rather than as food.
  */
-const fraunces = Fraunces({
-  variable: "--font-fraunces",
-  subsets: ["latin"],
-  display: "swap"
-});
-
 const archivo = Archivo({
   variable: "--font-archivo",
   subsets: ["latin"],
   display: "swap"
+});
+
+const caveat = Caveat({
+  variable: "--font-caveat",
+  subsets: ["latin"],
+  display: "swap",
+  weight: ["600", "700"]
 });
 
 const plexMono = IBM_Plex_Mono({
@@ -46,7 +49,7 @@ const plexMono = IBM_Plex_Mono({
 });
 
 export const metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://addis-eats-six.vercel.app"),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://addis-eats-capstone.vercel.app"),
   title: {
     default: "Addis Eats | Authentic Ethiopian Food Delivery",
     template: "%s | Addis Eats"
@@ -74,8 +77,8 @@ export const viewport = {
    * are the computed sRGB for --paper in each scheme.
    */
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f8fafc" },
-    { media: "(prefers-color-scheme: dark)", color: "#0a0c10" },
+    { media: "(prefers-color-scheme: light)", color: "#fcf9eb" },
+    { media: "(prefers-color-scheme: dark)", color: "#071009" },
   ],
   colorScheme: "light dark",
   width: "device-width",
@@ -97,7 +100,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html
       lang="en"
-      className={`${fraunces.variable} ${archivo.variable} ${plexMono.variable}`}
+      className={`${archivo.variable} ${caveat.variable} ${plexMono.variable}`}
       // data-theme is written by the boot script above, which React cannot know
       // about at render time. Suppressing the warning here is correct: the
       // mismatch is intentional and already resolved before hydration.

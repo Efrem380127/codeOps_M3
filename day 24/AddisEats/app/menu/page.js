@@ -47,6 +47,7 @@ export default async function Menu({ searchParams }) {
         <div>
           <span className="eyebrow">Cooked to order</span>
           <h1>Menu</h1>
+          <span className="script">Everything we cook</span>
           <p className="lede mt-2">
             {dishes.length} dishes across {categories.length} kitchen sections:
             slow-simmered wats, grilled tibs and vegan platters, priced in birr.

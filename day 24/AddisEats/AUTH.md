@@ -80,7 +80,7 @@ This document details the multi-layer security model, route guards, ownership ve
 ### Attack 3: Crafted Open Redirect via Sign-In Link
 - **Browser URL Test**:
   ```
-  https://addis-eats-six.vercel.app/sign-in?next=https://example.com
+  https://addis-eats-capstone.vercel.app/sign-in?next=https://example.com
   // Also tested: /sign-in?next=//evil.com
   ```
 - **Line That Stopped It**:
@@ -97,7 +97,7 @@ This document details the multi-layer security model, route guards, ownership ve
 ### Attack 4: URL ID Tampering on Private Orders Page
 - **Browser URL Test**:
   ```
-  https://addis-eats-six.vercel.app/orders/999
+  https://addis-eats-capstone.vercel.app/orders/999
   ```
 - **Line That Stopped It**:
   - `app/orders/[id]/page.js`, Lines 24–30:

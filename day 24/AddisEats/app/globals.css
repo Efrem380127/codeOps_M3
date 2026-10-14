@@ -1,14 +1,14 @@
 /* ==========================================================================
    Addis Eats design system
-   Bold and appetising. A spice market poster, not a delivery marketplace.
+   Fresh and appetising. A market stall sign, not a delivery marketplace.
    See .impeccable.md for the direction this encodes.
 
    This no longer shares a design language with Meds Addis. That project keeps
    its own restrained system, which suits a pharmacy. A food app has a
    different job: it has to make someone hungry in the time it takes them to
-   scroll one screen. So this system commits to a saturated colour field, a
-   display serif and generous radius, and it shares nothing with Meds Addis but
-   the token names.
+   scroll one screen. So this system commits to forest green, a lime action
+   colour, an orange script voice and heavy uppercase display type, and it
+   shares nothing with Meds Addis but the token names.
 
    Order: tokens -> reset -> base -> header -> layout -> components -> states
    ========================================================================== */
@@ -31,81 +31,96 @@
   color-scheme: light dark;
 
   /* --- Neutrals -----------------------------------------------------------
-     A warm ramp drawn from roasted spice rather than from a screen. The hue
-     sits around 45 degrees, so every neutral carries a trace of brown and
-     nothing on the page is cold. The ramp runs light to dark as ink-0 is the
-     strongest text, so the naming stays stable when the theme flips. */
-  --ink-0: light-dark(oklch(21% 0.038 45), oklch(97% 0.014 80));
-  --ink-1: light-dark(oklch(31% 0.034 45), oklch(89% 0.016 80));
-  --ink-2: light-dark(oklch(44% 0.030 46), oklch(75% 0.018 78));
+     A green-cast ramp, drawn from leaf and stem rather than from a screen.
+     The hue sits around 155 degrees, so every neutral carries a trace of
+     green and the page reads as fresh rather than as warm brown. The ramp runs
+     light to dark as ink-0 is the strongest text, so the naming stays stable
+     when the theme flips. */
+  --ink-0: light-dark(oklch(23% 0.032 155), oklch(96% 0.012 110));
+  --ink-1: light-dark(oklch(33% 0.030 155), oklch(88% 0.014 110));
+  --ink-2: light-dark(oklch(46% 0.028 155), oklch(74% 0.016 110));
   /* ink-3 carries real text (labels, table meta), so it owes the full 4.5:1
      rather than the 3:1 for incidental marks. ink-4 is placeholder and
      disabled only, held to the 3:1 floor WCAG asks of inactive UI. */
-  --ink-3: light-dark(oklch(55% 0.028 48), oklch(63% 0.020 78));
-  --ink-4: light-dark(oklch(66% 0.024 50), oklch(51% 0.020 78));
+  --ink-3: light-dark(oklch(53.5% 0.026 155), oklch(62% 0.018 110));
+  --ink-4: light-dark(oklch(67% 0.022 155), oklch(50% 0.018 110));
 
   /* --- Surfaces -----------------------------------------------------------
-     `paper` is a warm cream, the colour of a paper menu under a lamp. Cards
+     `paper` is a warm cream, the colour of a delivery bag on a counter. Cards
      sit a shade above it on `surface`, and wells sink below it. Neither is
      pure white, because pure white next to food photography reads as a
      screenshot rather than a page. */
-  --paper: light-dark(oklch(96.5% 0.022 80), oklch(17% 0.024 42));
-  --surface: light-dark(oklch(99.3% 0.010 85), oklch(21.5% 0.026 42));
-  --surface-sunken: light-dark(oklch(93.5% 0.030 78), oklch(14% 0.022 42));
+  --paper: light-dark(oklch(98% 0.018 95), oklch(16% 0.020 150));
+  --surface: light-dark(oklch(100% 0 0), oklch(21% 0.022 150));
+  --surface-sunken: light-dark(oklch(95.5% 0.030 100), oklch(13% 0.018 150));
 
   /* --- Field --------------------------------------------------------------
      A saturated colour field. Used as the ground for the hero and the footer,
-     which are the two places the page is allowed to shout. Deep berbere red
+     which are the two places the page is allowed to shout. Deep forest green
      with cream type on it: the strongest single move in the system. */
-  --field: light-dark(oklch(41% 0.165 32), oklch(30% 0.115 32));
-  --field-ink: light-dark(oklch(97% 0.022 82), oklch(95% 0.020 82));
-  --field-ink-soft: light-dark(oklch(88% 0.060 60), oklch(82% 0.055 62));
+  --field: light-dark(oklch(31% 0.062 160), oklch(24% 0.050 160));
+  --field-ink: light-dark(oklch(97% 0.020 95), oklch(95% 0.018 95));
+  --field-ink-soft: light-dark(oklch(88% 0.045 110), oklch(84% 0.045 110));
 
   /* --- Rules --------------------------------------------------------------
-     Warm hairlines. Still the cheapest way to separate, but they now sit on
+     Green hairlines. Still the cheapest way to separate, but they now sit on
      cream rather than on cold grey. */
-  --rule: light-dark(oklch(87% 0.032 72), oklch(30% 0.030 42));
-  --rule-strong: light-dark(oklch(75% 0.048 65), oklch(42% 0.038 42));
+  --rule: light-dark(oklch(89% 0.030 130), oklch(29% 0.028 150));
+  --rule-strong: light-dark(oklch(78% 0.050 135), oklch(41% 0.035 150));
 
-  /* Text placed on an ink or signal surface. It flips with the theme because
-     the surfaces it sits on flip too: cream-on-red in light mode becomes
-     near-black-on-lighter-red in dark. This exists so that "text on a coloured
-     button" has one honest answer instead of a hardcoded #fff that breaks the
-     moment the theme changes. */
-  --on-accent: light-dark(oklch(99% 0.012 82), oklch(18% 0.026 42));
-  --on-accent-strong: oklch(99% 0.014 82);
+  /* Text placed on a signal or field surface. It stays cream in BOTH schemes,
+     because those surfaces stay deep in both: forest green does not lighten
+     into something that wants dark text on it. This exists so that "text on a
+     coloured button" has one honest answer instead of a hardcoded #fff. */
+  --on-accent: light-dark(oklch(98% 0.020 95), oklch(98% 0.020 95));
+  --on-accent-strong: oklch(98% 0.020 95);
 
   /* --- Signal -------------------------------------------------------------
-     Berbere. The primary action colour and the loudest thing small enough to
-     be a button. Saturated on purpose: a food app that cannot commit to one
-     hot colour is a food app with no appetite. */
-  --signal: light-dark(oklch(52% 0.198 32), oklch(67% 0.178 34));
-  --signal-ink: light-dark(oklch(42% 0.180 30), oklch(86% 0.098 40));
-  --signal-wash: light-dark(oklch(93% 0.048 45), oklch(28% 0.072 32));
-  --signal-rule: light-dark(oklch(74% 0.140 35), oklch(46% 0.110 32));
+     Forest green. The brand colour, the primary action colour, and the ink
+     for anything that has to read as the house voice. Deep enough in light
+     mode to carry cream type, and light enough in dark mode to stay legible
+     as text on the near-black page. */
+  --signal: light-dark(oklch(38% 0.072 158), oklch(74% 0.100 158));
+  --signal-ink: light-dark(oklch(34% 0.078 158), oklch(86% 0.095 158));
+  --signal-wash: light-dark(oklch(95% 0.055 120), oklch(26% 0.045 158));
+  --signal-rule: light-dark(oklch(80% 0.090 130), oklch(45% 0.070 158));
 
   /* The signal as a pressed fill. Deliberately deep in BOTH schemes, because
-     the label on it has to be light in both. --signal-ink cannot provide that,
-     since it flips to a light berbere in dark mode. */
-  --signal-strong: light-dark(oklch(44% 0.190 30), oklch(50% 0.175 32));
+     the label on it is cream in both. */
+  --signal-strong: light-dark(oklch(31% 0.062 160), oklch(26% 0.055 160));
 
   /* --- Accent -------------------------------------------------------------
-     Saffron, the colour of the spice stalls and of the turmeric in a wat. The
-     signal is what you press; the accent is what you notice. It carries the
-     section markers, the "spicy" note and the hairline details that would
-     otherwise be grey, and it never fills a control. */
-  --accent: light-dark(oklch(78% 0.155 78), oklch(82% 0.148 80));
-  --accent-ink: light-dark(oklch(50% 0.135 68), oklch(88% 0.125 82));
-  --accent-wash: light-dark(oklch(95% 0.060 85), oklch(28% 0.062 74));
+     Lime. The reference's action colour, and the one thing on a page that
+     looks pressable: it fills the primary buttons, the pills and the active
+     chip, always with dark green type on top. It is deliberately brighter
+     than the signal so a lime control never reads as a green panel. */
+  --accent: light-dark(oklch(85% 0.165 122), oklch(86% 0.160 122));
+  /* Fixed in BOTH schemes, for the same reason `--signal-strong` is: the lime
+     fill stays light in both, so the type on it has to stay dark in both. An
+     earlier pass made this light in dark mode, which put light lime on light
+     lime under every primary button. Text that sits on the *page* rather than
+     on lime uses `--signal-ink`, which is the token that does flip. */
+  --accent-ink: oklch(33% 0.072 158);
+  --accent-wash: light-dark(oklch(96% 0.060 118), oklch(27% 0.050 150));
+
+  /* --- Highlight ----------------------------------------------------------
+     Orange. The reference's third voice, and the one that gives the system
+     its warmth: it carries the script subline under every section headline,
+     the promo panel, and small emphases. Never used for a control, and never
+     for body copy, where it cannot reach the contrast it owes. */
+  --highlight: light-dark(oklch(70% 0.170 48), oklch(76% 0.155 52));
+  --highlight-ink: light-dark(oklch(56% 0.165 42), oklch(84% 0.120 55));
+  --highlight-wash: light-dark(oklch(95% 0.045 60), oklch(28% 0.060 45));
 
   /* --- Semantic -----------------------------------------------------------
-     Two functional colours, both kept quieter than the signal so that the
-     only thing shouting on a page is the thing you can press. Green marks
-     plant-based and confirmed states; red marks a failure. Neither ever
-     appears as a fill for a primary control. */
-  --ok: light-dark(oklch(54% 0.125 152), oklch(76% 0.112 152));
-  --ok-ink: light-dark(oklch(42% 0.112 152), oklch(86% 0.095 152));
-  --ok-wash: light-dark(oklch(94% 0.040 152), oklch(27% 0.052 152));
+     Two functional colours. `ok` is a teal rather than a green, because the
+     brand is green now: a green "confirmed" tick on a green panel would say
+     nothing. `danger` keeps its red, which is the one hue the brand does not
+     use and therefore the one that still reads as a problem. Neither ever
+     appears as the fill of a primary control. */
+  --ok: light-dark(oklch(50% 0.105 190), oklch(76% 0.095 190));
+  --ok-ink: light-dark(oklch(40% 0.095 190), oklch(86% 0.080 190));
+  --ok-wash: light-dark(oklch(94% 0.035 190), oklch(27% 0.042 190));
 
   --danger: light-dark(oklch(52% 0.185 27), oklch(72% 0.160 27));
   --danger-ink: light-dark(oklch(44% 0.175 27), oklch(85% 0.100 27));
@@ -123,21 +138,24 @@
   --r-full: 999px;
 
   /* --- Shadows ------------------------------------------------------------
-     Warm shadows tinted toward brown, so a card lifts off cream paper instead
-     of casting a grey smudge on it. */
-  --shadow-color: light-dark(oklch(38% 0.090 45 / 0.20), oklch(0% 0 0 / 0.55));
+     Shadows tinted toward green, so a card lifts off cream paper instead of
+     casting a grey smudge on it. */
+  --shadow-color: light-dark(oklch(30% 0.050 155 / 0.18), oklch(0% 0 0 / 0.55));
   --shadow-sm: 0 2px 6px -1px var(--shadow-color);
   --shadow-md: 0 12px 28px -10px var(--shadow-color);
   --shadow-lg: 0 28px 60px -18px var(--shadow-color);
 
   /* --- Type ---------------------------------------------------------------
-     Three roles. Fraunces is the display face: a soft serif with real weight
-     to it, drawn for headlines rather than for reading, and it is what gives
-     the page its warmth. Archivo handles every piece of running text and every
-     control. IBM Plex Mono survives only where a number has to line up in a
-     column on a kitchen ticket, never in customer-facing copy. */
-  --font-display: var(--font-fraunces), "Fraunces", Georgia, "Times New Roman",
-    serif;
+     Three roles. The display face is Archivo at its heaviest weight, set in
+     uppercase: the reference's headlines are a heavy grotesque, not a serif,
+     and the weight now does the shouting that a colour field used to do.
+     Caveat is the script that carries the subline under every section
+     headline, in orange. Archivo handles running text and controls. IBM Plex
+     Mono survives only where a number has to line up in a column on a kitchen
+     ticket, never in customer-facing copy. */
+  --font-display: var(--font-archivo), "Archivo", ui-sans-serif, system-ui,
+    -apple-system, "Segoe UI", sans-serif;
+  --font-script: var(--font-caveat), "Caveat", "Segoe Script", cursive;
   --font-sans: var(--font-archivo), "Archivo", ui-sans-serif, system-ui,
     -apple-system, "Segoe UI", sans-serif;
   --font-mono: var(--font-plex-mono), "IBM Plex Mono", ui-monospace,
@@ -151,7 +169,7 @@
   --t-lg: 1.5rem; /* 24px */
   --t-xl: 2rem; /* 32px */
   --t-2xl: 2.75rem; /* 44px */
-  --t-display: clamp(2.5rem, 1.1rem + 5.6vw, 5.25rem);
+  --t-display: clamp(2.6rem, 1.1rem + 6.2vw, 5.75rem);
 
   --lh-tight: 1.02;
   --lh-head: 1.1;
@@ -207,6 +225,10 @@ html {
   -webkit-text-size-adjust: 100%;
   scroll-behavior: smooth;
   scroll-padding-top: calc(var(--header-h) + var(--sp-4));
+  /* The hero breaks out of the page container with a 100vw bleed. `clip`
+     contains that without creating a scroll container, which `hidden` would:
+     a scroll container here would break the sticky header. */
+  overflow-x: clip;
 }
 
 body {
@@ -265,12 +287,15 @@ a {
    3. Base typography
    -------------------------------------------------------------------------- */
 
+/* The display voice: Archivo at its heaviest, set in uppercase with tight
+   tracking, so a headline reads as a sign rather than as a sentence. Only h1
+   and h2 take it. h3 stays sentence case at a normal weight, because card and
+   step titles are labels inside a panel, not headlines on a wall. */
 h1,
 h2,
 h3,
 h4 {
   font-family: var(--font-display);
-  font-optical-sizing: auto;
   color: var(--ink-0);
   font-weight: 700;
   line-height: var(--lh-head);
@@ -280,20 +305,42 @@ h4 {
 
 h1 {
   font-size: var(--t-2xl);
-  font-weight: 800;
-  letter-spacing: -0.034em;
-  line-height: var(--lh-tight);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.035em;
+  line-height: 0.98;
   margin-block-end: var(--sp-2);
 }
 
 h2 {
   font-size: var(--t-xl);
-  letter-spacing: -0.028em;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.03em;
+  line-height: 1;
   margin-block-end: var(--sp-2);
 }
 
 h3 {
   font-size: var(--t-lg);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+/* The orange script subline that sits under a section headline. It is the one
+   place the script face is allowed, and the one place orange carries text.
+   Sizes are kept large on purpose: at this weight of orange, small text would
+   fall under the contrast it owes. */
+.script {
+  display: block;
+  font-family: var(--font-script);
+  font-size: clamp(1.75rem, 1.2rem + 1.8vw, 2.5rem);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--highlight-ink);
+  margin-block-start: var(--sp-1);
 }
 
 p {
@@ -401,19 +448,18 @@ p {
   border-block-end-color: var(--signal);
 }
 
-/* Cart. Filled berbere, because on a food page the basket is the one control
-   that should be impossible to miss. It is the only filled element in the
-   header. */
+/* Cart. Filled lime, because on a food page the basket is the one control that
+   should be impossible to miss. It is the only filled element in the header. */
 .cart-pill {
   display: inline-flex;
   align-items: center;
   gap: var(--sp-2);
   min-height: 42px;
   padding-inline: var(--sp-5);
-  border: 1px solid var(--signal);
+  border: 1px solid var(--accent);
   border-radius: var(--r-md);
-  background: var(--signal);
-  color: var(--on-accent) !important;
+  background: var(--accent);
+  color: var(--accent-ink) !important;
   font-family: var(--font-sans);
   font-size: var(--t-sm);
   font-weight: 700 !important;
@@ -994,11 +1040,11 @@ aside,
 .food-card-action {
   width: 100%;
   padding: var(--sp-3) var(--sp-4);
-  background: var(--signal);
-  border: 1px solid var(--signal);
-  color: var(--on-accent);
+  background: var(--accent);
+  border: 1px solid var(--accent);
+  color: var(--accent-ink);
   font-size: var(--t-sm);
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: -0.004em;
   border-radius: var(--r-md);
   text-align: center;
@@ -1062,8 +1108,10 @@ aside,
 /* --------------------------------------------------------------------------
    10. Buttons
 
-   Primary is paprika — this app's accent *is* its call to action. Secondary is
-   a hairline rectangle.
+   Primary is lime with dark green type, which is the reference's one
+   unambiguous "press me". Secondary is a hairline outline. On a dark field the
+   primary keeps lime and the secondary goes cream, since neither the ink
+   outline nor the ink label survives on green.
    -------------------------------------------------------------------------- */
 
 .btn {
@@ -1094,14 +1142,13 @@ aside,
 }
 
 .btn-primary {
-  background-color: var(--signal);
-  border-color: var(--signal);
-  color: var(--on-accent);
+  background-color: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-ink);
 }
 
-/* Presses to a deeper paprika that stays deep in both schemes, so the label can
-   stay light in both. This used to point at --signal-ink, which is a light
-   paprika in dark mode — the hover state was white on light paprika. */
+/* Presses to deep forest green with cream type. Both of those are fixed in
+   both schemes, so the pair stays legible whichever way the theme flips. */
 .btn-primary:hover {
   background-color: var(--signal-strong);
   border-color: var(--signal-strong);
@@ -1980,7 +2027,7 @@ textarea:focus {
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--accent-ink);
+  color: var(--signal-ink);
   margin-block-end: var(--sp-4);
 }
 
@@ -2070,6 +2117,60 @@ textarea:focus {
   padding-inline-start: var(--sp-5);
 }
 
+/* The closing band. Deep forest green with cream type: the same ground the
+   hero and the footer stand on, so the page opens and closes on the brand's
+   own colour. It is the one section on the page allowed to be a filled slab,
+   which is what keeps the four sections above it reading as a rhythm of
+   different shapes rather than four variations on a white box.
+
+   The ink overrides are the point of this block. A dark panel inverts every
+   assumption the child rules made about their background, so the section
+   index, the script subline, the lede and the outline button each have to be
+   re-stated here. Without them the lede would be near-black on near-black. */
+.cta-band {
+  background: var(--field);
+  color: var(--field-ink);
+  border-radius: var(--r-lg);
+  padding: var(--sp-7) var(--sp-6);
+}
+
+.cta-band h2,
+.cta-band h3 {
+  color: var(--field-ink);
+}
+
+.cta-band .section-index {
+  color: var(--field-ink-soft);
+}
+
+/* Orange on the deep green ground. Measured at 4.48:1, which clears the 3:1
+   floor that large script type owes. It is not allowed near body copy. */
+.cta-band .script {
+  color: var(--highlight);
+}
+
+.cta-band .lede {
+  color: var(--field-ink-soft);
+  max-width: 56ch;
+}
+
+.cta-band .btn-secondary {
+  border-color: var(--field-ink-soft);
+  color: var(--on-accent-strong);
+}
+
+.cta-band .btn-secondary:hover {
+  background: var(--on-accent-strong);
+  border-color: var(--on-accent-strong);
+  color: var(--signal-strong);
+}
+
+@media (min-width: 720px) {
+  .cta-band {
+    padding: var(--sp-8) var(--sp-7);
+  }
+}
+
 .steps {
   list-style: none;
   padding: 0;
@@ -2080,8 +2181,8 @@ textarea:focus {
 
 .steps li {
   display: grid;
-  grid-template-columns: 2.25rem minmax(0, 1fr);
-  gap: var(--sp-3);
+  grid-template-columns: 2.5rem minmax(0, 1fr);
+  gap: var(--sp-4);
   padding-block: var(--sp-4);
   border-block-end: 1px solid var(--rule);
 }
@@ -2090,19 +2191,31 @@ textarea:focus {
   border-block-end: 0;
 }
 
+/* The marker is a filled circle rather than a bare numeral, which is the
+   reference's treatment. It also does real work: four discs read as four
+   discrete stages at a glance, where four numerals in a left column read as
+   four paragraphs. The number stays inside the disc because the order is the
+   information the list is carrying. */
 .steps__n {
+  display: grid;
+  place-items: center;
+  inline-size: 2.25rem;
+  block-size: 2.25rem;
+  border-radius: var(--r-full);
+  background: var(--accent);
+  color: var(--accent-ink);
   font-family: var(--font-mono);
   font-size: var(--t-2xs);
-  font-weight: 500;
-  letter-spacing: 0.08em;
-  color: var(--signal-ink);
-  padding-block-start: 3px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  line-height: 1;
 }
 
 .steps h3 {
   font-size: var(--t-base);
   font-weight: 600;
   letter-spacing: -0.012em;
+  padding-block-start: 4px;
 }
 
 .steps p {
@@ -2112,86 +2225,118 @@ textarea:focus {
   max-width: 62ch;
 }
 
-/* The hero is the one saturated field on the site. Deep berbere in both
-   schemes, cream type, generous radius: it should read as a plate of mitmita
-   before it reads as a layout. Everything inside inherits the field, so the
-   overrides below are about contrast, not colour invention. */
+/* The hero. A full-bleed photograph with a green scrim over it, so the type
+   sits on a colour the system controls rather than on whatever the photograph
+   happens to be doing underneath. It breaks out of the page container on both
+   sides; `overflow-x: clip` on the root stops that becoming a scrollbar. */
 .hero {
   position: relative;
+  isolation: isolate;
   overflow: hidden;
-  background: var(--signal-strong);
-  color: var(--on-accent-strong);
-  border-radius: var(--r-xl);
-  padding: var(--sp-7) var(--sp-6);
+  margin-inline: calc(50% - 50vw);
+  margin-block-start: calc(-1 * var(--sp-5));
   margin-block-end: var(--sp-7);
-  box-shadow: var(--shadow-md);
+  padding-block: var(--sp-8) var(--sp-7);
+  padding-inline: var(--sp-4);
+  color: var(--on-accent-strong);
+}
+
+@media (min-width: 640px) {
+  .hero {
+    padding-inline: var(--sp-6);
+  }
+}
+
+/* Photograph, then scrim, then content. The scrim is heaviest on the left,
+   where the type sits, and lifts toward the right so the food is still food. */
+.hero__bg {
+  object-fit: cover;
+  object-position: center;
+  z-index: 0;
+}
+
+.hero__scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(
+    100deg,
+    oklch(22% 0.050 160 / 0.95) 0%,
+    oklch(22% 0.050 160 / 0.86) 45%,
+    oklch(22% 0.050 160 / 0.55) 100%
+  );
 }
 
 .hero__inner {
+  position: relative;
+  z-index: 2;
   display: grid;
   gap: var(--sp-6);
   align-items: center;
+  max-width: var(--container);
+  margin-inline: auto;
 }
 
-@media (min-width: 960px) {
-  .hero__inner {
-      grid-template-columns: minmax(0, 1fr) minmax(0, 0.78fr);
-      gap: var(--sp-8);
-    }
+.hero__copy {
+  /* A measure in rem, not ch. `ch` resolves against this element's own 16px
+     font, so 46ch here silently clamped the column to about 410px and forced
+     the 92px headline onto seven lines, pushing the buttons below the fold. */
+  max-width: 40rem;
+}
+
+/* The script line, treated exactly like every other section subline: orange,
+   script, sitting directly above the headline it belongs to. */
+.hero__script {
+  margin-block: 0 var(--sp-2);
+  color: var(--highlight);
 }
 
 .hero h1 {
   color: inherit;
   font-size: var(--t-display);
-  font-weight: 600;
-  letter-spacing: -0.042em;
-  line-height: var(--lh-tight);
-  max-width: 14ch;
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  line-height: 0.95;
+  max-width: 20ch;
 }
 
 .hero p {
-  color: oklch(99% 0.014 82 / 0.85);
+  color: var(--field-ink-soft);
   font-size: var(--t-md);
   line-height: 1.5;
   max-width: 46ch;
-}
-
-/* The eyebrow and both buttons are restated against the field: the global
-   paprika primary would vanish on berbere, and the ink eyebrow would too. */
-.hero .eyebrow {
-  color: var(--on-accent-strong);
-}
-
-.hero .eyebrow::before {
-  background: currentColor;
-}
-
-.hero .btn-primary {
-  background-color: var(--on-accent-strong);
-  border-color: var(--on-accent-strong);
-  color: var(--signal-strong);
-}
-
-.hero .btn-primary:hover {
-  background-color: oklch(95% 0.024 82);
-  border-color: oklch(95% 0.024 82);
-}
-
-.hero .btn-secondary {
-  border-color: oklch(99% 0.014 82 / 0.55);
-  color: var(--on-accent-strong);
-}
-
-.hero .btn-secondary:hover {
-  border-color: var(--on-accent-strong);
-  color: var(--on-accent-strong);
 }
 
 .hero__actions {
   display: flex;
   flex-wrap: wrap;
   gap: var(--sp-3);
-  margin-block-start: var(--sp-2);
+  margin-block-start: var(--sp-5);
+}
+
+/* On the field the primary action is lime: against a dark green ground it is
+   the one fill in the system that still reads as pressable. */
+.hero .btn-primary {
+  background-color: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-ink);
+}
+
+.hero .btn-primary:hover {
+  background-color: var(--accent-ink);
+  border-color: var(--accent-ink);
+  color: var(--accent);
+}
+
+.hero .btn-secondary {
+  border-color: oklch(98% 0.020 95 / 0.55);
+  color: var(--on-accent-strong);
+}
+
+.hero .btn-secondary:hover {
+  border-color: var(--on-accent-strong);
+  background-color: oklch(98% 0.020 95 / 0.12);
+  color: var(--on-accent-strong);
 }
 
 /* A compact trust line under the buttons, in place of the four-cell stat
@@ -2205,149 +2350,49 @@ textarea:focus {
   margin-block-start: var(--sp-5);
   font-size: var(--t-sm);
   font-weight: 500;
-  color: oklch(99% 0.014 82 / 0.85);
+  color: var(--field-ink-soft);
 }
 
 .hero__trust strong {
   font-family: var(--font-display);
   font-size: var(--t-md);
-  font-weight: 600;
+  font-weight: 800;
   letter-spacing: -0.02em;
   margin-inline-end: var(--sp-1);
-  color: inherit;
+  color: var(--on-accent-strong);
 }
 
-/* The lockup: one large photograph, the wordmark set oversized behind it like
-   a sign over a stall, and a note card floating over the corner of the image.
-   The photograph is the appetite; the wordmark is the brand at sign scale. */
-.hero__visual {
-  position: relative;
-  display: flex;
-  justify-content: center;
-  padding-block-start: 0;
-}
-
-/* The wordmark is a display line, not a watermark: it sits whole above the
-   photograph, so the visual column needs the room reserved for it. Reserving
-   it here rather than overlapping keeps every letter legible. */
-@media (min-width: 960px) {
-  .hero__visual {
-    padding-block-start: var(--sp-8);
-  }
-}
-
-.hero__wordmark {
-  position: absolute;
-  inset-block-start: 0;
-  inset-inline: 0;
-  z-index: 0;
-  font-family: var(--font-display);
-  font-size: clamp(2.5rem, 5.5vw, 4.5rem);
-  font-weight: 700;
-  line-height: 0.85;
-  letter-spacing: -0.055em;
-  text-align: center;
-  white-space: nowrap;
-  color: oklch(99% 0.014 82 / 0.92);
-  pointer-events: none;
-  user-select: none;
-}
-
-/* `height: auto` matters: without it the height attribute next/image emits
-   wins over aspect-ratio and the photograph renders at its intrinsic 1086x1448,
-   which made the hero 1576px tall. */
-.hero__photo {
-  position: relative;
-  z-index: 1;
-  width: 100%;
-  height: auto;
-  max-width: 400px;
-  aspect-ratio: 3 / 4;
-  object-fit: cover;
-  border-radius: var(--r-xl);
-  box-shadow: var(--shadow-lg);
-}
-
-/* The floating note. It sits on the field, not on the photograph, so it keeps
-   the paper surface and the full text contrast in both themes. */
-.hero__card {
+/* The circular badge, the reference's one piece of pure decoration. It sits at
+   the top of the content column rather than at the edge of the viewport, so it
+   stays near the headline on a wide screen. Dropped below 960px, where it
+   would land on top of the type. */
+.hero__badge {
+  display: none;
   position: absolute;
   z-index: 2;
+  inset-block-start: 0;
   inset-inline-end: 0;
-  inset-block-end: var(--sp-5);
-  width: min(248px, 70%);
-  display: grid;
-  gap: var(--sp-2);
-  padding: var(--sp-4);
-  background: var(--paper);
-  color: var(--ink-0);
-  border-radius: var(--r-lg);
-  box-shadow: var(--shadow-lg);
-}
-
-.hero__card-icon {
-  display: grid;
   place-items: center;
-  width: 32px;
-  height: 32px;
-  border-radius: var(--r-sm);
-  background: var(--accent-wash);
+  width: 120px;
+  height: 120px;
+  padding: var(--sp-3);
+  border-radius: var(--r-full);
+  background: var(--accent);
   color: var(--accent-ink);
-  margin-block-end: var(--sp-1);
+  font-family: var(--font-display);
+  font-size: var(--t-xs);
+  font-weight: 800;
+  line-height: 1.15;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  transform: rotate(-8deg);
+  box-shadow: var(--shadow-md);
 }
 
-.hero__card-icon .icon {
-  width: 17px;
-  height: 17px;
-}
-
-.hero__card h2 {
-  font-size: var(--t-lg);
-  letter-spacing: -0.024em;
-  margin: 0;
-}
-
-.hero__card p {
-  font-size: var(--t-sm);
-  line-height: 1.45;
-  color: var(--ink-2);
-  margin: 0;
-}
-
-.hero__card a {
-  justify-self: start;
-  font-size: var(--t-sm);
-  font-weight: 600;
-  color: var(--signal-ink);
-  text-decoration: none;
-}
-
-.hero__card a:hover {
-  text-decoration: underline;
-}
-
-/* Stacked below the split, the wordmark would collide with the photograph, so
-   it goes and the card becomes a normal block under the image. */
-@media (max-width: 959px) {
-  .hero__wordmark {
-    display: none;
-  }
-
-  .hero__visual {
-    flex-direction: column;
-    align-items: center;
-    gap: var(--sp-4);
-    padding-block-start: 0;
-  }
-
-  .hero__photo {
-    max-width: 320px;
-  }
-
-  .hero__card {
-    position: static;
-    width: 100%;
-    max-width: 420px;
+@media (min-width: 960px) {
+  .hero__badge {
+    display: grid;
   }
 }
 
@@ -2591,9 +2636,9 @@ textarea:focus {
 
 .chip[aria-pressed="true"],
 .chip[data-active="true"] {
-  background: var(--signal);
-  border-color: var(--signal);
-  color: var(--on-accent);
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-ink);
   box-shadow: var(--shadow-sm);
 }
 

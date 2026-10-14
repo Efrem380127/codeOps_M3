@@ -14,7 +14,7 @@ This document details every query, rendering boundary, cache key, refresh rule, 
 | **Order History** | Server | `getOrdersForUser(session.id)` in `app/orders/page.js` | Dynamic (`cookies()`) | Strictly private; rendered dynamically on demand to enforce caller ownership and prevent caching of personal customer records. |
 | **Single Order Detail** | Server | `getOrderById(params.id)` in `app/orders/[id]/page.js` | Dynamic (`cookies()`) | Ownership gate verifies `order.sessionId === session.id` before rendering. Throws access refusal for unauthorized IDs. |
 | **Live Order Status Polling** | Client | `/api/orders/${id}` in `app/orders/OrderStatus.js` | SWR 5s poll (`refreshInterval: 5000`) | Pre-seeded with server `fallbackData` for zero-spinner initial paint. SWR polls every 5 seconds while tab is active, pausing automatically when window is blurred. |
-| **Live Delivery SSE Stream** | Server / Client | `/api/orders/[id]/stream` in `app/order-status/LiveOrderStatus.js` | Real-time Server-Sent Events | Pushes live driver courier coordinates across Addis Ababa checkpoints directly to the interactive Leaflet map without continuous HTTP overhead. |
+| **Live Delivery SSE Stream** | Server / Client | `/api/orders/[id]/stream` in `app/order-status/LiveOrderStatus.js` | Real-time Server-Sent Events | Pushes live driver courier coordinates across Addis Ababa checkpoints directly to the hand-rolled SVG delivery map without continuous HTTP overhead. |
 | **Kitchen Dashboard** | Server | `getOrders()` in `app/kitchen/page.js` | Dynamic (`session.role === "staff"`) | Displays incoming tickets and real-time order states strictly for authenticated restaurant kitchen staff. |
 
 ---

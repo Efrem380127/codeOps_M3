@@ -9,12 +9,19 @@ import { ImageResponse } from "next/og";
  * the matching token (see .impeccable.md). This is the one file in the app
  * where hex literals are the correct choice rather than a leftover.
  *
- * Light-theme palette: PAPER #f8fafc, INK #10141a, INK_2 #51565c,
- * RULE #d8dbdf, SIGNAL (paprika) #c63f29.
+ * Light-theme palette: PAPER #fcf9eb, INK #102116, INK_2 #4c5d51,
+ * RULE #d4dfcb, SIGNAL (forest green) #194e33, ACCENT (lime) #bcde57.
  */
 export const alt = "Addis Eats, Ethiopian food delivered across Addis Ababa";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
+
+/* The domain printed on the card. Read from the deployment's own URL rather
+   than typed in: the previous revision hardcoded a domain that now belongs to
+   a different project, so every share card advertised the wrong site. */
+const SITE = (
+  process.env.NEXT_PUBLIC_APP_URL || "https://addis-eats-capstone.vercel.app"
+).replace(/^https?:\/\//, "");
 
 export default function Image() {
   return new ImageResponse(
@@ -26,7 +33,7 @@ export default function Image() {
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
-          background: "#f8fafc",
+          background: "#fcf9eb",
           padding: "76px 80px",
           position: "relative"
         }}
@@ -39,7 +46,7 @@ export default function Image() {
             left: 0,
             right: 0,
             height: 8,
-            background: "#c63f29"
+            background: "#194e33"
           }}
         />
 
@@ -48,7 +55,7 @@ export default function Image() {
             display: "flex",
             fontSize: 24,
             letterSpacing: 6,
-            color: "#10141a"
+            color: "#102116"
           }}
         >
           ADDIS EATS
@@ -60,15 +67,15 @@ export default function Image() {
             fontSize: 86,
             lineHeight: 1.04,
             letterSpacing: -2,
-            color: "#10141a",
+            color: "#102116",
             maxWidth: 940
           }}
         >
-          Dinner, from the kitchens that made the city.
+          Dinner, cooked when you order it.
         </div>
 
         <div style={{ display: "flex", flexDirection: "column" }}>
-          <div style={{ display: "flex", height: 1, background: "#d8dbdf" }} />
+          <div style={{ display: "flex", height: 1, background: "#d4dfcb" }} />
           <div
             style={{
               display: "flex",
@@ -76,11 +83,11 @@ export default function Image() {
               marginTop: 22,
               fontSize: 21,
               letterSpacing: 3,
-              color: "#51565c"
+              color: "#4c5d51"
             }}
           >
             <span>ADDIS ABABA</span>
-            <span>addis-eats-six.vercel.app</span>
+            <span>{SITE}</span>
           </div>
         </div>
       </div>

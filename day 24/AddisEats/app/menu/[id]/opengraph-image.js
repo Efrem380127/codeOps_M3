@@ -11,8 +11,8 @@ import { dishes } from "@/app/data/dishes";
  * sRGB of the matching token (see .impeccable.md), which is why this file
  * contains hex literals.
  *
- * Light-theme palette: PAPER #f8fafc, INK #10141a, INK_2 #51565c,
- * INK_3 #6a6f75, RULE #d8dbdf, SIGNAL (paprika) #c63f29.
+ * Light-theme palette: PAPER #fcf9eb, INK #102116, INK_2 #4c5d51,
+ * INK_3 #69796e, RULE #d4dfcb, SIGNAL (forest green) #194e33.
  */
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
@@ -34,7 +34,7 @@ export default async function Image({ params }) {
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
-          background: "#f8fafc",
+          background: "#fcf9eb",
           padding: "76px 80px",
           position: "relative"
         }}
@@ -47,7 +47,7 @@ export default async function Image({ params }) {
             left: 0,
             right: 0,
             height: 8,
-            background: "#c63f29"
+            background: "#194e33"
           }}
         />
 
@@ -57,11 +57,11 @@ export default async function Image({ params }) {
             justifyContent: "space-between",
             fontSize: 24,
             letterSpacing: 6,
-            color: "#10141a"
+            color: "#102116"
           }}
         >
           <span>ADDIS EATS</span>
-          <span style={{ color: "#6a6f75" }}>MENU</span>
+          <span style={{ color: "#69796e" }}>MENU</span>
         </div>
 
         <div style={{ display: "flex", flexDirection: "column" }}>
@@ -71,7 +71,7 @@ export default async function Image({ params }) {
               fontSize: 78,
               lineHeight: 1.05,
               letterSpacing: -2,
-              color: "#10141a",
+              color: "#102116",
               maxWidth: 940
             }}
           >
@@ -84,7 +84,7 @@ export default async function Image({ params }) {
               marginTop: 24,
               fontSize: 40,
               letterSpacing: 1,
-              color: "#c63f29"
+              color: "#194e33"
             }}
           >
             {dish.price} ETB
@@ -92,14 +92,14 @@ export default async function Image({ params }) {
         </div>
 
         <div style={{ display: "flex", flexDirection: "column" }}>
-          <div style={{ display: "flex", height: 1, background: "#d8dbdf" }} />
+          <div style={{ display: "flex", height: 1, background: "#d4dfcb" }} />
           <div
             style={{
               display: "flex",
               marginTop: 22,
               fontSize: 22,
               lineHeight: 1.4,
-              color: "#51565c",
+              color: "#4c5d51",
               maxWidth: 960
             }}
           >

@@ -2,7 +2,6 @@ import Image from "next/image";
 import Link from "next/link";
 
 import FeaturedDishes from "./components/FeaturedDishes";
-import Icon from "./components/Icon";
 import { categories, dishes } from "./data/dishes";
 
 export const metadata = {
@@ -60,9 +59,29 @@ export default function Home() {
   return (
     <>
       <section className="hero">
+        {/*
+          A full-bleed photograph with a green scrim over it, so the type sits
+          on a colour the system controls rather than on whatever the
+          photograph happens to be doing underneath. `fill` needs the section to
+          be positioned, which it is.
+        */}
+        <Image
+          src="/hero/hero.png"
+          alt=""
+          fill
+          sizes="100vw"
+          className="hero__bg"
+          priority
+        />
+        <div className="hero__scrim" aria-hidden="true" />
+
         <div className="hero__inner">
-          <div className="stack">
-            <span className="eyebrow">Addis Ababa &middot; Cooked to order</span>
+          <span className="hero__badge" aria-hidden="true">
+            Cooked to order
+          </span>
+
+          <div className="hero__copy">
+            <span className="script hero__script">Fresh from the kitchen</span>
 
             <h1>Ethiopian food, cooked when you order it.</h1>
 
@@ -95,40 +114,6 @@ export default function Home() {
               <li>Same day across Addis Ababa</li>
             </ul>
           </div>
-
-          {/*
-            The lockup: one large photograph, the wordmark set oversized behind
-            it like a sign over a stall, and a note card floating over the
-            corner of the image. Below the split the wordmark is dropped and the
-            card becomes a normal block under the photograph.
-          */}
-          <div className="hero__visual">
-            <span className="hero__wordmark" aria-hidden="true">
-              Addis Eats
-            </span>
-
-            <Image
-              src="/hero/hero.png"
-              alt=""
-              width={1086}
-              height={1448}
-              sizes="(min-width: 960px) 400px, 320px"
-              className="hero__photo"
-              priority
-            />
-
-            <div className="hero__card">
-              <span className="hero__card-icon" aria-hidden="true">
-                <Icon name="bowl" />
-              </span>
-              <h2>Cooked to order</h2>
-              <p>
-                Nothing is cooked before you order it, which is why the food is
-                hot when it reaches your door.
-              </p>
-              <Link href="/menu">See the menu</Link>
-            </div>
-          </div>
         </div>
       </section>
 
@@ -137,6 +122,7 @@ export default function Home() {
           <div className="split__aside">
             <span className="section-index">01 &middot; Browse</span>
             <h2>What are you hungry for?</h2>
+            <span className="script">Pick a kitchen</span>
             <p className="small muted mt-2">
               {categories.length} kitchen sections. Every dish shows its price up
               front, so nothing is a surprise at checkout.
@@ -171,6 +157,7 @@ export default function Home() {
           <div>
             <span className="section-index">02 &middot; From the kitchen</span>
             <h2>Four to start with</h2>
+            <span className="script">Straight from the pot</span>
           </div>
           <p className="small muted mb-0">
             One from each kitchen section, then the next in line, so the first
@@ -187,6 +174,7 @@ export default function Home() {
           <div className="split__aside">
             <span className="section-index">03 &middot; How it works</span>
             <h2>From order to doorstep</h2>
+            <span className="script">Four simple steps</span>
             <p className="small muted mt-2">
               Four steps, one of which you can watch happen in real time.
             </p>
@@ -214,9 +202,10 @@ export default function Home() {
       </section>
 
       <section className="section">
-        <div className="rule-block">
+        <div className="cta-band">
           <span className="section-index">04 &middot; Staff</span>
           <h2>Running the kitchen?</h2>
+          <span className="script">For the staff</span>
           <p className="lede mt-2">
             The kitchen view lists every order that has been placed, oldest
             first, and moves it through preparing, on the way and delivered.

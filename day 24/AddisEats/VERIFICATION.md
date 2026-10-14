@@ -8,7 +8,7 @@ This document records the exact steps to verify Addis Eats across the four areas
 
 ## 1. Verifying the Protection: The Three Console Attacks (Slide 17)
 
-Open the browser DevTools Console on the deployed application (`https://addis-eats-six.vercel.app`) or localhost:
+Open the browser DevTools Console on the deployed application (`https://addis-eats-capstone.vercel.app`) or localhost:
 
 ```js
 // Attack 1: Calling a Server Action While Signed Out
@@ -44,7 +44,7 @@ await cancelOrder("1"); // Targeting Order #1 belonging to "usr_abebe"
 | **Live data** | Network tab while typing in search box | One request per pause, not per keystroke | **Passed**: 300ms debounce timer resets on each key; only 1 `GET /api/dishes?search=...` fires after typing stops. |
 | **Seeding** | Load `/order-status?id=1` or `/orders/1` | Data on arrival, no spinner at all | **Passed**: Server passes `fallbackData` to SWR. Order status displays immediately on first paint. Polling continues every 5s silently. |
 | **Performance** | Run Lighthouse on deployed build | Both numbers recorded, LCP down | **Passed**: Lighthouse Performance: 98. LCP: 1.3s (down from 4.6s). CLS: 0.00 (down from 0.32). |
-| **Metadata** | View page source (`Ctrl+U`) on deployed page | Absolute `og:image` URLs, distinct descriptions | **Passed**: `<meta property="og:image" content="https://addis-eats-six.vercel.app/menu/1/opengraph-image">`. Each dish has a unique description. |
+| **Metadata** | View page source (`Ctrl+U`) on deployed page | Absolute `og:image` URLs, distinct descriptions | **Passed**: `<meta property="og:image" content="https://addis-eats-capstone.vercel.app/menu/1/opengraph-image">`. Each dish has a unique description. |
 | **Discovery** | Open `/sitemap.xml` and `/robots.txt` in browser | Real dishes listed, private routes absent | **Passed**: `/sitemap.xml` lists all 9 dishes (`/menu/1` to `/menu/9`). `/robots.txt` disallows `/cart`, `/checkout`, `/orders`, `/kitchen`. |
 
 ---
@@ -53,7 +53,7 @@ await cancelOrder("1"); // Targeting Order #1 belonging to "usr_abebe"
 
 | Time | Segment | What to Demonstrate & Say |
 |---|---|---|
-| **0–1 min** | **The Deployed Application** | Open `https://addis-eats-six.vercel.app`. Sign in with customer credentials (`abebe@example.com` / `password123`). Browse the menu, add Doro Wat and Shiro to cart, and place an order on `/checkout`. Show that the order completes cleanly. |
+| **0–1 min** | **The Deployed Application** | Open `https://addis-eats-capstone.vercel.app`. Sign in with customer credentials (`abebe@example.com` / `password123`). Browse the menu, add Doro Wat and Shiro to cart, and place an order on `/checkout`. Show that the order completes cleanly. |
 | **1–3 min** | **The AUTH.md Table & 3 Attacks** | Open `AUTH.md`. Explain Decision One: why each route has 3 protection layers and why the fourth column matters. Open DevTools console and execute the 3 attacks live: Attack 1 (signed out cancel), Attack 2 (cross-account cancel), Attack 3 (open redirect). Show that each is refused with the exact line of code. |
 | **3–5 min** | **Live Data & Seeded Orders** | Open DevTools Network tab. Filter by `Fetch/XHR`. Type "Tibs" rapidly into search — point out that zero requests fire until typing stops (300ms debounce). Then navigate to `/order-status?id=1`: show that full order details render immediately on first paint (no spinner) because server `fallbackData` seeded SWR. Point out subsequent 5-second polls in the network log. |
 | **5–7 min** | **PERF.md: The Before & After** | Open `PERF.md`. Present Decision Three: baseline vs optimized metrics. Show that LCP dropped from 4.6s to 1.3s because of `priority` preloading on the hero image; show that CLS dropped from 0.32 to 0.00 through explicit dimensions and `next/font` zero-shift overrides. Run or show Lighthouse score (98). |

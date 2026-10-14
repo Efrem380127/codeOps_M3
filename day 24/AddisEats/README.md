@@ -7,7 +7,7 @@
 
 ## 🚀 Live Production Deliverable
 
-- **Live Production URL**: [https://addis-eats-six.vercel.app](https://addis-eats-six.vercel.app)
+- **Live Production URL**: [https://addis-eats-capstone.vercel.app](https://addis-eats-capstone.vercel.app)
 - **Deployment URL**: [https://addis-eats-4038gzhqr-roveltesfaye-3329s-projects.vercel.app](https://addis-eats-4038gzhqr-roveltesfaye-3329s-projects.vercel.app)
 - **Vercel Project Dashboard**: [https://vercel.com/roveltesfaye-3329s-projects/addis-eats](https://vercel.com/roveltesfaye-3329s-projects/addis-eats)
 
@@ -20,7 +20,7 @@
 The application synthesizes the full curriculum of React and Next.js:
 - **Semantic, Accessible Markup**: Zero clickable divs, full keyboard navigation (Tab/Enter/Escape), and WCAG 44px touch targets.
 - **Three-Layer Security**: Cryptographic session cookies, edge middleware route protection, server component authorization, and ownership-gated server actions.
-- **Live Data Architecture**: Real-time Leaflet delivery tracking, Server-Sent Events (SSE) driver stream, 5-second SWR order status polling, and 300ms debounced catalog search.
+- **Live Data Architecture**: Real-time hand-rolled SVG delivery map, Server-Sent Events (SSE) driver stream, 5-second SWR order status polling, and 300ms debounced catalog search.
 - **Measured Core Web Vitals**: LCP of 1.3s, zero CLS (0.00), self-hosted typography (`next/font`), and responsive image pipelines (`next/image`).
 - **Data Presentation**: RFC 4180 CSV export, interactive order analytics charts, and tabular accessibility mirrors.
 
@@ -100,7 +100,7 @@ Open [http://localhost:3000](http://localhost:3000) to view the application.
 
 ### Timing Breakdown
 - **0:00–1:00 (1 min)**: *What it is and who it is for* — Introduce Addis Eats as an authentic Ethiopian food delivery service solving courier tracking and ordering.
-- **1:00–3:00 (2 mins)**: *The main flow, live* — Demonstrate live browsing on [https://addis-eats-six.vercel.app](https://addis-eats-six.vercel.app), add Shiro to cart, checkout, and watch real-time delivery map updates.
+- **1:00–3:00 (2 mins)**: *The main flow, live* — Demonstrate live browsing on [https://addis-eats-capstone.vercel.app](https://addis-eats-capstone.vercel.app), add Shiro to cart, checkout, and watch real-time delivery map updates.
 - **3:00–5:00 (2 mins)**: *One technical decision* — Explain why `DishList.js` is a Server Component streamed into client `FilterShell.js`, cutting client bundle size while preserving instant client tab switching.
 - **5:00–6:00 (1 min)**: *The three attacks refused* — Open DevTools console on the live site and demonstrate refusal of signed-out mutations, cross-account IDOR, and open redirects.
 - **6:00–7:00 (1 min)**: *PERF.md* — Walk through the two-column budget: how image preloading and `next/font` moved LCP from 4.6s to 1.3s and CLS to 0.00.

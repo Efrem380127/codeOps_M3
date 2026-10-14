@@ -8,7 +8,7 @@ Search engine optimization, metadata architecture, dynamic OpenGraph generation,
 - In `app/layout.tsx`:
   ```tsx
   export const metadata = {
-    metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://addis-eats-six.vercel.app"),
+    metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://addis-eats-capstone.vercel.app"),
     title: {
       default: "Addis Eats | Authentic Ethiopian Food & Cultural Books",
       template: "%s | Addis Eats",
@@ -24,7 +24,7 @@ Search engine optimization, metadata architecture, dynamic OpenGraph generation,
   };
   ```
 - **Why `metadataBase` is set to production URL**:
-  Next.js uses `metadataBase` to automatically resolve all relative paths into absolute URLs (e.g. `og:image` tags become `https://addis-eats-six.vercel.app/opengraph-image`). Social scrapers (Facebook, Twitter/X, Discord, WhatsApp) reject relative image paths.
+  Next.js uses `metadataBase` to automatically resolve all relative paths into absolute URLs (e.g. `og:image` tags become `https://addis-eats-capstone.vercel.app/opengraph-image`). Social scrapers (Facebook, Twitter/X, Discord, WhatsApp) reject relative image paths.
 - **Title Template**: Child routes export individual titles like `"Menu & Specialties"`, and Next.js expands them to `"Menu & Specialties | Addis Eats"`.
 
 ---
@@ -136,24 +136,24 @@ return (
   - **Excludes private routes**: `/cart`, `/checkout`, `/orders`, `/kitchen`, `/sign-in`.
 - **`app/robots.js`**:
   - Directs crawlers to allow public surfaces and disallow private surfaces (`/cart`, `/checkout`, `/orders`, `/kitchen`, `/sign-in`).
-  - Points crawlers to `https://addis-eats-six.vercel.app/sitemap.xml`.
+  - Points crawlers to `https://addis-eats-capstone.vercel.app/sitemap.xml`.
 
 ---
 
 ## 7. Canonical URLs on Query-Bearing Routes
 Search engines penalize duplicate content caused by query parameters (e.g. `/menu?category=Vegan&search=shiro`, `/sign-in?next=/checkout`).
 Every parameter-bearing route explicitly defines a canonical URL tag via `alternates.canonical`:
-- `/menu` -> `rel="canonical" href="https://addis-eats-six.vercel.app/menu"`
-- `/order-status` -> `rel="canonical" href="https://addis-eats-six.vercel.app/order-status"`
-- `/sign-in` -> `rel="canonical" href="https://addis-eats-six.vercel.app/sign-in"`
-- `/menu/[id]` -> `rel="canonical" href="https://addis-eats-six.vercel.app/menu/[id]"`
+- `/menu` -> `rel="canonical" href="https://addis-eats-capstone.vercel.app/menu"`
+- `/order-status` -> `rel="canonical" href="https://addis-eats-capstone.vercel.app/order-status"`
+- `/sign-in` -> `rel="canonical" href="https://addis-eats-capstone.vercel.app/sign-in"`
+- `/menu/[id]` -> `rel="canonical" href="https://addis-eats-capstone.vercel.app/menu/[id]"`
 
 ---
 
 ## 8. "Check Yourself" Verification Answers
 
 ### 1. Does the page source show absolute URLs in every `og:image` tag?
-**Yes.** Because `metadataBase` is set to `https://addis-eats-six.vercel.app` in `app/layout.tsx`, Next.js automatically prefixes all relative image routes. In page source, `<meta property="og:image" content="...">` renders with full absolute URLs (e.g. `https://addis-eats-six.vercel.app/opengraph-image` and `https://addis-eats-six.vercel.app/menu/1/opengraph-image`).
+**Yes.** Because `metadataBase` is set to `https://addis-eats-capstone.vercel.app` in `app/layout.tsx`, Next.js automatically prefixes all relative image routes. In page source, `<meta property="og:image" content="...">` renders with full absolute URLs (e.g. `https://addis-eats-capstone.vercel.app/opengraph-image` and `https://addis-eats-capstone.vercel.app/menu/1/opengraph-image`).
 
 ### 2. Do two different dish pages have two different descriptions?
 **Yes.** Each dish record in `app/data/dishes.js` defines an authentic culinary summary:
