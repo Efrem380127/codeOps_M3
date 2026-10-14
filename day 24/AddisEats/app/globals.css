@@ -2117,6 +2117,8 @@ textarea:focus {
    before it reads as a layout. Everything inside inherits the field, so the
    overrides below are about contrast, not colour invention. */
 .hero {
+  position: relative;
+  overflow: hidden;
   background: var(--signal-strong);
   color: var(--on-accent-strong);
   border-radius: var(--r-xl);
@@ -2128,12 +2130,12 @@ textarea:focus {
 .hero__inner {
   display: grid;
   gap: var(--sp-6);
-  align-items: end;
+  align-items: center;
 }
 
 @media (min-width: 960px) {
   .hero__inner {
-      grid-template-columns: minmax(0, 1fr) minmax(0, 0.62fr);
+      grid-template-columns: minmax(0, 1fr) minmax(0, 0.78fr);
       gap: var(--sp-8);
     }
 }
@@ -2192,103 +2194,160 @@ textarea:focus {
   margin-block-start: var(--sp-2);
 }
 
-.hero__facts {
-  display: grid;
-  gap: 0;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+/* A compact trust line under the buttons, in place of the four-cell stat
+   strip. The same facts, read as a sentence rather than as a dashboard. */
+.hero__trust {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2) var(--sp-5);
   list-style: none;
   padding: 0;
-  border-block-start: 1px solid oklch(99% 0.014 82 / 0.35);
+  margin-block-start: var(--sp-5);
+  font-size: var(--t-sm);
+  font-weight: 500;
+  color: oklch(99% 0.014 82 / 0.85);
 }
 
-@media (min-width: 560px) {
-  .hero__facts {
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-    }
-}
-
-.hero__facts li {
-  padding: var(--sp-3) var(--sp-4) var(--sp-3) 0;
-  border-inline-end: 1px solid oklch(99% 0.014 82 / 0.22);
-}
-
-.hero__facts li:last-child {
-  border-inline-end: 0;
-}
-
-@media (min-width: 560px) {
-  .hero__facts li + li {
-      padding-inline-start: var(--sp-4);
-    }
-}
-
-.hero__facts strong {
-  display: block;
+.hero__trust strong {
   font-family: var(--font-display);
-  font-size: var(--t-xl);
+  font-size: var(--t-md);
   font-weight: 600;
   letter-spacing: -0.02em;
-  line-height: 1.1;
+  margin-inline-end: var(--sp-1);
   color: inherit;
 }
 
-.hero__facts strong .icon {
-  width: 24px;
-  height: 24px;
-}
-
-.hero__facts span {
-  display: block;
-  margin-block-start: var(--sp-1);
-  font-family: var(--font-sans);
-  font-size: var(--t-xs);
-  font-weight: 500;
-  letter-spacing: 0.01em;
-  color: oklch(99% 0.014 82 / 0.78);
-}
-
-/* Hero food gallery — a mosaic of real dish photographs that makes the
-   visitor hungry before they read a word. */
+/* The lockup: one large photograph, the wordmark set oversized behind it like
+   a sign over a stall, and a note card floating over the corner of the image.
+   The photograph is the appetite; the wordmark is the brand at sign scale. */
 .hero__visual {
+  position: relative;
   display: flex;
-  flex-direction: column;
-  gap: var(--sp-5);
+  justify-content: center;
+  padding-block-start: 0;
 }
 
-.hero__gallery {
-  display: grid;
-  grid-template-columns: 1.2fr 1fr;
-  gap: var(--sp-3);
-  align-items: start;
+/* The wordmark is a display line, not a watermark: it sits whole above the
+   photograph, so the visual column needs the room reserved for it. Reserving
+   it here rather than overlapping keeps every letter legible. */
+@media (min-width: 960px) {
+  .hero__visual {
+    padding-block-start: var(--sp-8);
+  }
 }
 
-.hero__gallery-col {
-  display: flex;
-  flex-direction: column;
-  gap: var(--sp-3);
+.hero__wordmark {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline: 0;
+  z-index: 0;
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 5.5vw, 4.5rem);
+  font-weight: 700;
+  line-height: 0.85;
+  letter-spacing: -0.055em;
+  text-align: center;
+  white-space: nowrap;
+  color: oklch(99% 0.014 82 / 0.92);
+  pointer-events: none;
+  user-select: none;
 }
 
-.hero__gallery-col--large {
-  aspect-ratio: 1 / 1;
-}
-
-.hero__gallery-img {
+/* `height: auto` matters: without it the height attribute next/image emits
+   wins over aspect-ratio and the photograph renders at its intrinsic 1086x1448,
+   which made the hero 1576px tall. */
+.hero__photo {
+  position: relative;
+  z-index: 1;
   width: 100%;
-  height: 100%;
+  height: auto;
+  max-width: 400px;
+  aspect-ratio: 3 / 4;
   object-fit: cover;
+  border-radius: var(--r-xl);
+  box-shadow: var(--shadow-lg);
+}
+
+/* The floating note. It sits on the field, not on the photograph, so it keeps
+   the paper surface and the full text contrast in both themes. */
+.hero__card {
+  position: absolute;
+  z-index: 2;
+  inset-inline-end: 0;
+  inset-block-end: var(--sp-5);
+  width: min(248px, 70%);
+  display: grid;
+  gap: var(--sp-2);
+  padding: var(--sp-4);
+  background: var(--paper);
+  color: var(--ink-0);
   border-radius: var(--r-lg);
-  display: block;
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--shadow-lg);
 }
 
-.hero__gallery-col--large .hero__gallery-img {
-  height: 100%;
+.hero__card-icon {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--r-sm);
+  background: var(--accent-wash);
+  color: var(--accent-ink);
+  margin-block-end: var(--sp-1);
 }
 
+.hero__card-icon .icon {
+  width: 17px;
+  height: 17px;
+}
+
+.hero__card h2 {
+  font-size: var(--t-lg);
+  letter-spacing: -0.024em;
+  margin: 0;
+}
+
+.hero__card p {
+  font-size: var(--t-sm);
+  line-height: 1.45;
+  color: var(--ink-2);
+  margin: 0;
+}
+
+.hero__card a {
+  justify-self: start;
+  font-size: var(--t-sm);
+  font-weight: 600;
+  color: var(--signal-ink);
+  text-decoration: none;
+}
+
+.hero__card a:hover {
+  text-decoration: underline;
+}
+
+/* Stacked below the split, the wordmark would collide with the photograph, so
+   it goes and the card becomes a normal block under the image. */
 @media (max-width: 959px) {
-  .hero__gallery {
-    max-width: 480px;
-    margin-inline: auto;
+  .hero__wordmark {
+    display: none;
+  }
+
+  .hero__visual {
+    flex-direction: column;
+    align-items: center;
+    gap: var(--sp-4);
+    padding-block-start: 0;
+  }
+
+  .hero__photo {
+    max-width: 320px;
+  }
+
+  .hero__card {
+    position: static;
+    width: 100%;
+    max-width: 420px;
   }
 }
 

@@ -74,66 +74,60 @@ export default function Home() {
 
             <div className="hero__actions">
               <Link className="btn btn-primary" href="/menu">
-                Browse the menu
+                Order now
               </Link>
-              <Link className="btn btn-secondary" href="/order-status">
-                Track an order
+              <Link className="btn btn-secondary" href="/menu">
+                View the menu
               </Link>
             </div>
+
+            {/*
+              The four-cell stat strip is gone. The same facts now read as one
+              line under the buttons, which is where a visitor looks next.
+            */}
+            <ul className="hero__trust">
+              <li>
+                <strong>{dishes.length}</strong> dishes
+              </li>
+              <li>
+                <strong>{categories.length}</strong> kitchen sections
+              </li>
+              <li>Same day across Addis Ababa</li>
+            </ul>
           </div>
 
+          {/*
+            The lockup: one large photograph, the wordmark set oversized behind
+            it like a sign over a stall, and a note card floating over the
+            corner of the image. Below the split the wordmark is dropped and the
+            card becomes a normal block under the photograph.
+          */}
           <div className="hero__visual">
-            <div className="hero__gallery">
-              <div className="hero__gallery-col hero__gallery-col--large">
-                <Image
-                  src="/dishes/doro-wat.jpg"
-                  alt="Doro Wat, slow-simmered chicken in berbere sauce"
-                  width={400}
-                  height={400}
-                  className="hero__gallery-img"
-                  priority
-                />
-              </div>
-              <div className="hero__gallery-col">
-                <Image
-                  src="/dishes/misir-wat.jpg"
-                  alt="Misir Wat, red split lentils in berbere spices"
-                  width={200}
-                  height={200}
-                  className="hero__gallery-img"
-                  priority
-                />
-                <Image
-                  src="/dishes/derek-tibs.jpg"
-                  alt="Tibs, sautéed beef cubes with rosemary"
-                  width={200}
-                  height={200}
-                  className="hero__gallery-img"
-                  priority
-                />
-              </div>
-            </div>
+            <span className="hero__wordmark" aria-hidden="true">
+              Addis Eats
+            </span>
 
-            <ul className="hero__facts">
-              <li>
-                <strong>{dishes.length}</strong>
-                <span>Dishes on the menu</span>
-              </li>
-              <li>
-                <strong>{categories.length}</strong>
-                <span>Kitchen sections</span>
-              </li>
-              <li>
-                <strong>Same day</strong>
-                <span>Across Addis Ababa</span>
-              </li>
-              <li>
-                <strong>
-                  <Icon name="pin" />
-                </strong>
-                <span>Live courier tracking</span>
-              </li>
-            </ul>
+            <Image
+              src="/hero/hero.png"
+              alt=""
+              width={1086}
+              height={1448}
+              sizes="(min-width: 960px) 400px, 320px"
+              className="hero__photo"
+              priority
+            />
+
+            <div className="hero__card">
+              <span className="hero__card-icon" aria-hidden="true">
+                <Icon name="bowl" />
+              </span>
+              <h2>Cooked to order</h2>
+              <p>
+                Nothing is cooked before you order it, which is why the food is
+                hot when it reaches your door.
+              </p>
+              <Link href="/menu">See the menu</Link>
+            </div>
           </div>
         </div>
       </section>
