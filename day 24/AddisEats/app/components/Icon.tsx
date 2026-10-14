@@ -167,6 +167,22 @@ const ICONS: Record<string, React.ReactNode> = {
       <path d="M12 4.4v15.2" />
       <path d="M7.6 8.8 12 4.4l4.4 4.4" />
     </>
+  ),
+
+  leaf: (
+    <>
+      <path d="M12 3c0 0-8 4-8 10a8 8 0 0 0 8 8 8 8 0 0 0 8-8c0-6-8-10-8-10z" />
+      <path d="M12 21V11" />
+    </>
+  ),
+
+  utensils: (
+    <>
+      <path d="M6 3v6c0 2.2 1.3 4 3 4s3-1.8 3-4V3" />
+      <path d="M6 3v18" />
+      <path d="M17 3v9c0 1.7 1 3 2.2 3s2.3-1.3 2.3-3V3" />
+      <path d="M17 15v6" />
+    </>
   )
 };
 

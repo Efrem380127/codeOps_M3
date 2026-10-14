@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Archivo, IBM_Plex_Mono } from "next/font/google";
+import { Archivo, Fraunces, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
 import Providers from "./components/Providers";
 import AccountMenu from "./components/AccountMenu";
@@ -14,16 +14,24 @@ import Icon from "./components/Icon";
  * a privacy leak to a third party for no benefit. next/font downloads the files
  * at build time and serves them from our own origin.
  *
- * Archivo is a grotesque drawn for signage and technical documentation. It has
- * the proportions of the Swiss tradition without being Helvetica — which is the
- * right register for a printed menu. It replaces Playfair Display (an editorial
- * serif, and the single most common "make it look premium" reflex) and Plus
- * Jakarta Sans.
+ * Fraunces is the display face. It is a soft serif with a variable optical
+ * size, drawn for headlines, and it is deliberately warm rather than neutral:
+ * at large sizes it reads as a painted sign over a food stall. It carries the
+ * wordmark, every headline and every dish name, and nothing else.
  *
- * IBM Plex Mono carries every price, quantity and order number. It was drawn
- * for IBM's brand rather than for a code editor, so it reads as instrument
- * labelling rather than as a developer terminal.
+ * Archivo carries running text and controls. It is a grotesque drawn for
+ * signage, so it stays legible at small sizes without competing with Fraunces.
+ *
+ * IBM Plex Mono is kept for one job only: numbers that have to line up in a
+ * column on the kitchen ticket. It is no longer used for prices or labels,
+ * where monospace was reading as instrument panel rather than as food.
  */
+const fraunces = Fraunces({
+  variable: "--font-fraunces",
+  subsets: ["latin"],
+  display: "swap"
+});
+
 const archivo = Archivo({
   variable: "--font-archivo",
   subsets: ["latin"],
@@ -89,7 +97,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html
       lang="en"
-      className={`${archivo.variable} ${plexMono.variable}`}
+      className={`${fraunces.variable} ${archivo.variable} ${plexMono.variable}`}
       // data-theme is written by the boot script above, which React cannot know
       // about at render time. Suppressing the warning here is correct: the
       // mismatch is intentional and already resolved before hydration.
@@ -128,7 +136,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </main>
 
           <footer>
-            <p>Addis Eats &middot; Authentic Ethiopian Cuisine</p>
+            <p>Addis Eats Ethiopia</p>
           </footer>
         </Providers>
 

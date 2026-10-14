@@ -1,11 +1,14 @@
 /* ==========================================================================
-   Addis Eats — design system
-   Clinical Swiss, warm signal: a printed menu, not a delivery marketplace.
+   Addis Eats design system
+   Bold and appetising. A spice market poster, not a delivery marketplace.
    See .impeccable.md for the direction this encodes.
 
-   This is the same system as Meds Addis — the two capstones share a design
-   language — differentiated by its signal colour. Meds Addis signals in
-   prescription amber; Addis Eats signals in paprika.
+   This no longer shares a design language with Meds Addis. That project keeps
+   its own restrained system, which suits a pharmacy. A food app has a
+   different job: it has to make someone hungry in the time it takes them to
+   scroll one screen. So this system commits to a saturated colour field, a
+   display serif and generous radius, and it shares nothing with Meds Addis but
+   the token names.
 
    Order: tokens -> reset -> base -> header -> layout -> components -> states
    ========================================================================== */
@@ -28,92 +31,130 @@
   color-scheme: light dark;
 
   /* --- Neutrals -----------------------------------------------------------
-     A cool ramp carrying a trace of blue. Not pure grey: nothing in a real
-     environment is. The ramp runs light-to-dark as ink-0 is the strongest
-     text, so the naming stays stable when the theme flips. */
-  --ink-0: light-dark(oklch(19% 0.014 255), oklch(97% 0.004 255));
-  --ink-1: light-dark(oklch(30% 0.013 255), oklch(89% 0.006 255));
-  --ink-2: light-dark(oklch(45% 0.012 255), oklch(74% 0.008 255));
-  /* ink-3 carries real text — labels, chart ticks, table meta — so it owes the
-     full 4.5:1 rather than the 3:1 for incidental marks. ink-4 is placeholder
-     and disabled only, held to the 3:1 floor WCAG asks of inactive UI. Both
-     were a step too light. */
-  --ink-3: light-dark(oklch(54% 0.011 255), oklch(62% 0.010 255));
-  --ink-4: light-dark(oklch(65% 0.009 255), oklch(50% 0.010 255));
+     A warm ramp drawn from roasted spice rather than from a screen. The hue
+     sits around 45 degrees, so every neutral carries a trace of brown and
+     nothing on the page is cold. The ramp runs light to dark as ink-0 is the
+     strongest text, so the naming stays stable when the theme flips. */
+  --ink-0: light-dark(oklch(21% 0.038 45), oklch(97% 0.014 80));
+  --ink-1: light-dark(oklch(31% 0.034 45), oklch(89% 0.016 80));
+  --ink-2: light-dark(oklch(44% 0.030 46), oklch(75% 0.018 78));
+  /* ink-3 carries real text (labels, table meta), so it owes the full 4.5:1
+     rather than the 3:1 for incidental marks. ink-4 is placeholder and
+     disabled only, held to the 3:1 floor WCAG asks of inactive UI. */
+  --ink-3: light-dark(oklch(55% 0.028 48), oklch(63% 0.020 78));
+  --ink-4: light-dark(oklch(66% 0.024 50), oklch(51% 0.020 78));
 
   /* --- Surfaces -----------------------------------------------------------
-     `paper` is deliberately not #fff. The old canvas was a warm cream, which
-     is the other obvious reflex for a food brand; a neutral paper lets the
-     photography be the only warm thing on the page. */
-  --paper: light-dark(oklch(98.4% 0.003 255), oklch(15.5% 0.008 255));
-  --surface: light-dark(oklch(100% 0 0), oklch(19.5% 0.008 255));
-  --surface-sunken: light-dark(oklch(96.6% 0.004 255), oklch(23.5% 0.008 255));
+     `paper` is a warm cream, the colour of a paper menu under a lamp. Cards
+     sit a shade above it on `surface`, and wells sink below it. Neither is
+     pure white, because pure white next to food photography reads as a
+     screenshot rather than a page. */
+  --paper: light-dark(oklch(96.5% 0.022 80), oklch(17% 0.024 42));
+  --surface: light-dark(oklch(99.3% 0.010 85), oklch(21.5% 0.026 42));
+  --surface-sunken: light-dark(oklch(93.5% 0.030 78), oklch(14% 0.022 42));
+
+  /* --- Field --------------------------------------------------------------
+     A saturated colour field. Used as the ground for the hero and the footer,
+     which are the two places the page is allowed to shout. Deep berbere red
+     with cream type on it: the strongest single move in the system. */
+  --field: light-dark(oklch(41% 0.165 32), oklch(30% 0.115 32));
+  --field-ink: light-dark(oklch(97% 0.022 82), oklch(95% 0.020 82));
+  --field-ink-soft: light-dark(oklch(88% 0.060 60), oklch(82% 0.055 62));
 
   /* --- Rules --------------------------------------------------------------
-     The only mechanism for depth in this system. There are no shadows. */
-  --rule: light-dark(oklch(89% 0.006 255), oklch(29% 0.010 255));
-  --rule-strong: light-dark(oklch(78% 0.008 255), oklch(40% 0.012 255));
+     Warm hairlines. Still the cheapest way to separate, but they now sit on
+     cream rather than on cold grey. */
+  --rule: light-dark(oklch(87% 0.032 72), oklch(30% 0.030 42));
+  --rule-strong: light-dark(oklch(75% 0.048 65), oklch(42% 0.038 42));
 
   /* Text placed on an ink or signal surface. It flips with the theme because
-     the surfaces it sits on flip too: white-on-paprika in light mode becomes
-     near-black-on-lighter-paprika in dark. This exists so that "white text on a
+     the surfaces it sits on flip too: cream-on-red in light mode becomes
+     near-black-on-lighter-red in dark. This exists so that "text on a coloured
      button" has one honest answer instead of a hardcoded #fff that breaks the
      moment the theme changes. */
-  --on-accent: light-dark(oklch(100% 0 0), oklch(16% 0.012 255));
-  --on-accent-strong: oklch(98% 0.010 32);
+  --on-accent: light-dark(oklch(99% 0.012 82), oklch(18% 0.026 42));
+  --on-accent-strong: oklch(99% 0.014 82);
 
   /* --- Signal -------------------------------------------------------------
-     Paprika. The single accent, and unlike Meds Addis it is also the primary
-     action colour — for a food app, appetite is the point, and a black "Add to
-     cart" would be a wasted opportunity. It appears nowhere else. */
-  --signal: light-dark(oklch(56% 0.175 32), oklch(68% 0.155 32));
-  --signal-ink: light-dark(oklch(42% 0.155 30), oklch(84% 0.100 32));
-  --signal-wash: light-dark(oklch(96.5% 0.028 32), oklch(26% 0.055 32));
-  --signal-rule: light-dark(oklch(80% 0.110 32), oklch(44% 0.095 32));
+     Berbere. The primary action colour and the loudest thing small enough to
+     be a button. Saturated on purpose: a food app that cannot commit to one
+     hot colour is a food app with no appetite. */
+  --signal: light-dark(oklch(52% 0.198 32), oklch(67% 0.178 34));
+  --signal-ink: light-dark(oklch(42% 0.180 30), oklch(86% 0.098 40));
+  --signal-wash: light-dark(oklch(93% 0.048 45), oklch(28% 0.072 32));
+  --signal-rule: light-dark(oklch(74% 0.140 35), oklch(46% 0.110 32));
 
   /* The signal as a pressed fill. Deliberately deep in BOTH schemes, because
-     the label on it has to be light in both — which --signal-ink cannot
-     provide, since it flips to a light paprika in dark mode. Pointing the
-     hover state at it produced white-on-light-paprika there. */
-  --signal-strong: light-dark(oklch(48% 0.170 32), oklch(54% 0.150 32));
+     the label on it has to be light in both. --signal-ink cannot provide that,
+     since it flips to a light berbere in dark mode. */
+  --signal-strong: light-dark(oklch(44% 0.190 30), oklch(50% 0.175 32));
+
+  /* --- Accent -------------------------------------------------------------
+     Saffron, the colour of the spice stalls and of the turmeric in a wat. The
+     signal is what you press; the accent is what you notice. It carries the
+     section markers, the "spicy" note and the hairline details that would
+     otherwise be grey, and it never fills a control. */
+  --accent: light-dark(oklch(78% 0.155 78), oklch(82% 0.148 80));
+  --accent-ink: light-dark(oklch(50% 0.135 68), oklch(88% 0.125 82));
+  --accent-wash: light-dark(oklch(95% 0.060 85), oklch(28% 0.062 74));
 
   /* --- Semantic -----------------------------------------------------------
-     Kept muted on purpose. A system with one signal colour cannot afford a
-     second one shouting at the same volume. */
-  --ok: light-dark(oklch(52% 0.098 158), oklch(74% 0.090 158));
-  --ok-ink: light-dark(oklch(40% 0.088 158), oklch(84% 0.080 158));
-  --ok-wash: light-dark(oklch(96.5% 0.022 158), oklch(26% 0.035 158));
+     Two functional colours, both kept quieter than the signal so that the
+     only thing shouting on a page is the thing you can press. Green marks
+     plant-based and confirmed states; red marks a failure. Neither ever
+     appears as a fill for a primary control. */
+  --ok: light-dark(oklch(54% 0.125 152), oklch(76% 0.112 152));
+  --ok-ink: light-dark(oklch(42% 0.112 152), oklch(86% 0.095 152));
+  --ok-wash: light-dark(oklch(94% 0.040 152), oklch(27% 0.052 152));
 
-  --danger: light-dark(oklch(52% 0.170 27), oklch(72% 0.150 27));
-  --danger-ink: light-dark(oklch(43% 0.160 27), oklch(84% 0.090 27));
-  --danger-wash: light-dark(oklch(96.5% 0.022 27), oklch(26% 0.050 27));
+  --danger: light-dark(oklch(52% 0.185 27), oklch(72% 0.160 27));
+  --danger-ink: light-dark(oklch(44% 0.175 27), oklch(85% 0.100 27));
+  --danger-wash: light-dark(oklch(94% 0.042 27), oklch(28% 0.058 27));
 
   /* --- Geometry -----------------------------------------------------------
-     Zero radius. Sharp rectangles are the printed-menu metaphor, and they are
-     the single most visible break from the rounded-card default. Circles are
-     allowed only for status dots, which are genuinely circular objects. */
-  --r: 0px;
+     Generous radius. Sharp rectangles were the printed-ticket metaphor; food
+     wants edges that look hand-cut rather than guillotined. `--r` is the
+     default every control inherits, so nothing is left square by accident. */
+  --r: 12px;
+  --r-sm: 8px;
+  --r-md: 14px;
+  --r-lg: 20px;
+  --r-xl: 28px;
   --r-full: 999px;
 
+  /* --- Shadows ------------------------------------------------------------
+     Warm shadows tinted toward brown, so a card lifts off cream paper instead
+     of casting a grey smudge on it. */
+  --shadow-color: light-dark(oklch(38% 0.090 45 / 0.20), oklch(0% 0 0 / 0.55));
+  --shadow-sm: 0 2px 6px -1px var(--shadow-color);
+  --shadow-md: 0 12px 28px -10px var(--shadow-color);
+  --shadow-lg: 0 28px 60px -18px var(--shadow-color);
+
   /* --- Type ---------------------------------------------------------------
-     One grotesque for structure, one mono for data. */
+     Three roles. Fraunces is the display face: a soft serif with real weight
+     to it, drawn for headlines rather than for reading, and it is what gives
+     the page its warmth. Archivo handles every piece of running text and every
+     control. IBM Plex Mono survives only where a number has to line up in a
+     column on a kitchen ticket, never in customer-facing copy. */
+  --font-display: var(--font-fraunces), "Fraunces", Georgia, "Times New Roman",
+    serif;
   --font-sans: var(--font-archivo), "Archivo", ui-sans-serif, system-ui,
     -apple-system, "Segoe UI", sans-serif;
   --font-mono: var(--font-plex-mono), "IBM Plex Mono", ui-monospace,
     SFMono-Regular, Menlo, Consolas, monospace;
 
-  --t-2xs: 0.6875rem; /* 11px — mono labels only */
-  --t-xs: 0.75rem; /* 12px */
-  --t-sm: 0.8125rem; /* 13px */
-  --t-base: 0.9375rem; /* 15px — body */
-  --t-md: 1.0625rem; /* 17px — lead */
-  --t-lg: 1.375rem; /* 22px */
-  --t-xl: 1.875rem; /* 30px */
-  --t-2xl: 2.375rem; /* 38px */
-  --t-display: clamp(2.25rem, 1.4rem + 3.8vw, 3.75rem);
+  --t-2xs: 0.75rem; /* 12px, dense labels */
+  --t-xs: 0.8125rem; /* 13px */
+  --t-sm: 0.875rem; /* 14px */
+  --t-base: 1rem; /* 16px, body */
+  --t-md: 1.125rem; /* 18px, lead */
+  --t-lg: 1.5rem; /* 24px */
+  --t-xl: 2rem; /* 32px */
+  --t-2xl: 2.75rem; /* 44px */
+  --t-display: clamp(2.5rem, 1.1rem + 5.6vw, 5.25rem);
 
-  --lh-tight: 1.03;
-  --lh-head: 1.15;
+  --lh-tight: 1.02;
+  --lh-head: 1.1;
   --lh-body: 1.55;
 
   /* --- Space -------------------------------------------------------------- */
@@ -124,13 +165,13 @@
   --sp-5: 1.5rem;
   --sp-6: 2rem;
   --sp-7: 3rem;
-  --sp-8: 4.5rem;
-  --sp-9: 7rem;
+  --sp-8: 5rem;
+  --sp-9: 7.5rem;
 
   --ring: 0 0 0 2px var(--paper), 0 0 0 4px var(--signal);
 
-  --container: 1120px;
-  --header-h: 60px;
+  --container: 1200px;
+  --header-h: 68px;
 
   /* Exponential ease-out. Nothing in this system bounces. */
   --ease: cubic-bezier(0.16, 1, 0.3, 1);
@@ -228,23 +269,26 @@ h1,
 h2,
 h3,
 h4 {
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
   color: var(--ink-0);
-  font-weight: 600;
+  font-weight: 700;
   line-height: var(--lh-head);
-  letter-spacing: -0.022em;
+  letter-spacing: -0.025em;
   text-wrap: balance;
 }
 
 h1 {
   font-size: var(--t-2xl);
-  letter-spacing: -0.03em;
+  font-weight: 800;
+  letter-spacing: -0.034em;
   line-height: var(--lh-tight);
   margin-block-end: var(--sp-2);
 }
 
 h2 {
   font-size: var(--t-xl);
-  letter-spacing: -0.026em;
+  letter-spacing: -0.028em;
   margin-block-end: var(--sp-2);
 }
 
@@ -280,9 +324,10 @@ p {
 .site-header {
   background: var(--paper);
   border-block-end: 1px solid var(--rule);
-  /* The regulatory band. One 2px paprika rule across the top of every page is
-     the cheapest possible brand device. */
-  border-block-start: 2px solid var(--signal);
+  /* One thick berbere band across the top of every page. The cheapest brand
+     device there is, and at 4px it reads as a deliberate stripe rather than as
+     a rendering artefact. */
+  border-block-start: 4px solid var(--signal);
   position: sticky;
   top: 0;
   z-index: 40;
@@ -304,21 +349,25 @@ p {
   display: inline-flex;
   align-items: center;
   gap: var(--sp-3);
+  font-family: var(--font-display);
   font-size: var(--t-md);
-  font-weight: 600;
+  font-weight: 700;
   color: var(--ink-0);
   text-decoration: none;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.022em;
 }
 
-/* A solid ink square holding a drawn mark — not a serif wordmark. */
+/* A filled berbere tile holding a drawn mark. The tile is the app's colour at
+   its smallest size, which is what makes the header recognisable before any
+   text is read. */
 .brand-mark {
   display: grid;
   place-items: center;
-  width: 30px;
-  height: 30px;
-  background: var(--ink-0);
-  color: var(--paper);
+  width: 34px;
+  height: 34px;
+  background: var(--signal);
+  color: var(--on-accent);
+  border-radius: var(--r-sm);
   flex-shrink: 0;
 }
 
@@ -357,31 +406,33 @@ p {
   border-block-end-color: var(--signal);
 }
 
-/* Cart. A rectangle with a hairline, not a filled pill. */
+/* Cart. Filled berbere, because on a food page the basket is the one control
+   that should be impossible to miss. It is the only filled element in the
+   header. */
 .cart-pill {
   display: inline-flex;
   align-items: center;
   gap: var(--sp-2);
-  min-height: 40px;
-  padding-inline: var(--sp-4);
-  border: 1px solid var(--ink-0);
-  border-radius: var(--r);
-  background: transparent;
-  color: var(--ink-0) !important;
-  font-family: var(--font-mono);
-  font-size: var(--t-2xs);
-  font-weight: 500 !important;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  min-height: 42px;
+  padding-inline: var(--sp-5);
+  border: 1px solid var(--signal);
+  border-radius: var(--r-md);
+  background: var(--signal);
+  color: var(--on-accent) !important;
+  font-family: var(--font-sans);
+  font-size: var(--t-sm);
+  font-weight: 700 !important;
   text-decoration: none;
   white-space: nowrap;
+  box-shadow: var(--shadow-sm);
   transition: background-color var(--dur) var(--ease),
-    color var(--dur) var(--ease);
+    border-color var(--dur) var(--ease), color var(--dur) var(--ease);
 }
 
 .cart-pill:hover {
-  background: var(--ink-0);
-  color: var(--paper) !important;
+  background: var(--signal-strong);
+  border-color: var(--signal-strong);
+  color: var(--on-accent-strong) !important;
 }
 
 /* Theme control. Sits beside the cart and behaves like a form control. */
@@ -408,10 +459,8 @@ p {
   height: 17px;
 }
 
-/* Account state. Identity reads as a stamp — mono, uppercase, hairline — not
-   as a chip with a coloured dot, which is the usual treatment and says nothing.
-   The name is the only variable-length string in the header, so it is allowed
-   to truncate rather than push the nav around. */
+/* Account state. The name is the only variable-length string in the header, so
+   it is allowed to truncate rather than push the nav around. */
 .account {
   display: inline-flex;
   align-items: center;
@@ -422,13 +471,11 @@ p {
   display: inline-flex;
   align-items: center;
   gap: var(--sp-2);
-  max-width: 12ch;
+  max-width: 14ch;
   overflow: hidden;
-  font-family: var(--font-mono);
-  font-size: var(--t-2xs);
-  font-weight: 500;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  font-family: var(--font-sans);
+  font-size: var(--t-sm);
+  font-weight: 600;
   color: var(--ink-2);
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -479,17 +526,23 @@ main {
   padding: var(--sp-5) var(--sp-4) var(--sp-8);
 }
 
+/* The closing band. A full-bleed berbere field with the wordmark set large on
+   it, so the page ends on the brand rather than trailing off into small print.
+   It is the second and last place the palette is allowed to shout. */
 footer {
-  border-block-start: 1px solid var(--rule-strong);
-  background: var(--paper);
-  padding-block: var(--sp-5);
+  background: var(--field);
+  padding-block: var(--sp-7);
   padding-inline: var(--sp-4);
   text-align: center;
-  font-family: var(--font-mono);
-  font-size: var(--t-2xs);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--ink-3);
+}
+
+footer p {
+  font-family: var(--font-display);
+  font-size: var(--t-lg);
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  color: var(--field-ink);
+  margin: 0;
 }
 
 .page-heading {
@@ -819,8 +872,8 @@ aside,
 
 .menu-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: var(--sp-5);
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--sp-6);
   margin-block-start: var(--sp-4);
 }
 
@@ -828,23 +881,28 @@ aside,
   position: relative;
   background: var(--surface);
   border: 1px solid var(--rule);
-  border-radius: var(--r);
+  border-radius: var(--r-lg);
   overflow: hidden;
   display: flex;
   flex-direction: column;
   text-decoration: none;
   color: inherit;
-  transition: border-color var(--dur) var(--ease);
+  box-shadow: var(--shadow-sm);
+  transition: border-color var(--dur) var(--ease),
+    box-shadow var(--dur) var(--ease),
+    transform var(--dur) var(--ease);
 }
 
 .food-card:hover {
-  border-color: var(--ink-0);
+  border-color: var(--rule-strong);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
 }
 
 .food-card-media {
   position: relative;
   width: 100%;
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 1 / 1;
   overflow: hidden;
   background: var(--surface-sunken);
   border-block-end: 1px solid var(--rule);
@@ -855,6 +913,11 @@ aside,
   height: 100%;
   object-fit: cover;
   display: block;
+  transition: transform 0.4s var(--ease);
+}
+
+.food-card:hover .food-card-img {
+  transform: scale(1.06);
 }
 
 .food-card-body {
@@ -868,16 +931,16 @@ aside,
 .food-card-header {
   display: flex;
   justify-content: space-between;
-  align-items: baseline;
+  align-items: flex-start;
   gap: var(--sp-3);
-  margin-block-end: var(--sp-1);
+  margin-block-end: var(--sp-2);
 }
 
 .food-card-title {
-  font-size: var(--t-base);
+  font-size: var(--t-lg);
   font-weight: 600;
   color: var(--ink-0);
-  letter-spacing: -0.014em;
+  letter-spacing: -0.018em;
   line-height: 1.25;
   margin: 0;
 }
@@ -892,18 +955,18 @@ aside,
 }
 
 .food-card-price {
-  font-family: var(--font-mono);
-  font-size: var(--t-sm);
-  font-weight: 500;
-  color: var(--ink-0);
+  font-size: var(--t-md);
+  font-weight: 700;
+  color: var(--signal);
   white-space: nowrap;
+  letter-spacing: -0.01em;
 }
 
 .food-card-desc {
   font-size: var(--t-sm);
   color: var(--ink-2);
-  line-height: 1.45;
-  margin-block-end: var(--sp-4);
+  line-height: 1.5;
+  margin-block-end: var(--sp-3);
   min-height: 2.4rem;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -911,34 +974,45 @@ aside,
   overflow: hidden;
 }
 
-/* The dietary annotation. Was a frosted pill floating over the photograph;
-   now an italic note beside the dish, as the design doc always intended. */
+/* The dietary annotation and prep time — clean, functional labels
+   that help the visitor decide what to order. */
 .dish-category {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
   font-size: var(--t-2xs);
-  font-style: italic;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
   color: var(--ink-3);
-  margin-block-end: var(--sp-1);
+  margin-block-end: var(--sp-2);
+}
+
+.dish-prep-time {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-1);
+  font-size: var(--t-2xs);
+  color: var(--ink-3);
 }
 
 .food-card-action {
   width: 100%;
   padding: var(--sp-3) var(--sp-4);
-  background: transparent;
-  border: 1px solid var(--ink-0);
-  color: var(--ink-0);
-  font-family: var(--font-mono);
-  font-weight: 500;
-  font-size: var(--t-2xs);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  border-radius: var(--r);
+  background: var(--signal);
+  border: 1px solid var(--signal);
+  color: var(--on-accent);
+  font-size: var(--t-sm);
+  font-weight: 600;
+  letter-spacing: -0.004em;
+  border-radius: var(--r-md);
   text-align: center;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: var(--sp-2);
   transition: background-color var(--dur) var(--ease),
+    border-color var(--dur) var(--ease),
     color var(--dur) var(--ease);
   margin-block-start: auto;
   cursor: pointer;
@@ -946,8 +1020,16 @@ aside,
 }
 
 .food-card:hover .food-card-action {
-  background: var(--ink-0);
-  color: var(--paper);
+  background: var(--signal-strong);
+  border-color: var(--signal-strong);
+  color: var(--on-accent-strong);
+}
+
+.food-card-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  margin-block-end: var(--sp-3);
 }
 
 .food-card-controls {
@@ -964,20 +1046,18 @@ aside,
 }
 
 .dish-details-link {
-  font-family: var(--font-mono);
-  font-size: var(--t-2xs);
+  font-size: var(--t-sm);
   font-weight: 500;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
   color: var(--ink-2);
   text-decoration: none;
-  padding: var(--sp-3) var(--sp-2);
-  border-radius: var(--r);
+  padding: var(--sp-3) var(--sp-3);
+  border-radius: var(--r-md);
+  transition: color var(--dur) var(--ease), background-color var(--dur) var(--ease);
 }
 
 .dish-details-link:hover {
   color: var(--ink-0);
-  text-decoration: underline;
+  background: var(--surface-sunken);
 }
 
 .dish-list-heading {
@@ -996,19 +1076,20 @@ aside,
   align-items: center;
   justify-content: center;
   gap: var(--sp-2);
-  padding: var(--sp-3) var(--sp-4);
-  min-height: 44px;
+  padding: var(--sp-3) var(--sp-5);
+  min-height: 48px;
   font-size: var(--t-sm);
-  font-weight: 500;
+  font-weight: 600;
   letter-spacing: -0.004em;
-  border-radius: var(--r);
+  border-radius: var(--r-md);
   border: 1px solid transparent;
   cursor: pointer;
   text-decoration: none;
   line-height: 1.25;
   white-space: nowrap;
   transition: background-color var(--dur) var(--ease),
-    border-color var(--dur) var(--ease), color var(--dur) var(--ease);
+    border-color var(--dur) var(--ease), color var(--dur) var(--ease),
+    box-shadow var(--dur) var(--ease);
 }
 
 .btn[disabled],
@@ -1030,6 +1111,7 @@ aside,
   background-color: var(--signal-strong);
   border-color: var(--signal-strong);
   color: var(--on-accent-strong);
+  box-shadow: var(--shadow-sm);
 }
 
 .btn-secondary {
@@ -1846,13 +1928,13 @@ textarea:focus {
 }
 
 .section {
-  padding-block: var(--sp-7);
+  padding-block: var(--sp-8);
   border-block-start: 1px solid var(--rule);
 }
 
 .section:first-of-type {
   border-block-start: 0;
-  padding-block-start: var(--sp-5);
+  padding-block-start: var(--sp-6);
 }
 
 .section-head {
@@ -1871,12 +1953,13 @@ textarea:focus {
 
 .section-index {
   display: block;
-  font-family: var(--font-mono);
-  font-size: var(--t-2xs);
-  font-weight: 500;
-  letter-spacing: 0.1em;
-  color: var(--ink-3);
-  margin-block-end: var(--sp-3);
+  font-family: var(--font-sans);
+  font-size: var(--t-xs);
+  font-weight: 700;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--signal);
+  margin-block-end: var(--sp-2);
 }
 
 @media (min-width: 900px) {
@@ -1896,21 +1979,22 @@ textarea:focus {
 .eyebrow {
   display: inline-flex;
   align-items: center;
-  gap: var(--sp-2);
-  font-family: var(--font-mono);
-  font-size: var(--t-2xs);
-  font-weight: 500;
-  letter-spacing: 0.09em;
+  gap: var(--sp-3);
+  font-family: var(--font-sans);
+  font-size: var(--t-xs);
+  font-weight: 700;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--ink-3);
-  margin-block-end: var(--sp-3);
+  color: var(--accent-ink);
+  margin-block-end: var(--sp-4);
 }
 
 .eyebrow::before {
   content: "";
-  width: 14px;
-  height: 1px;
-  background: var(--signal);
+  width: 26px;
+  height: 4px;
+  border-radius: var(--r-full);
+  background: var(--accent);
   flex-shrink: 0;
 }
 
@@ -1987,8 +2071,8 @@ textarea:focus {
 }
 
 .rule-block {
-  border-inline-start: 2px solid var(--signal);
-  padding-inline-start: var(--sp-4);
+  border-inline-start: 6px solid var(--signal);
+  padding-inline-start: var(--sp-5);
 }
 
 .steps {
@@ -2033,10 +2117,17 @@ textarea:focus {
   max-width: 62ch;
 }
 
+/* The hero is the one saturated field on the site. Deep berbere in both
+   schemes, cream type, generous radius: it should read as a plate of mitmita
+   before it reads as a layout. Everything inside inherits the field, so the
+   overrides below are about contrast, not colour invention. */
 .hero {
-  padding-block: var(--sp-6) var(--sp-7);
-  border-block-start: 2px solid var(--ink-0);
+  background: var(--signal-strong);
+  color: var(--on-accent-strong);
+  border-radius: var(--r-xl);
+  padding: var(--sp-7) var(--sp-6);
   margin-block-end: var(--sp-7);
+  box-shadow: var(--shadow-md);
 }
 
 .hero__inner {
@@ -2053,7 +2144,7 @@ textarea:focus {
 }
 
 .hero h1 {
-  color: var(--ink-0);
+  color: inherit;
   font-size: var(--t-display);
   font-weight: 600;
   letter-spacing: -0.042em;
@@ -2062,10 +2153,41 @@ textarea:focus {
 }
 
 .hero p {
-  color: var(--ink-2);
+  color: oklch(99% 0.014 82 / 0.85);
   font-size: var(--t-md);
   line-height: 1.5;
   max-width: 46ch;
+}
+
+/* The eyebrow and both buttons are restated against the field: the global
+   paprika primary would vanish on berbere, and the ink eyebrow would too. */
+.hero .eyebrow {
+  color: var(--on-accent-strong);
+}
+
+.hero .eyebrow::before {
+  background: currentColor;
+}
+
+.hero .btn-primary {
+  background-color: var(--on-accent-strong);
+  border-color: var(--on-accent-strong);
+  color: var(--signal-strong);
+}
+
+.hero .btn-primary:hover {
+  background-color: oklch(95% 0.024 82);
+  border-color: oklch(95% 0.024 82);
+}
+
+.hero .btn-secondary {
+  border-color: oklch(99% 0.014 82 / 0.55);
+  color: var(--on-accent-strong);
+}
+
+.hero .btn-secondary:hover {
+  border-color: var(--on-accent-strong);
+  color: var(--on-accent-strong);
 }
 
 .hero__actions {
@@ -2081,7 +2203,7 @@ textarea:focus {
   grid-template-columns: repeat(2, minmax(0, 1fr));
   list-style: none;
   padding: 0;
-  border-block-start: 1px solid var(--rule-strong);
+  border-block-start: 1px solid oklch(99% 0.014 82 / 0.35);
 }
 
 @media (min-width: 560px) {
@@ -2092,7 +2214,7 @@ textarea:focus {
 
 .hero__facts li {
   padding: var(--sp-3) var(--sp-4) var(--sp-3) 0;
-  border-inline-end: 1px solid var(--rule);
+  border-inline-end: 1px solid oklch(99% 0.014 82 / 0.22);
 }
 
 .hero__facts li:last-child {
@@ -2107,21 +2229,72 @@ textarea:focus {
 
 .hero__facts strong {
   display: block;
-  font-size: var(--t-lg);
+  font-family: var(--font-display);
+  font-size: var(--t-xl);
   font-weight: 600;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.02em;
   line-height: 1.1;
-  color: var(--ink-0);
+  color: inherit;
+}
+
+.hero__facts strong .icon {
+  width: 24px;
+  height: 24px;
 }
 
 .hero__facts span {
   display: block;
   margin-block-start: var(--sp-1);
-  font-family: var(--font-mono);
-  font-size: var(--t-2xs);
-  letter-spacing: 0.07em;
-  text-transform: uppercase;
-  color: var(--ink-3);
+  font-family: var(--font-sans);
+  font-size: var(--t-xs);
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  color: oklch(99% 0.014 82 / 0.78);
+}
+
+/* Hero food gallery — a mosaic of real dish photographs that makes the
+   visitor hungry before they read a word. */
+.hero__visual {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+}
+
+.hero__gallery {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: var(--sp-3);
+  align-items: start;
+}
+
+.hero__gallery-col {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+
+.hero__gallery-col--large {
+  aspect-ratio: 1 / 1;
+}
+
+.hero__gallery-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: var(--r-lg);
+  display: block;
+  box-shadow: var(--shadow-sm);
+}
+
+.hero__gallery-col--large .hero__gallery-img {
+  height: 100%;
+}
+
+@media (max-width: 959px) {
+  .hero__gallery {
+    max-width: 480px;
+    margin-inline: auto;
+  }
 }
 
 .price {
@@ -2341,32 +2514,33 @@ textarea:focus {
 .chip {
   display: inline-flex;
   align-items: center;
-  min-height: 38px;
-  padding-inline: var(--sp-3);
+  min-height: 40px;
+  padding-inline: var(--sp-4);
   border: 1px solid var(--rule-strong);
-  border-radius: var(--r);
-  background: transparent;
+  border-radius: var(--r-md);
+  background: var(--surface);
   color: var(--ink-2);
-  font-family: var(--font-mono);
-  font-size: var(--t-2xs);
+  font-size: var(--t-xs);
   font-weight: 500;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  letter-spacing: -0.004em;
   text-decoration: none;
   transition: border-color var(--dur) var(--ease),
-    color var(--dur) var(--ease), background-color var(--dur) var(--ease);
+    color var(--dur) var(--ease), background-color var(--dur) var(--ease),
+    box-shadow var(--dur) var(--ease);
 }
 
 .chip:hover {
-  border-color: var(--ink-0);
-  color: var(--ink-0);
+  border-color: var(--signal);
+  color: var(--signal);
+  background: var(--signal-wash);
 }
 
 .chip[aria-pressed="true"],
 .chip[data-active="true"] {
-  background: var(--ink-0);
-  border-color: var(--ink-0);
-  color: var(--paper);
+  background: var(--signal);
+  border-color: var(--signal);
+  color: var(--on-accent);
+  box-shadow: var(--shadow-sm);
 }
 
 .pager {

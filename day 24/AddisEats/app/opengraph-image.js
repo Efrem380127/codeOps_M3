@@ -12,7 +12,7 @@ import { ImageResponse } from "next/og";
  * Light-theme palette: PAPER #f8fafc, INK #10141a, INK_2 #51565c,
  * RULE #d8dbdf, SIGNAL (paprika) #c63f29.
  */
-export const alt = "Addis Eats — Ethiopian food, delivered across Addis Ababa";
+export const alt = "Addis Eats, Ethiopian food delivered across Addis Ababa";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 

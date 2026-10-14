@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 import FeaturedDishes from "./components/FeaturedDishes";
@@ -67,7 +68,7 @@ export default function Home() {
 
             <p>
               Slow-simmered wats, grilled tibs and vegan platters from a kitchen
-              in Addis Ababa — delivered to your door, with the courier&rsquo;s
+              in Addis Ababa, delivered to your door with the courier&rsquo;s
               position on a live map while it is on its way.
             </p>
 
@@ -81,40 +82,66 @@ export default function Home() {
             </div>
           </div>
 
-          {/*
-            A specification strip, not the 2x2 grid of rounded stat tiles this
-            slot would usually hold. Values over mono labels, divided by
-            hairlines, reading left to right like the panel on a delivery note.
-            The counts are read from the menu rather than typed in, so they
-            cannot drift out of date.
-          */}
-          <ul className="hero__facts">
-            <li>
-              <strong>{dishes.length}</strong>
-              <span>Dishes on the menu</span>
-            </li>
-            <li>
-              <strong>{categories.length}</strong>
-              <span>Kitchen sections</span>
-            </li>
-            <li>
-              <strong>Same day</strong>
-              <span>Across Addis Ababa</span>
-            </li>
-            <li>
-              <strong>
-                <Icon name="pin" />
-              </strong>
-              <span>Live courier tracking</span>
-            </li>
-          </ul>
+          <div className="hero__visual">
+            <div className="hero__gallery">
+              <div className="hero__gallery-col hero__gallery-col--large">
+                <Image
+                  src="/dishes/doro-wat.jpg"
+                  alt="Doro Wat, slow-simmered chicken in berbere sauce"
+                  width={400}
+                  height={400}
+                  className="hero__gallery-img"
+                  priority
+                />
+              </div>
+              <div className="hero__gallery-col">
+                <Image
+                  src="/dishes/misir-wat.jpg"
+                  alt="Misir Wat, red split lentils in berbere spices"
+                  width={200}
+                  height={200}
+                  className="hero__gallery-img"
+                  priority
+                />
+                <Image
+                  src="/dishes/derek-tibs.jpg"
+                  alt="Tibs, sautéed beef cubes with rosemary"
+                  width={200}
+                  height={200}
+                  className="hero__gallery-img"
+                  priority
+                />
+              </div>
+            </div>
+
+            <ul className="hero__facts">
+              <li>
+                <strong>{dishes.length}</strong>
+                <span>Dishes on the menu</span>
+              </li>
+              <li>
+                <strong>{categories.length}</strong>
+                <span>Kitchen sections</span>
+              </li>
+              <li>
+                <strong>Same day</strong>
+                <span>Across Addis Ababa</span>
+              </li>
+              <li>
+                <strong>
+                  <Icon name="pin" />
+                </strong>
+                <span>Live courier tracking</span>
+              </li>
+            </ul>
+          </div>
         </div>
       </section>
 
       <section className="section">
         <div className="split">
           <div className="split__aside">
-            <span className="section-index">01 &mdash; Browse</span>
+            <span className="section-index">01 &middot; Browse</span>
             <h2>What are you hungry for?</h2>
             <p className="small muted mt-2">
               {categories.length} kitchen sections. Every dish shows its price up
@@ -148,11 +175,11 @@ export default function Home() {
       <section className="section">
         <div className="section-head">
           <div>
-            <span className="section-index">02 &mdash; From the kitchen</span>
+            <span className="section-index">02 &middot; From the kitchen</span>
             <h2>Four to start with</h2>
           </div>
           <p className="small muted mb-0">
-            One from each kitchen section, then the next in line — so the first
+            One from each kitchen section, then the next in line, so the first
             thing you see is the range of the menu rather than its first four
             rows.
           </p>
@@ -164,7 +191,7 @@ export default function Home() {
       <section className="section">
         <div className="split">
           <div className="split__aside">
-            <span className="section-index">03 &mdash; How it works</span>
+            <span className="section-index">03 &middot; How it works</span>
             <h2>From order to doorstep</h2>
             <p className="small muted mt-2">
               Four steps, one of which you can watch happen in real time.
@@ -194,7 +221,7 @@ export default function Home() {
 
       <section className="section">
         <div className="rule-block">
-          <span className="section-index">04 &mdash; Staff</span>
+          <span className="section-index">04 &middot; Staff</span>
           <h2>Running the kitchen?</h2>
           <p className="lede mt-2">
             The kitchen view lists every order that has been placed, oldest

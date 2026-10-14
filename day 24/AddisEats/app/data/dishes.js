@@ -20,6 +20,7 @@ export const dishes = [
     price: 320,
     category: "Main",
     spicy: true,
+    prepTime: 35,
     summary: "Slow-simmered tender chicken leg in rich berbere sauce with hard-boiled egg and seasoned butter.",
     image: "/dishes/doro-wat.jpg"
   },
@@ -29,6 +30,7 @@ export const dishes = [
     price: 380,
     category: "Main",
     spicy: true,
+    prepTime: 20,
     summary: "Minced prime beef gently warmed with spiced clarified butter and mitmita chili powder.",
     image: "/dishes/kitfo.jpg"
   },
@@ -38,6 +40,7 @@ export const dishes = [
     price: 180,
     category: "Main",
     spicy: false,
+    prepTime: 25,
     summary: "Creamy slow-cooked chickpea powder stew infused with garlic, ginger, and Ethiopian herbs.",
     image: "/dishes/shiro.jpg"
   },
@@ -47,6 +50,7 @@ export const dishes = [
     price: 200,
     category: "Vegan",
     spicy: true,
+    prepTime: 30,
     summary: "Savory red split lentils simmered in aromatic berbere spices, onions, and garlic.",
     image: "/dishes/misir-wat.jpg"
   },
@@ -56,6 +60,7 @@ export const dishes = [
     price: 220,
     category: "Vegan",
     spicy: false,
+    prepTime: 20,
     summary: "Colorful vegetarian platter featuring lentils, greens, split peas, and fresh salad on injera.",
     image: "/dishes/beyainatu.jpg"
   },
@@ -65,6 +70,7 @@ export const dishes = [
     price: 160,
     category: "Vegan",
     spicy: false,
+    prepTime: 25,
     summary: "Tender collard greens braised with sweet onions, garlic, and mild Ethiopian peppers.",
     image: "/dishes/gomen.jpg"
   },
@@ -74,6 +80,7 @@ export const dishes = [
     price: 340,
     category: "Grill",
     spicy: false,
+    prepTime: 25,
     summary: "Sautéed beef cubes seared with rosemary, sweet red onions, and mild jalapeño slices.",
     image: "/dishes/derek-tibs.jpg"
   },
@@ -83,6 +90,7 @@ export const dishes = [
     price: 360,
     category: "Grill",
     spicy: false,
+    prepTime: 30,
     summary: "Delicately grilled tender lamb tossed with fresh herbs, garlic, and clarified butter.",
     image: "/dishes/lega-tibs.jpg"
   },
@@ -92,6 +100,7 @@ export const dishes = [
     price: 400,
     category: "Grill",
     spicy: true,
+    prepTime: 15,
     summary: "Cubed raw lean beef seasoned with warm niter kibbeh spiced butter and fiery awaze paste.",
     image: "/dishes/kitfo.jpg"
   }
