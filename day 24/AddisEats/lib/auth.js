@@ -7,7 +7,7 @@ if (process.env.NODE_ENV === "production" && !process.env.SESSION_SECRET) {
   // deployment that refuses to boot is a worse one. Set SESSION_SECRET in the
   // deployment environment; the fallback is only ever meant for local work.
   console.warn(
-    "[addis-eats] SESSION_SECRET is not set — the session HMAC is using a public default. Set it in the deployment environment.",
+    "[addis-eats] SESSION_SECRET is not set. The session HMAC is using a public default. Set it in the deployment environment.",
   );
 }
 

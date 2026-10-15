@@ -174,7 +174,7 @@ export default function LiveOrderStatus({ initialOrder }) {
           <p className="stat__value" style={{ fontSize: "var(--t-base)" }}>
             {/* Placeholder until the client clock is known, so the server and
                 the hydration pass agree on the same string. */}
-            {now === null ? "\u2014" : relative(updatedAt, now)}
+            {now === null ? "Pending" : relative(updatedAt, now)}
           </p>
         </div>
       </div>

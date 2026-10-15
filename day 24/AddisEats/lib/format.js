@@ -17,9 +17,9 @@ export function etb(amount) {
  * was ordered there, regardless of where the reader happens to be sitting.
  */
 export function when(timestamp) {
-  if (!timestamp) return "—";
+  if (!timestamp) return "not set";
   const date = new Date(timestamp);
-  if (isNaN(date.getTime())) return "—";
+  if (isNaN(date.getTime())) return "not set";
   return date.toLocaleDateString("en-US", {
     timeZone: "Africa/Addis_Ababa",
     month: "short",
@@ -41,9 +41,9 @@ export function when(timestamp) {
  * on the server (see the `useNow` hook in the order status view).
  */
 export function relative(timestamp, now = Date.now()) {
-  if (!timestamp) return "—";
+  if (!timestamp) return "not set";
   const date = new Date(timestamp);
-  if (isNaN(date.getTime())) return "—";
+  if (isNaN(date.getTime())) return "not set";
   const diffMs = now - date.getTime();
   const diffSec = Math.round(diffMs / 1000);
   const diffMin = Math.round(diffSec / 60);
