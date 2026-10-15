@@ -39,7 +39,7 @@ export default function CartContents() {
       <div className="price-row"><span>Subtotal ({itemCount} {itemCount === 1 ? "portion" : "portions"})</span><span className="tabular">{subtotal} ETB</span></div>
       <div className="price-row"><span>Demo delivery fee</span><span className="tabular">{deliveryFee} ETB</span></div>
       <div className="price-row price-total" aria-live="polite"><strong>Total</strong><strong className="tabular">{total} ETB</strong></div>
-      <p className="helper-text">Session-only demo cart. Refreshing the page clears it. No payment or delivery is processed.</p>
+      <p className="helper-text">Your cart is kept for this browser tab only. Closing the tab clears it. No payment or delivery is processed.</p>
       <div className="cart-actions">
         <Link href="/menu" className="btn btn-secondary">Keep browsing</Link>
         <Link href="/checkout" className="btn btn-primary">Continue to checkout &rarr;</Link>
