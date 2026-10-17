@@ -1,4 +1,4 @@
-# Addis Eats — Design System (DESIGN.md)
+# Addis Eats: Design System (DESIGN.md)
 
 ## 1. Visual Theme & Atmosphere
 
@@ -63,17 +63,17 @@ one declaration serves both themes.
 
 ### Brand Colours
 
-- **Forest Green** — light `#194e33`, dark `#71be93`. `--signal`. The brand
-  colour and the primary ink: brand title, `h1`–`h3`, section indices, links.
+- **Forest Green**: light `#194e33`, dark `#71be93`. `--signal`. The brand
+  colour and the primary ink: brand title, `h1` to `h3`, section indices, links.
   Deep enough in light mode to carry cream type; light enough in dark mode to
   stay legible as text on the near-black page.
-- **Lime** — light `#bcde57`, dark `#c0e160`. `--accent`. Fills every primary
+- **Lime**: light `#bcde57`, dark `#c0e160`. `--accent`. Fills every primary
   control: buttons, the cart pill, the active filter chip, the step markers.
   Always with dark green type on it.
-- **Orange** — light `#f0772d`, dark `#fd9149`. `--highlight`. The script
+- **Orange**: light `#f0772d`, dark `#fd9149`. `--highlight`. The script
   subline under each section headline, and small emphases. Never a control,
   never body copy.
-- **Deep Green** — `#0b3a25` in both themes. `--signal-strong` / `--field`. The
+- **Deep Green**: `#0b3a25` in both themes. `--signal-strong` / `--field`. The
   ground for the hero, the closing band and the footer, and the pressed state of
   a primary button.
 
@@ -94,22 +94,22 @@ does flip.
 
 ### Surfaces & Neutrals
 
-- **Paper** — light `#fcf9eb`, dark `#071009`. `--paper`. The page canvas.
+- **Paper**: light `#fcf9eb`, dark `#071009`. `--paper`. The page canvas.
   Cream, not white, in light mode.
-- **Surface** — light `#ffffff`, dark `#111b13`. `--surface`. Card bodies.
-- **Surface Sunken** — light `#f4f1da`, dark `#030904`. `--surface-sunken`.
+- **Surface**: light `#ffffff`, dark `#111b13`. `--surface`. Card bodies.
+- **Surface Sunken**: light `#f4f1da`, dark `#030904`. `--surface-sunken`.
   Media wells and inset areas.
-- **Ink ramp** — `--ink-0` `#102116` / `#f2f3ea` down to `--ink-4` `#8b998f` /
+- **Ink ramp**: `--ink-0` `#102116` / `#f2f3ea` down to `--ink-4` `#8b998f` /
   `#646459`. Body text sits on `--ink-1` and `--ink-2`; `--ink-3` is the muted
   floor and clears 4.5:1 on paper at 4.82:1.
-- **Rules** — `--rule` `#d4dfcb` / `#212f24`, `--rule-strong` `#aabf9f` /
+- **Rules**: `--rule` `#d4dfcb` / `#212f24`, `--rule-strong` `#aabf9f` /
   `#3d5040`. Green hairlines, not grey ones.
 
 ### Semantic Colours
 
-- **OK** — light `#007570`, dark `#5fc5be`. `--ok`. **Teal, not green**, so a
+- **OK**: light `#007570`, dark `#5fc5be`. `--ok`. **Teal, not green**, so a
   confirmed state reads on a green panel.
-- **Danger** — light `#bc2826`, dark `#f9786c`. `--danger`. The one hue the
+- **Danger**: light `#bc2826`, dark `#f9786c`. `--danger`. The one hue the
   brand does not use, and therefore the one that still reads as a problem.
 
 Neither ever appears as the fill of a primary control.
@@ -149,8 +149,8 @@ a third party at runtime.
 | `--t-base` | 1rem | Body |
 | `--t-md` | 1.125rem | Lede paragraphs, dish prices |
 | `--t-lg` | 1.5rem | Dish names |
-| `--t-xl` | 2rem | — |
-| `--t-2xl` | 2.75rem | — |
+| `--t-xl` | 2rem |: |
+| `--t-2xl` | 2.75rem |: |
 | `--t-display` | `clamp(2.6rem, 1.1rem + 6.2vw, 5.75rem)` | The hero headline only |
 
 Line heights are `--lh-tight: 1.02`, `--lh-head: 1.1`, `--lh-body: 1.55`.

@@ -1,4 +1,4 @@
-# FUTURE.md — MoSCoW Triage & Roadmap
+# FUTURE.md: MoSCoW Triage & Roadmap
 
 This document captures the triage decisions made during the Frontend Capstone build, recording what was prioritized, what was consciously deferred, and the roadmap for future development.
 
@@ -19,7 +19,7 @@ This document captures the triage decisions made during the Frontend Capstone bu
 1. **Payment Gateway Integration (Telebirr / Stripe)**:
    - *Rationale*: A mock or cash-on-delivery state allows the full ordering lifecycle to complete end-to-end without requiring third-party merchant approval or external sandbox latency during live assessment.
 2. **Bi-directional WebSockets**:
-   - *Rationale*: The combination of SWR 5-second polling with server `fallbackData` and Server-Sent Events (SSE) achieves 100% of the live driver tracking requirements without the operational complexity and server overhead of maintaining standing WebSocket connections on serverless infrastructure.
+   - *Rationale*: The combination of SWR 3-second polling with server `fallbackData` and Server-Sent Events (SSE) achieves 100% of the live driver tracking requirements without the operational complexity and server overhead of maintaining standing WebSocket connections on serverless infrastructure.
 3. **Multi-language Amharic / English Switcher**:
    - *Rationale*: While culturally authentic, dynamic i18n routing would have duplicated route testing without adding architectural breadth to the core React/Next.js evaluation rubric.
 

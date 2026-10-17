@@ -1,4 +1,4 @@
-# AUTH.md — Authentication, Authorization & Three-Layer Security
+# AUTH.md: Authentication, Authorization & Three-Layer Security
 
 This document details the multi-layer security model, route guards, ownership verification, and security testing against the Addis Eats application.
 
@@ -16,21 +16,21 @@ This document details the multi-layer security model, route guards, ownership ve
 | `/orders/[id]` | **The Owner** | Server Component ownership check | The authenticated user owns the requested order record. |
 | `/kitchen` | **Staff Only** | Server Component role check (`role === "staff"`) | The user is signed in and possesses the staff role. |
 
-> **Why the fourth column matters**: "Protected by middleware" is never a sufficient answer. Middleware only proves that a cookie exists. Documenting precisely what each layer establishes shows where vulnerabilities lie — which is almost always a server action that blindly trusts an ID it was handed.
+> **Why the fourth column matters**: "Protected by middleware" is never a sufficient answer. Middleware only proves that a cookie exists. Documenting precisely what each layer establishes shows where vulnerabilities lie, which is almost always a server action that blindly trusts an ID it was handed.
 
 ---
 
 ## 2. The Three Layers of Protection
 
-1. **Layer 1: Edge / Request Middleware (`middleware.js`)**
+1. **Layer 1: Edge / Request Middleware (`proxy.js`)**
    - Intercepts requests before route execution on edge runtime.
    - Verifies the cryptographic HMAC signature of the session cookie (`SESSION_SECRET`).
-   - Redirects unauthenticated visitors attempting to reach `/orders` or `/orders/*` to `/sign-in?next=<destination>`.
-   - Never leaks internal route structures to unauthorized visitors.
+   - Redirects unauthenticated visitors attempting to reach `/checkout`, `/orders` or `/orders/*` to `/sign-in?next=<destination>`, carrying the intended path in the `next` parameter.
+   - The `next` value is read back only if it is a relative path, so the redirect cannot be turned into an open redirect.
 
 2. **Layer 2: Server Component Guard (`app/orders/page.js`, `app/orders/[id]/page.js`, `app/kitchen/page.js`)**
    - Re-verifies `await getSession()` inside the React Server Component render cycle.
-   - Scopes data queries strictly to `session.id` (`getOrdersForUser(session.id)`).
+   - Scopes the order list to the caller: the page keeps only the rows whose `sessionId` matches `session.id`, so another account's records are never read into the render.
    - Enforces role requirements on staff-only routes (`session.role === "staff"`).
    - Prevents IDOR (Insecure Direct Object References) if an attacker crafts an arbitrary ID in the URL.
 
@@ -50,7 +50,7 @@ This document details the multi-layer security model, route guards, ownership ve
   await cancelOrder("ord_812");
   ```
 - **Line That Stopped It**:
-  - `app/actions/order.js`, Lines 57–59:
+  - `app/actions/order.js`, Lines 112-114:
     ```javascript
     if (!session) {
       return { error: "Unauthorized: No active session" };
@@ -64,16 +64,16 @@ This document details the multi-layer security model, route guards, ownership ve
 - **Browser Console Command**:
   ```javascript
   // Signed in as user "Chala Kebede" (id: usr_chala_kebede)
-  await cancelOrder("1"); // Targeting Order #1 owned by "Abebe Bikila" (id: usr_abebe)
+  await cancelOrder("1"); // Targeting Order #1 owned by "Abebe Bikila" (id: usr_abebe_bikila)
   ```
 - **Line That Stopped It**:
-  - `app/actions/order.js`, Lines 66–68:
+  - `app/actions/order.js`, Lines 121-123:
     ```javascript
     if (order.sessionId !== session.id && order.owner !== session.name && session.role !== "staff") {
       return { error: "Forbidden: Not the record owner" };
     }
     ```
-- **Observed Result**: The session was valid, but record comparison failed because `order.sessionId ("usr_abebe") !== session.id ("usr_chala_kebede")`. The action halted with `{ error: "Forbidden: Not the record owner" }`. The target order remained untouched.
+- **Observed Result**: The session was valid, but record comparison failed because `order.sessionId ("usr_abebe_bikila") !== session.id ("usr_chala_kebede")`. The action halted with `{ error: "Forbidden: Not the record owner" }`. The target order remained untouched.
 
 ---
 
@@ -84,7 +84,7 @@ This document details the multi-layer security model, route guards, ownership ve
   // Also tested: /sign-in?next=//evil.com
   ```
 - **Line That Stopped It**:
-  - `app/actions/auth.js`, Lines 27–29:
+  - `app/actions/auth.js`, Line 27:
     ```javascript
     if (typeof rawNext === "string" && rawNext.startsWith("/") && !rawNext.startsWith("//")) {
       destination = rawNext;
@@ -100,10 +100,16 @@ This document details the multi-layer security model, route guards, ownership ve
   https://addis-eats-capstone.vercel.app/orders/999
   ```
 - **Line That Stopped It**:
-  - `app/orders/[id]/page.js`, Lines 24–30:
+  - `app/orders/[id]/page.js`, Lines 16-24:
     ```javascript
-    if (order.sessionId !== session.id && session.role !== "staff") {
-      return <div className="error-card">Access Denied: You do not own this order.</div>;
+    if (session && order.sessionId && order.sessionId !== session.id && session.role !== "staff") {
+      return (
+        <div style={{ padding: "2rem" }}>
+          <h1 style={{ color: "var(--danger-ink)" }}>Access Denied</h1>
+          <p>You cannot view orders from another account.</p>
+          <Link href="/orders">&larr; Back to your orders</Link>
+        </div>
+      );
     }
     ```
 - **Observed Result**: Renders an explicit Access Denied gate rather than revealing someone else's order data.
