@@ -38,3 +38,17 @@ dist-ssr/
 .env*
 .playwright-cli/
 .workbuddy-ai/
+
+# AI-generated docs (not for submission)
+AUTH.md
+DATA.md
+BOUNDARY.md
+FUTURE.md
+PERF.md
+.impeccable.md
+**/.impeccable.md
+**/AUTH.md
+**/DATA.md
+**/BOUNDARY.md
+**/FUTURE.md
+**/PERF.md
