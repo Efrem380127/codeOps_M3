@@ -47,3 +47,12 @@ next-env.d.ts
 
 .vercel
 .env*
+
+# AI-generated docs (not for submission)
+AUTH.md
+DATA.md
+BOUNDARY.md
+FUTURE.md
+PERF.md
+.impeccable.md
+.workbuddy-ai
