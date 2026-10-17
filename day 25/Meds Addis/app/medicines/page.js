@@ -64,10 +64,6 @@ export default function MedicinesPage({ searchParams }) {
 
       <header className="catalogue-head">
         <h1>Medicines</h1>
-        <p className="catalogue-head__note">
-          Sixteen lines across nine categories. Prescription-only items are
-          checked by a pharmacist before dispatch.
-        </p>
       </header>
 
       {/*

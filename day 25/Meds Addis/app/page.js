@@ -9,7 +9,7 @@ import { categories } from "@/lib/catalog";
 import { iconForCategory } from "@/lib/category-icons";
 
 export const metadata = {
-  title: "Meds Addis — Online Pharmacy & Same-Day Delivery",
+  title: "Meds Addis — Online Pharmacy & Same Day Delivery",
   description:
     "Order genuine medicines online in Addis Ababa. Upload a prescription, have it verified by a registered pharmacist, and track your courier live.",
   alternates: { canonical: "/" },
@@ -65,10 +65,8 @@ export default function HomePage() {
       <section className="hero">
         <div className="hero__inner">
           <div>
-            <span className="eyebrow">Addis Ababa · Same-day delivery</span>
+            <span>Addis Ababa · Same day delivery</span>
 
-            {/* Two-tone: the second line carries the brand colour, which is the
-                cheapest way to make a hero feel branded. */}
             <h1 className="mt-2">
               Your health,
               <span className="hero__accent">our priority.</span>
